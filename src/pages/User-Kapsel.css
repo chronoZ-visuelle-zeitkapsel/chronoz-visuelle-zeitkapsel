@@ -1,0 +1,559 @@
+.UserKapselPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.UserKapselMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.FullScreenContainer {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow: hidden;
+}
+
+
+.Postcard {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  height: 80%;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.PostcardImages {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+  max-height: 500px;
+}
+
+/* Template System - Alle Templates */
+.Template1, .Template2, .Template3, .Template4 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 8px;
+}
+
+.TemplateImage {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.TemplateImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.TemplateImageRow {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+/* Template 1: Ein Bild - Vollbreite */
+.Template1 .TemplateImage {
+  flex: 1;
+  min-height: 100%;
+}
+
+/* Template 2: Zwei Bilder - Nebeneinander */
+.Template2 {
+  flex-direction: row;
+}
+
+.Template2 .TemplateImage {
+  flex: 1;
+  min-height: 100%;
+}
+
+/* Template 3: Drei Bilder - 1 oben, 2 unten */
+.Template3 .TemplateImageTop {
+  flex: 2;
+  min-height: 200px;
+}
+
+.Template3 .TemplateImageRow {
+  flex: 1;
+  min-height: 100px;
+}
+
+.Template3 .TemplateImageRow .TemplateImage {
+  flex: 1;
+  min-height: 100px;
+}
+
+/* Template 4: Vier Bilder - 2x2 Grid */
+.Template4 .TemplateImageRow {
+  flex: 1;
+  min-height: 50%;
+}
+
+.Template4 .TemplateImageRow .TemplateImage {
+  flex: 1;
+  min-height: 100%;
+}
+
+/* Platzhalter */
+.TemplatePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #666;
+  border: 2px dashed #ccc;
+  height: 100%;
+  border-radius: 8px;
+}
+
+.TemplatePlaceholder .PlaceholderIcon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.TemplatePlaceholder .PlaceholderText {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.PostcardImagePlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.PlaceholderIcon {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.PlaceholderText {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.PostcardContent {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #f8f9fa;
+}
+
+.PostcardTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.PostcardDate {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+
+.PostcardDescription {
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* Navigation Pfeile */
+.NavArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.NavArrow:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.NavArrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.NavArrowLeft {
+  left: 30px;
+}
+
+.NavArrowRight {
+  right: 30px;
+}
+
+/* Karten-Zähler */
+.CardCounter {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  color: #333;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Options Button */
+.PostcardOptions {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+.OptionsButton {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.OptionsButton:hover {
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.OptionsDropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 21;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.OptionsItem {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.OptionsItem:hover {
+  background: #f8f9fa;
+}
+
+.OptionsItemDanger {
+  color: #dc3545;
+}
+
+.OptionsItemDanger:hover {
+  background: #fff5f5;
+}
+
+/* + Button rechts unten */
+.AddButtonBottomRight {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AddButtonBottomRight:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.Plus {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Zentraler + Button für leere Kapsel */
+.AddMemoryButton {
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AddMemoryButton:hover {
+  background: white;
+  transform: scale(1.1);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .Postcard {
+    flex-direction: column;
+    width: 95%;
+    height: 90%;
+  }
+  
+  .PostcardImages {
+    flex: 1;
+    min-height: 250px;
+    max-height: 300px;
+  }
+  
+  /* Template 3 - Mobile */
+  .Template3 .TemplateImageTop {
+    min-height: 120px;
+  }
+  
+  .Template3 .TemplateImageRow {
+    min-height: 60px;
+  }
+  
+  .Template3 .TemplateImageRow .TemplateImage {
+    min-height: 60px;
+  }
+  
+  /* Template 4 - Mobile */
+  .Template4 .TemplateImageRow {
+    min-height: 60px;
+  }
+  
+  .Template4 .TemplateImageRow .TemplateImage {
+    min-height: 60px;
+  }
+  
+  .PostcardContent {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .PostcardTitle {
+    font-size: 1.8rem;
+  }
+  
+  .NavArrow {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .NavArrowLeft {
+    left: 15px;
+  }
+  
+  .NavArrowRight {
+    right: 15px;
+  }
+  
+  .CardCounter {
+    top: 15px;
+    right: 15px;
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  /* Options Button - Mobile */
+  .PostcardOptions {
+    top: 15px;
+    right: 15px;
+  }
+
+  .OptionsButton {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .OptionsDropdown {
+    top: 45px;
+    min-width: 140px;
+  }
+
+  .OptionsItem {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .AddButtonBottomRight {
+    bottom: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}
+
+/* CreatePostcard Bildvorschau Styles */
+.ImagePreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.PreviewItem {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid #ddd;
+}
+
+.RemoveImageButton {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 59, 48, 0.95);
+  color: white;
+  border: 1.5px solid white;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.RemoveImageButton:hover {
+  background: rgba(255, 59, 48, 1);
+  transform: scale(1.1);
+}
+
+.PreviewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.PreviewLabel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 2px 4px;
+}
+
+.ImageUploadHint {
+  margin-top: 5px;
+  color: #666;
+  font-style: italic;
+}
+
+.ImageLimitWarning {
+  margin-top: 10px;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+/* Responsive Bildvorschau */
+@media (max-width: 768px) {
+  .PreviewItem {
+    width: 80px;
+    height: 80px;
+  }
+}

@@ -68,3 +68,40 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Backend (Mailserver)
+
+1. Server starten
+```
+cd server
+npm install
+npm run dev
+```
+
+2. .env anlegen (unter `server/.env`)
+```
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your_smtp_user
+SMTP_PASS=your_smtp_password
+MAIL_FROM="chronoZ <no-reply@example.com>"
+PORT=4000
+```
+
+3. Test
+- Health: GET http://localhost:4000/health
+- Reminder: POST http://localhost:4000/api/reminder
+```
+{
+  "email": "deine@mail.tld",
+  "subject": "Test",
+  "message": "Hallo von chronoZ"
+}
+```
+
+4. Frontend Proxy (optional)
+In `package.json` auf Projektebene:
+```
+"proxy": "http://localhost:4000"
+```
