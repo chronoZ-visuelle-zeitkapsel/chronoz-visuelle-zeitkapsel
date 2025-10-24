@@ -1,10 +1,11 @@
 import React, { ReactElement, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type Mode = 'login' | 'register';
 
 function Login(): ReactElement {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [mode, setMode] = useState<Mode>('login');
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -56,8 +57,14 @@ function Login(): ReactElement {
         localStorage.setItem('currentUser', JSON.stringify(data.user));
         
         window.dispatchEvent(new CustomEvent('userLogin', { detail: data.user }));
-        // Popup schließen und zur Seite weiterleiten
-        navigate('/history');
+       
+        // Prüfe ob ein redirect Parameter existiert
+        const redirectTo = searchParams.get('redirect');
+        if (redirectTo === 'history') {
+          navigate('/history');
+        } else {
+          navigate('/');
+        }
       } else {
         const res = await fetch('http://localhost:5000/api/auth/register', {
           method: 'POST',
@@ -71,8 +78,14 @@ function Login(): ReactElement {
         localStorage.setItem('currentUser', JSON.stringify(data.user));
         
         window.dispatchEvent(new CustomEvent('userLogin', { detail: data.user }));
-        // Popup schließen und zur History-Seite weiterleiten
-        navigate('/history');
+        
+        // Prüfe ob ein redirect Parameter existiert
+        const redirectTo = searchParams.get('redirect');
+        if (redirectTo === 'history') {
+          navigate('/history');
+        } else {
+          navigate('/');
+        }
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Unbekannter Fehler');

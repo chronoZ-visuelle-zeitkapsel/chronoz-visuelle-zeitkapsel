@@ -61,8 +61,8 @@ function CTA(): ReactElement {
 
 	function handleHistoryClick() {
 		if (!currentUser) {
-			// Öffne das Login-Popup
-			navigate('/login');
+			// Öffne das Login-Popup mit redirect Parameter
+			navigate('/login?redirect=history');
 			return;
 		}
 		navigate('/history');
