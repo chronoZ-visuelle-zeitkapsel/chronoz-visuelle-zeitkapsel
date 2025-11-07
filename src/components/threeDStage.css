@@ -1,0 +1,20 @@
+.ThreeDStage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.StageContainer {
+    width: 1369px;
+    height: 684px;
+    background: linear-gradient(134deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 32px;
+    border: 1.80px white solid;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

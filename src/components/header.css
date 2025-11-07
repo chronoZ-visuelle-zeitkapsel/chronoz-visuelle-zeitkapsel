@@ -35,6 +35,14 @@
         0 8px 32px rgba(13, 14, 23, 0.08);
 }
 
+.HeaderLeft {
+    position: absolute;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    
+}
+
 .HeaderCenter {
     position: absolute;
     left: 50%;
@@ -48,12 +56,35 @@
     align-items: center;
 }
 
+.Logo {
+    /* smaller logo to fit HeaderContainer */
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 6px; /* optional */
+    display: block;
+}
+
+/* optional alternate CZ-logo styling (if used) */
+.CzLogo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.HeaderCenter .LogoLogo {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+}   
+
 .BrandText {
     font-family: Sarpanch;
-    font-size: 42px;
+    font-size: 36px; /* reduced from 42px */
     font-weight: 600;
     color: #1D1B1C;
-    letter-spacing: 2px;
+    letter-spacing: 1.6px; /* slightly reduced spacing */
     margin: 0;
     background: linear-gradient(135deg, #1D1B1C 30%, #2D2B2C 100%);
     -webkit-background-clip: text;
@@ -148,12 +179,12 @@
 }
 
 .AuthButton:hover {
-    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+    background: linear-gradient(135 deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
 }
 
 /* Add spacing helper for content below header */
 :root {
-    --header-height: 111px; /* 71px header + 2 * 20px padding */
+    --header-height: 55px; /* 55px header + 2 * 20px padding */
 }
 
 /* Ensure main content starts below header */

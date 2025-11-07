@@ -101,8 +101,26 @@ function Header(): ReactElement {
 	return (
 		<header className="Header">
 			<div className="HeaderContainer">
+				<div className="HeaderLeft">
+					<img
+						src="/CzLogo.png"
+						alt="chronoZ Logo"
+						className="Logo"
+						onClick={() => navigate('/')}
+						loading="lazy"
+						role="button"
+					/>
+				</div>
+
 				<div className="HeaderCenter">
-					<h1 className="BrandText">chronoZ</h1>
+					<img
+						src="/chronoZLogo.png"
+						alt="chronoZ Logo"
+						className="LogoLogo"
+						onClick={() => navigate('/')}
+						loading="lazy"
+						role="button"
+					/>
 				</div>
 
 				<div className="HeaderRight">
