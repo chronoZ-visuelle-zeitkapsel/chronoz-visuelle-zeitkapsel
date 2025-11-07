@@ -1,0 +1,15 @@
+.Footer {
+    width: auto;
+    height: 88px;
+    background: rgba(248, 249, 250, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.FooterRight {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    align-items: center;
+}

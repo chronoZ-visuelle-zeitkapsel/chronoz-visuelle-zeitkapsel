@@ -12,6 +12,7 @@
 
 
 .FullScreenContainer {
+  margin-top: 53px;
   flex: 1;
   position: relative;
   width: 100%;
@@ -19,7 +20,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
 }
 
@@ -351,6 +351,13 @@
 .Plus {
   font-size: 24px;
   font-weight: bold;
+  width: 49.618282318115234px;
+  height: 54.29718017578125px;
+  transform: rotate(-0deg);
+  opacity: 1;
+  top: 484.97px;
+  left: 696.32px;
+  border-radius: 15px;
 }
 
 /* Zentraler + Button für leere Kapsel */
@@ -359,20 +366,19 @@
   height: 80px;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  font-size: 32px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(
+        111deg,
+        rgba(255, 255, 255, 0.4) -4.87%,
+        rgba(255, 255, 255, 0.1) 103.95%
+  );
+  backdrop-filter: blur(20px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .AddMemoryButton:hover {
-  background: white;
+  background: rgb(104, 123, 139);
   transform: scale(1.1);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }
