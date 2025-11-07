@@ -56,28 +56,24 @@
     align-items: center;
 }
 
+
 .Logo {
-    /* smaller logo to fit HeaderContainer */
     width: 60px;
     height: 60px;
     object-fit: contain;
     cursor: pointer;
     border-radius: 6px; /* optional */
     display: block;
-}
-
-/* optional alternate CZ-logo styling (if used) */
-.CzLogo {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-}
-
-.HeaderCenter .LogoLogo {
-    width: 65px;
-    height: 65px;
-    object-fit: contain;
 }   
+
+.LogoLogo {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    cursor: pointer;
+    border-radius: 6px; /* optional */
+    display: block;
+}
 
 .BrandText {
     font-family: Sarpanch;
