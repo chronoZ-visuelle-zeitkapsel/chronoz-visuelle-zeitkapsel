@@ -1,3 +1,4 @@
+import './header.css';
 import React, { ReactElement, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -99,91 +100,39 @@ function Header(): ReactElement {
 
 	return (
 		<header className="Header">
-			<div className="HeaderLeft">
-				<img 
-					src="/cZPlatzhalter.jpg" 
-					alt="chronoZ Logo" 
-					className="Logo LogoImage" 
-					onClick={() => navigate('/')} 
-					style={{ cursor: 'pointer' }}
-				/>
-			</div>
-			<div className="HeaderCenter">chronoZ</div>
-			<div className="HeaderRight">
-				{currentUser ? (
-					/* User-Bereich: Container ist positioniert; Logout-Button liegt in .LogoutPanel */
-					<div
-						ref={userAreaRef}
-						className={`UserArea ${menuOpen ? 'open' : ''}`}
-						tabIndex={0}
-						aria-haspopup="true"
-						onMouseEnter={() => setMenuOpen(true)}
-						onMouseLeave={() => setMenuOpen(false)}
-						onFocus={() => setMenuOpen(true)}
-						onBlur={() => setMenuOpen(false)}
-					>
-						<div className="UserChip" title={currentUser.email}>{currentUser.username}</div>
+			<div className="HeaderContainer">
+				<div className="HeaderCenter">
+					<h1 className="BrandText">chronoZ</h1>
+				</div>
 
-					
+				<div className="HeaderRight">
+					{currentUser ? (
 						<div
-							className="LogoutPanel"
-							role="menu"
-							aria-hidden={!menuOpen}
+							ref={userAreaRef}
+							className={`UserArea ${menuOpen ? 'open' : ''}`}
+							tabIndex={0}
+							aria-haspopup="true"
 							onMouseEnter={() => setMenuOpen(true)}
 							onMouseLeave={() => setMenuOpen(false)}
+							onFocus={() => setMenuOpen(true)}
+							onBlur={() => setMenuOpen(false)}
 						>
-							<button className="LogoutButton" onClick={handleLogout}>Logout</button>
+							<button className="UserButton" title={currentUser.email}>
+								<svg viewBox="0 0 24 24" className="UserIcon">
+									<path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+								</svg>
+							</button>
+
+							<div className="LogoutPanel" role="menu" aria-hidden={!menuOpen}>
+								<div className="UserInfo">{currentUser.username}</div>
+								<button className="LogoutButton" onClick={handleLogout}>Logout</button>
+							</div>
 						</div>
-					</div>
-				) : (
-					<button className="AuthButton" onClick={() => navigate('/login')}>Login / Registrieren</button>
-				)}
+					) : (
+						<button className="AuthButton" onClick={() => navigate('/login')}>Login</button>
+					)}
+				</div>
 			</div>
-
-			{/* Inline-CSS für das Hover-/Slide-Verhalten (kann später in separate CSS-Datei verschoben werden) */}
-			<style>{`
-				.Header .HeaderRight { position: relative; }
-				.UserArea { position: relative; display: inline-block; outline: none; }
-				.UserChip { /* ...bestehende Styles bleiben erhalten... */ cursor: pointer; }
-
-				.LogoutPanel {
-					position: absolute;
-					right: 0;
-					top: 100%;
-					transform: translateY(-6px);
-					opacity: 0;
-					visibility: hidden;
-					pointer-events: none;
-					transition: transform 180ms ease, opacity 180ms ease, visibility 0ms linear 180ms;
-					z-index: 100;
-					background: white;
-					border-radius: 4px;
-					box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-					padding: 6px;
-					min-width: 120px;
-					text-align: right;
-				}
-
-				/* Sichtbar bei Hover/Focus oder wenn menuOpen state true ist */
-				.UserArea:hover .LogoutPanel,
-				.UserArea:focus-within .LogoutPanel,
-				.UserArea.open .LogoutPanel {
-					transform: translateY(0);
-					opacity: 1;
-					visibility: visible;
-					pointer-events: auto;
-					transition-delay: 0;
-				}
-
-				.LogoutButton {
-					background: transparent;
-					border: none;
-					padding: 8px 12px;
-					cursor: pointer;
-					border-radius: 4px;
-				}
-				.LogoutButton:hover { background: rgba(0,0,0,0.04); }
-			`}</style>
 		</header>
 	);
 }
