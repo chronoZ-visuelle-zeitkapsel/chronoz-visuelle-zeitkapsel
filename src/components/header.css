@@ -12,7 +12,7 @@
 
 .HeaderContainer {
     width: 1369px;
-    height: 71px;
+    height: 55px;
     margin: 0 auto;
     position: relative;
     display: flex;
@@ -58,8 +58,8 @@
 
 
 .Logo {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     object-fit: contain;
     cursor: pointer;
     border-radius: 6px; /* optional */
