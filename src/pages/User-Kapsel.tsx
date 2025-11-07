@@ -308,12 +308,15 @@ function History(): ReactElement {
                   
                   <div className="PostcardImages">
                     {currentPostcard.images.length === 1 ? (
-                      // Template 1: Ein Bild - Vollbreite
                       <div className="Template1">
                         <div className="TemplateImage">
                           <img 
                             src={currentPostcard.images[0]} 
                             alt={`${currentPostcard.title} - Bild 1`}
+                            onError={(e) => {
+                              console.error('Fehler beim Laden des Bildes:', e);
+                              (e.target as HTMLImageElement).src = 'placeholder.png';
+                            }}
                           />
                         </div>
                       </div>
