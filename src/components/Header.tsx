@@ -62,7 +62,7 @@ function Header(): ReactElement {
 		const handleUserLogin = (event: CustomEvent) => {
 			const user = event.detail;
 			if (user) {
-				setCurrentUser({ id: user.id, username: user.username, email: user.email });
+				setCurrentUser({ id: user.id, username: user.username, email: user.email });				
 			}
 		};
 
