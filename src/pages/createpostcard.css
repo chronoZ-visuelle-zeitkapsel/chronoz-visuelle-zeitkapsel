@@ -1,0 +1,257 @@
+
+/* TopFields: group title + date into a single box */
+.TopFields {
+  background: linear-gradient(
+     111deg,
+     rgba(255, 255, 255, 0.4) -4.87%,
+     rgba(255, 255, 255, 0.1) 103.95%
+  );
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column; /* stack title above date */
+  gap: 8px;
+}
+
+.TopFields .TitleField,
+.TopFields .DateField {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; /* ensure full width so date is under title */
+}
+
+/* Place title label and input side-by-side */
+.TopFields .TitleField {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Title typography - applied to title input and label inside the TopFields box
+   Note: 'leading-trim' is not a standard CSS property and is omitted. */
+.TopFields .TitleField label{
+  font-family: 'Scope One', serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 25px;
+  line-height: 23.71px;
+  /* letter-spacing: 5% converted to 0.05em for compatibility */
+  letter-spacing: 0.05em;
+  color: #1D1B1C;
+  flex: 0 0 auto;
+  margin: 0;
+  /* keep the visual typography for the label */
+  font-family: 'Scope One', serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 23.71px;
+  letter-spacing: 0.05em;
+}
+
+
+.TopFields .TitleField input {
+  font-family: 'Scope One', serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 23.71px;
+  /* letter-spacing: 5% converted to 0.05em for compatibility */
+  letter-spacing: 0.05em;
+  color: #B0B5B3;
+  flex: 1 1 auto;
+  width: auto; /* allow flex to control width */
+  padding: 6px 8px;
+  font-size: 18px; /* smaller input text so label remains prominent */
+}
+
+/* Make DateField label and input inline (side-by-side) */
+.TopFields .DateField {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.TopFields .DateField label{ 
+  font-family: 'Scope One', serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 25px; 
+  line-height: 23.71px;
+  /* letter-spacing: 5% converted to 0.05em for compatibility */
+  letter-spacing: 0.05em;
+  color: #1D1B1C;
+}
+
+.TopFields .DateField input {
+  font-family: 'Scope One', serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 15px; 
+  line-height: 23.71px;
+  /* letter-spacing: 5% converted to 0.05em for compatibility */  
+  letter-spacing: 0.05em;
+  color: #B0B5B3;
+  flex: 1 1 auto;
+  width: auto;
+  padding: 6px 8px;
+}
+
+
+.FormSection {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* align the TopFields box to the right inside the form area */
+}
+
+.TopFields {
+  max-width: 500px; /* width of the box */
+  width: 100%;
+  margin-left: 0px; /* ensure it stays right-aligned in its flex parent */
+}
+
+/* Two-column form layout */
+.FormColumns {
+  display: flex;
+  gap: 24px;
+}
+
+.LeftColumn {
+  width: 420px;
+  max-width: 45%;
+}
+
+.RightColumn {
+  flex: 1 1 0;
+  min-width: 320px;
+}
+
+/* Glass-style file upload box */
+.FileUploadBox {
+  border-radius: 16px;
+  padding: 24px;
+  height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(111deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 32px rgba(13,14,23,0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  position: relative;
+}
+
+.HiddenFileInput { display:none; }
+
+.PlusUploadButton {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
+  backdrop-filter: blur(6px);
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  color: #1D1B1C;
+  cursor: pointer;
+}
+
+.UploadHint {
+  color: rgba(29,27,28,0.7);
+  font-size: 0.95rem;
+}
+
+.FileUploadBox.dragover {
+  box-shadow: 0 10px 40px rgba(20,92,158,0.12);
+  border-color: rgba(20,92,158,0.25);
+}
+
+.ImagePreview {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  justify-content: center;
+}
+
+.PreviewItem {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.PreviewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.RemoveImageButton {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .FormColumns { flex-direction: column; }
+  .LeftColumn { width: 100%; }
+}
+
+/* On smaller screens center the box and make it full-width */
+@media (max-width: 800px) {
+  .CreatePostcardContainer {
+    justify-content: center;
+    padding: 12px;
+  }
+  .FormSection {
+    max-width: 100%;
+    justify-content: center;
+  }
+  .TopFields {
+    max-width: 100%;
+    margin-left: 0;
+  }
+}
+
+.DateField input,
+.DateField textarea,
+.TitelField input,
+.TitelField textarea,
+.TitleField input,
+.TitleField textarea,
+.FormInput,
+#DateField input,
+#DateField textarea {
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: inherit;
+  font-size: 1rem;
+  line-height: 1.2;
+  padding: 0;
+}
+
+/* optional small utility styles */
+.TitelField.small,
+.DateField.small,
+#TitelField.small,
+#DateField.small {
+  padding: 8px 12px;
+  border-radius: 10px;
+}
