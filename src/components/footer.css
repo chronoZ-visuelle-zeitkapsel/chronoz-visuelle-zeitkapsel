@@ -3,12 +3,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: var(--footer-height, 88px);
+    height: var(--footer-height, 80px);
+    min-height: var(--footer-height, 80px);
     background: rgba(248, 249, 250, 1);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 60;
+    padding: 0 24px; /* horizontal padding only */
 }
 
 .FooterRight {
