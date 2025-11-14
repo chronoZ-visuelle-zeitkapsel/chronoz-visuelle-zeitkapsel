@@ -102,14 +102,174 @@
 
 .FormSection {
   width: 100%;
-  display: flex;
-  justify-content: center; /* align the TopFields box to the right inside the form area */
+
 }
 
-.TopFields {
-  max-width: 500px; /* width of the box */
+
+
+/* Position the whole postcard area: centered horizontally and wider on desktop.
+   Place it below the header and make it responsive. */
+.CreatePostcardContainer {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  /* keep the container below the header and finish 25px above the footer */
+  top: calc(var(--header-height, 64px) + 24px);
+  bottom: calc(var(--footer-height, 75px) + 25px);
+
+  /* make it wide but responsive: 95vw up to 1200px */
+  width: min(1200px, 95vw);
+  max-width: 1200px;
+
+  /* let height be determined by top/bottom with overflow if needed */
+  height: auto;
+  max-height: calc(100vh - var(--header-height, 64px) - var(--footer-height, 75px) - 48px);
+
+  box-sizing: border-box;
+  opacity: 1;
+  z-index: 70;
+  overflow: auto;
+}
+
+
+/* Top centered header inside postcard (visual only, do not change site header) */
+.CreatePostcardContainer .InnerTopBar {
   width: 100%;
-  margin-left: 0px; /* ensure it stays right-aligned in its flex parent */
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.15));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: rgba(13,14,23,0.6);
+  letter-spacing: 0.12em;
+}
+
+/* Layout: two columns inside the framed postcard */
+.CreatePostcardContainer .FormColumns {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  height: calc(100% - 80px);
+}
+
+.CreatePostcardContainer .LeftColumn {
+  width: 48%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  /* fill vertical space of the columns area */
+  height: 100%;
+}
+
+.CreatePostcardContainer .RightColumn {
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Big left upload panel styling */
+.FileUploadBox {
+  width: 100%;
+  height: 100%;
+  max-height: 680px;
+  border-radius: 14px;
+  padding: 28px 18px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.35));
+  border: 1px solid rgba(255,255,255,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.FileUploadBox .PlusUploadButton {
+  width: 84px;
+  height: 84px;
+  font-size: 36px;
+  box-shadow: 0 6px 18px rgba(13,14,23,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
+}
+
+.FileUploadBox .UploadHint {
+  margin-top: 12px;
+  color: rgba(29,27,28,0.55);
+}
+
+/* Right column boxes: small title/date box and large description box */
+.TopFields {
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.22));
+  border-radius: 12px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.7);
+}
+
+.TopFields .TitleField label,
+.TopFields .DateField label {
+  color: rgba(13,14,23,0.7);
+  font-weight: 600;
+}
+
+.DescriptionField {
+  background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.24));
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 260px;
+  border: 1px solid rgba(255,255,255,0.7);
+  color: rgba(13,14,23,0.7);
+}
+
+.DescriptionField textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
+  background: transparent;
+  color: inherit;
+  border: none;
+  outline: none;
+}
+
+/* Form action buttons - glassy rounded */
+.FormActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.ResetButton, .SubmitButton {
+  padding: 8px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.6);
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.28));
+  color: rgba(13,14,23,0.8);
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .CreatePostcardContainer { left: 24px; top: 100px; transform: none; }
+  .CreatePostcardContainer { width: calc(100% - 48px); height: calc(100% - 200px); }
+  .FormColumns { flex-direction: column; height: auto; }
+  .LeftColumn, .RightColumn { width: 100%; }
+}
+
+/* Optional modifier class: make the postcard full-screen
+   add the class `fullscreen` to the container to expand it */
+.CreatePostcardContainer.fullscreen {
+  left: 0;
+  right: 0;
+  /* keep fullscreen content visible under header and finish 25px above footer */
+  top: var(--header-height, 100px);
+  bottom: calc(var(--footer-height, 100px) + 30px);
+  transform: none;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  padding: 32px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
 /* Two-column form layout */
@@ -121,6 +281,8 @@
 .LeftColumn {
   width: 420px;
   max-width: 45%;
+  align-self: stretch;
+  height: 100%;
 }
 
 .RightColumn {
@@ -132,7 +294,9 @@
 .FileUploadBox {
   border-radius: 16px;
   padding: 24px;
-  height: 360px;
+  /* make the upload box fill the left column and grow if needed */
+  height: 100%;
+  min-height: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -207,26 +371,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 900px) {
-  .FormColumns { flex-direction: column; }
-  .LeftColumn { width: 100%; }
-}
 
-/* On smaller screens center the box and make it full-width */
-@media (max-width: 800px) {
-  .CreatePostcardContainer {
-    justify-content: center;
-    padding: 12px;
-  }
-  .FormSection {
-    max-width: 100%;
-    justify-content: center;
-  }
-  .TopFields {
-    max-width: 100%;
-    margin-left: 0;
-  }
-}
 
 .DateField input,
 .DateField textarea,
