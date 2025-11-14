@@ -35,16 +35,21 @@ function CreatePostcard(): ReactElement {
     }
   }, []);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const selectedImages = Array.from(files);
-      // Berechne wie viele Bilder noch hinzugefügt werden können
-      setImages(prevImages => {
-        const totalExisting = existingImageUrls.length + prevImages.length;
-        const remainingSlots = Math.max(0, 4 - totalExisting);
-        return [...prevImages, ...selectedImages.slice(0, remainingSlots)];
-      });
+  // helper to handle a FileList (used by input change and drop)
+  const handleFiles = (fileList: FileList | null) => {
+    if (!fileList) return;
+    const selectedImages = Array.from(fileList);
+    setImages(prevImages => {
+      const totalExisting = existingImageUrls.length + prevImages.length;
+      const remainingSlots = Math.max(0, 4 - totalExisting);
+      return [...prevImages, ...selectedImages.slice(0, remainingSlots)];
+    });
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer && e.dataTransfer.files) {
+      handleFiles(e.dataTransfer.files);
     }
   };
 
@@ -166,141 +171,133 @@ function CreatePostcard(): ReactElement {
       <Header />
       <main className="CreatePostcardMain">
         <div className="CreatePostcardContainer">
-          {/* Left Column - Info */}
-          <div className="ImageUploadSection">
-            <div className="ImageUploadContainer">
-              <div className="InfoText">
-                <h3>{isEditing ? 'Bearbeite deine Postkarte' : 'Erstelle deine Postkarte'}</h3>
-                <p>{isEditing ? 'Ändere die Felder rechts, um deine Erinnerung zu bearbeiten.' : 'Fülle die Felder rechts aus, um deine Erinnerung zu erstellen. Bilder sind optional.'}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Form */}
           <div className="FormSection">
             <form onSubmit={handleSubmit} className="PostcardForm">
-              <div className="FormField">
-                <label htmlFor="title">Titel:</label>
-                <input
-                  type="text"
-                  id="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                  className="FormInput"
-                  placeholder="Gib deiner Erinnerung einen Titel"
-                />
-              </div>
+              <div className="FormColumns">
+                <div className="LeftColumn">
+                  <div
+                    className="FileUploadBox"
+                    onDrop={handleDrop}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDragEnter={(e) => e.preventDefault()}
+                  >
+                    <label htmlFor="imageUpload" className="VisuallyHidden">Bilder hochladen</label>
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      multiple
+                      accept="image/*"
+                      onChange={(e) => handleFiles(e.target.files)}
+                      className="FormInput HiddenFileInput"
+                    />
 
-              <div className="FormField">
-                <label htmlFor="date">📅 Date:</label>
-                <input
-                  type="date"
-                  id="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                  className="FormInput"
-                />
-              </div>
+                    <button type="button" className="PlusUploadButton" onClick={() => {
+                      // trigger file input
+                      const el = document.getElementById('imageUpload') as HTMLInputElement | null;
+                      el?.click();
+                    }}>
+                      +
+                    </button>
 
-              <div className="FormField">
-                <label htmlFor="description">write down your day...</label>
-                <textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                  className="FormTextarea"
-                  placeholder="Beschreibe deinen Tag und deine Erinnerungen..."
-                  rows={6}
-                />
-              </div>
+                    <div className="UploadHint">Ziehe Bilder hierher oder klicke +</div>
 
-              <div className="FormField">
-                <label htmlFor="imageUpload">Bilder (optional, max. 4):</label>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  multiple
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="FormInput"
-                />
-                <div className="ImageUploadHint">
-                  <small>Automatische Template-Auswahl: 1 Bild = Vollbreite, 2 Bilder = Nebeneinander, 3 Bilder = 1+2 Layout, 4 Bilder = 2x2 Grid</small>
-                  {existingImageUrls.length + images.length > 0 && (
-                    <small> ({existingImageUrls.length + images.length} / 4 Bilder)</small>
-                  )}
-                </div>
-                {(existingImageUrls.length > 0 || images.length > 0) && (
-                  <div className="ImagePreview">
-                    {/* Bestehende Bilder (URLs) */}
-                    {existingImageUrls.map((url, index) => (
-                      <div key={`existing-${index}`} className="PreviewItem">
-                        <button 
-                          type="button"
-                          onClick={() => removeExistingImage(index)}
-                          className="RemoveImageButton"
-                          title="Bild entfernen"
-                        >
-                          ✕
-                        </button>
-                        <img 
-                          src={url} 
-                          alt={`Existing ${index + 1}`}
-                          className="PreviewImage"
-                        />
-                        <div className="PreviewLabel">
-                          Bild {index + 1}
+                    <div className="ImagePreview">
+                      {existingImageUrls.map((url, index) => (
+                        <div key={`existing-${index}`} className="PreviewItem">
+                          <button 
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className="RemoveImageButton"
+                            title="Bild entfernen"
+                          >
+                            ✕
+                          </button>
+                          <img 
+                            src={url} 
+                            alt={`Existing ${index + 1}`}
+                            className="PreviewImage"
+                          />
                         </div>
-                      </div>
-                    ))}
-                    {/* Neue Bilder (File-Objekte) */}
-                    {images.map((image, index) => (
-                      <div key={`new-${index}`} className="PreviewItem">
-                        <button 
-                          type="button"
-                          onClick={() => removeNewImage(index)}
-                          className="RemoveImageButton"
-                          title="Bild entfernen"
-                        >
-                          ✕
-                        </button>
-                        <img 
-                          src={URL.createObjectURL(image)} 
-                          alt={`New ${index + 1}`}
-                          className="PreviewImage"
-                        />
-                        <div className="PreviewLabel">
-                          Bild {existingImageUrls.length + index + 1}
+                      ))}
+                      {images.map((image, index) => (
+                        <div key={`new-${index}`} className="PreviewItem">
+                          <button 
+                            type="button"
+                            onClick={() => removeNewImage(index)}
+                            className="RemoveImageButton"
+                            title="Bild entfernen"
+                          >
+                            ✕
+                          </button>
+                          <img 
+                            src={URL.createObjectURL(image)} 
+                            alt={`New ${index + 1}`}
+                            className="PreviewImage"
+                          />
                         </div>
-                      </div>
-                    ))}
-                    {existingImageUrls.length + images.length >= 4 && (
-                      <div className="ImageLimitWarning">
-                        <small>✓ Maximale Anzahl erreicht (4 Bilder)</small>
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
 
-              <div className="FormActions">
-                <button 
-                  type="button" 
-                  onClick={handleReset}
-                  className="ResetButton"
-                >
-                  zurücksetzen
-                </button>
-                <button 
-                  type="submit" 
-                  disabled={loading}
-                  className="SubmitButton"
-                >
-                  {loading ? (isEditing ? 'Wird gespeichert...' : 'Wird erstellt...') : (isEditing ? 'Speichern' : 'hinzufügen')}
-                </button>
+                <div className="RightColumn">
+                  <div className="TopFields">
+                    <div className="TitleField">
+                      <label htmlFor="title">Titel:</label>
+                      <input
+                        type="text"
+                        id="title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        required
+                        className="FormInput"
+                        placeholder="Gib deiner Erinnerung einen Titel"
+                      />
+                    </div>
+
+                    <div className="DateField">
+                      <label htmlFor="date">📅 Date:</label>
+                      <input
+                        type="date"
+                        id="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
+                        className="FormInput"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="DescriptionField">
+                    <label htmlFor="description">write down your day...</label>
+                    <textarea
+                      id="description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                      className="FormTextarea"
+                      placeholder="Beschreibe deinen Tag und deine Erinnerungen..."
+                      rows={6}
+                    />
+                  </div>
+
+                  <div className="FormActions">
+                    <button 
+                      type="button" 
+                      onClick={handleReset}
+                      className="ResetButton"
+                    >
+                      zurücksetzen
+                    </button>
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="SubmitButton"
+                    >
+                      {loading ? (isEditing ? 'Wird gespeichert...' : 'Wird erstellt...') : (isEditing ? 'Speichern' : 'hinzufügen')}
+                    </button>
+                  </div>
+                </div>
               </div>
             </form>
           </div>

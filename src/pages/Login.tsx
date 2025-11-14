@@ -105,7 +105,23 @@ function Login(): ReactElement {
   return (
     <div className="LoginPage">
       <div className="LoginCard">
-        <h1 className="LoginTitle">{mode === 'login' ? 'Anmelden' : 'Registrieren'}</h1>
+        <h1 className="LoginTitle">chronoZ</h1>
+        <div className="SwitchContainer">
+          <button 
+            type="button" 
+            className={`SwitchButton ${mode === 'login' ? 'active' : ''}`}
+            onClick={() => setMode('login')}
+          >
+            Anmelden
+          </button>
+          <button 
+            type="button" 
+            className={`SwitchButton ${mode === 'register' ? 'active' : ''}`}
+            onClick={() => setMode('register')}
+          >
+            Registrieren
+          </button>
+        </div>
         <form onSubmit={handleSubmit} className="LoginForm">
           {mode === 'login' ? (
             <>
@@ -132,10 +148,6 @@ function Login(): ReactElement {
               <div className="Actions" style={{ flexDirection: 'column' as const }}>
                 <button type="submit" className="CTAButton" disabled={loading}>
                   {loading ? 'Bitte warten…' : 'Login'}
-                </button>
-                <div className="CTAHint">Ich habe noch kein Konto</div>
-                <button type="button" className="AuthButton" onClick={() => setMode('register')}>
-                  Registrieren
                 </button>
               </div>
             </>
@@ -178,10 +190,6 @@ function Login(): ReactElement {
               <div className="Actions" style={{ flexDirection: 'column' as const }}>
                 <button type="submit" className="CTAButton" disabled={loading}>
                   {loading ? 'Bitte warten…' : 'Registrieren'}
-                </button>
-                <div className="CTAHint">Ich habe bereits ein Konto</div>
-                <button type="button" className="AuthButton" onClick={() => setMode('login')}>
-                  Zum Login
                 </button>
               </div>
             </>
