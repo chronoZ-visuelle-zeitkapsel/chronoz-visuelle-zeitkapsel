@@ -10,6 +10,7 @@ function Login(): ReactElement {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -137,13 +138,23 @@ function Login(): ReactElement {
               </label>
               <label className="Field">
                 <span>Passwort</span>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="Input"
-                />
+                <div className="PasswordInputWrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="Input"
+                  />
+                  <button
+                    type="button"
+                    className="PasswordToggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                  >
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
+                </div>
               </label>
               <div className="Actions" style={{ flexDirection: 'column' as const }}>
                 <button type="submit" className="CTAButton" disabled={loading}>
@@ -175,13 +186,23 @@ function Login(): ReactElement {
               </label>
               <label className="Field">
                 <span>Passwort</span>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="Input"
-                />
+                <div className="PasswordInputWrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="Input"
+                  />
+                  <button
+                    type="button"
+                    className="PasswordToggle"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                  >
+                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                  </button>
+                </div>
                 <Rule ok={passLenOk} label="Mindestens 8 Zeichen" />
                 <Rule ok={passLowerOk} label="Mindestens 1 Kleinbuchstabe (a–z)" />
                 <Rule ok={passUpperOk} label="Mindestens 1 Großbuchstabe (A–Z)" />
