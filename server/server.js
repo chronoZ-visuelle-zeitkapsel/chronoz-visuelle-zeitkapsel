@@ -186,6 +186,140 @@ app.get('/api/protected', (req, res) => {
   });
 });
 
+// ----------- Postkarten Endpoints -----------
+
+// Get all postcards for a user
+app.get('/api/postcards', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+    
+    if (!token) {
+      return res.status(401).json({ error: "Token erforderlich" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    
+    const { data: postcards, error } = await supabase
+      .from('postcards')
+      .select('*')
+      .eq('user_id', decoded.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json(postcards || []);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Fehler beim Laden der Postkarten" });
+  }
+});
+
+// Create a new postcard
+app.post('/api/postcards', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+    
+    if (!token) {
+      return res.status(401).json({ error: "Token erforderlich" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { title, description, date, images } = req.body;
+
+    if (!title || !description || !date) {
+      return res.status(400).json({ error: "Titel, Beschreibung und Datum sind erforderlich" });
+    }
+
+    const { data: postcard, error } = await supabase
+      .from('postcards')
+      .insert([
+        {
+          user_id: decoded.id,
+          title,
+          description,
+          date,
+          images: images || []
+        }
+      ])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json(postcard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Fehler beim Erstellen der Postkarte" });
+  }
+});
+
+// Update a postcard
+app.put('/api/postcards/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+    
+    if (!token) {
+      return res.status(401).json({ error: "Token erforderlich" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { id } = req.params;
+    const { title, description, date, images } = req.body;
+
+    const { data: postcard, error } = await supabase
+      .from('postcards')
+      .update({
+        title,
+        description,
+        date,
+        images: images || [],
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id)
+      .eq('user_id', decoded.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    res.json(postcard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Fehler beim Aktualisieren der Postkarte" });
+  }
+});
+
+// Delete a postcard
+app.delete('/api/postcards/:id', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+    
+    if (!token) {
+      return res.status(401).json({ error: "Token erforderlich" });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { id } = req.params;
+
+    const { error } = await supabase
+      .from('postcards')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', decoded.id);
+
+    if (error) throw error;
+
+    res.json({ message: "Postkarte gelöscht" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Fehler beim Löschen der Postkarte" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server läuft auf http://localhost:${PORT}`);
 });

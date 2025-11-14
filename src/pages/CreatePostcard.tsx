@@ -2,6 +2,7 @@ import React, { ReactElement, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { uploadImage } from '../utils/supabase';
 import './createpostcard.css';
 
 function CreatePostcard(): ReactElement {
@@ -60,62 +61,82 @@ function CreatePostcard(): ReactElement {
     setLoading(true);
 
     try {
-      // Neue Bilder zu URLs konvertieren
-      const newImageUrls = images.length > 0 ? images.map(image => URL.createObjectURL(image)) : [];
-      // Kombiniere existierende und neue Bild-URLs
-      const allImageUrls = [...existingImageUrls, ...newImageUrls];
-      
       // Aktuellen User aus localStorage holen
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('Kein Token gefunden');
+        alert('Bitte melden Sie sich an');
         return;
       }
       
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       if (!currentUser.id) {
         console.error('Keine User-ID gefunden');
+        alert('Bitte melden Sie sich an');
         return;
       }
+
+      // Neue Bilder zu Supabase hochladen
+      const uploadedImageUrls: string[] = [];
+      for (const image of images) {
+        const url = await uploadImage(image, currentUser.id.toString());
+        if (url) {
+          uploadedImageUrls.push(url);
+        }
+      }
       
-      const userPostcardsKey = `userPostcards_${currentUser.id}`;
-      const existingPostcards = JSON.parse(localStorage.getItem(userPostcardsKey) || '[]');
+      // Kombiniere existierende und neue Bild-URLs
+      const allImageUrls = [...existingImageUrls, ...uploadedImageUrls];
 
       if (isEditing && editingPostcard) {
         // Bearbeitungsmodus: Postkarte aktualisieren
-        const updatedPostcard = {
-          ...editingPostcard,
-          title,
-          date,
-          description,
-          images: allImageUrls, // Verwende kombinierte Bild-URLs
-          updatedAt: new Date().toISOString()
-        };
- 
-        // Postkarte in der Liste finden und ersetzen
-        const updatedPostcards = existingPostcards.map((card: any) => 
-          card.createdAt === editingPostcard.createdAt ? updatedPostcard : card
-        );
-        
-        localStorage.setItem(userPostcardsKey, JSON.stringify(updatedPostcards));
-        console.log(`Postkarte für User ${currentUser.id} aktualisiert`);
+        const response = await fetch(`http://localhost:5000/api/postcards/${editingPostcard.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            date,
+            images: allImageUrls
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Fehler beim Aktualisieren der Postkarte');
+        }
+
+        const updatedPostcard = await response.json();
+        console.log('Postkarte aktualisiert:', updatedPostcard);
         
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('postcardUpdated', { detail: updatedPostcard }));
       } else {
         // Neuerstellungsmodus: Neue Postkarte hinzufügen
-        const newPostcard = {
-          id: Date.now().toString(),
-          title,
-          date,
-          description,
-          images: allImageUrls,
-          createdAt: new Date().toISOString()
-        };
+        const response = await fetch('http://localhost:5000/api/postcards', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            title,
+            description,
+            date,
+            images: allImageUrls
+          })
+        });
 
-        const updatedPostcards = [...existingPostcards, newPostcard];
-        localStorage.setItem(userPostcardsKey, JSON.stringify(updatedPostcards));
-        console.log(`Postkarte für User ${currentUser.id} gespeichert`);
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Fehler beim Erstellen der Postkarte');
+        }
+
+        const newPostcard = await response.json();
+        console.log('Postkarte erstellt:', newPostcard);
         
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('newPostcard', { detail: newPostcard }));
@@ -126,6 +147,7 @@ function CreatePostcard(): ReactElement {
       navigate('/history');
     } catch (error) {
       console.error('Error saving postcard:', error);
+      alert(error instanceof Error ? error.message : 'Fehler beim Speichern');
     } finally {
       setLoading(false);
     }

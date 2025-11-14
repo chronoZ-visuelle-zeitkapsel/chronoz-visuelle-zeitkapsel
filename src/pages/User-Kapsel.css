@@ -12,11 +12,9 @@
 
 
 .FullScreenContainer {
-  margin-top: 53px;
   flex: 1;
   position: relative;
   width: 100%;
-  height: calc(100vh - 120px); 
   display: flex;
   align-items: center;
   justify-content: center;

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ThreeDStage from '../components/ThreeDStage';
+import TimelineSlider from '../components/TimelineSlider';
 import './User-Kapsel.css';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
@@ -58,26 +59,38 @@ function History(): ReactElement {
   }, [navigate]);
 
 
-  // Postkarten aus localStorage laden (user-spezifisch)
-  const loadPostcards = () => {
+  // Postkarten aus Datenbank laden
+  const loadPostcards = async () => {
     if (!currentUser) return [];
     
-    const userPostcardsKey = `userPostcards_${currentUser.id}`;
-    const savedPostcards = localStorage.getItem(userPostcardsKey);
-    if (savedPostcards) {
-      try {
-        const parsed = JSON.parse(savedPostcards);
-        setPostcards(parsed);
-        console.log(`Postkarten für User ${currentUser.id} geladen:`, parsed);
-        return parsed;
-      } catch (error) {
-        console.error('Fehler beim Laden der Postkarten:', error);
-        return [];
+    const token = localStorage.getItem('token');
+    if (!token) return [];
+
+    try {
+      const response = await fetch('http://localhost:5000/api/postcards', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Fehler beim Laden der Postkarten');
       }
+
+      const postcards = await response.json();
+      
+      // Sortiere nach Datum (älteste zuerst)
+      const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      });
+      
+      setPostcards(sortedPostcards);
+      console.log(`Postkarten für User ${currentUser.id} geladen:`, sortedPostcards);
+      return sortedPostcards;
+    } catch (error) {
+      console.error('Fehler beim Laden der Postkarten:', error);
+      return [];
     }
-    // Keine Postkarten für diesen User
-    setPostcards([]);
-    return [];
   };
 
   useEffect(() => {
@@ -97,14 +110,8 @@ function History(): ReactElement {
     return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
-  // Postkarten in localStorage speichern (user-spezifisch)
-  useEffect(() => {
-    if (postcards.length > 0 && currentUser) {
-      const userPostcardsKey = `userPostcards_${currentUser.id}`;
-      localStorage.setItem(userPostcardsKey, JSON.stringify(postcards));
-      console.log(`Postkarten für User ${currentUser.id} gespeichert:`, postcards);
-    }
-  }, [postcards, currentUser]);
+  // Postkarten in Datenbank speichern nicht mehr notwendig - wird durch API gemacht
+  // useEffect entfernt
 
   // Event-Listener für neue Postkarten
   useEffect(() => {
@@ -112,22 +119,36 @@ function History(): ReactElement {
       const newPostcard = event.detail;
       console.log('Neue Postkarte erhalten:', newPostcard);
       setPostcards(prev => {
-        const updated = [...prev, newPostcard];
+        // Füge neue Postkarte hinzu und sortiere nach Datum
+        const updated = [...prev, newPostcard].sort((a, b) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
         console.log('Postkarten aktualisiert:', updated);
+        
+        // Finde den Index der neuen Postkarte in der sortierten Liste
+        const newIndex = updated.findIndex(card => card.id === newPostcard.id);
+        setCurrentCardIndex(newIndex);
+        
         return updated;
       });
-      // Gehe zur neuen Karte (letzte in der Liste)
-      setCurrentCardIndex(prev => prev + 1);
     };
 
     const handlePostcardUpdated = (event: CustomEvent) => {
       const updatedPostcard = event.detail;
       console.log('Postkarte aktualisiert erhalten:', updatedPostcard);
       setPostcards(prev => {
+        // Aktualisiere Postkarte und sortiere nach Datum
         const updated = prev.map(card => 
-          card.createdAt === updatedPostcard.createdAt ? updatedPostcard : card
-        );
+          card.id === updatedPostcard.id ? updatedPostcard : card
+        ).sort((a, b) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
         console.log('Postkarten nach Update:', updated);
+        
+        // Finde den neuen Index der aktualisierten Postkarte
+        const newIndex = updated.findIndex(card => card.id === updatedPostcard.id);
+        setCurrentCardIndex(newIndex);
+        
         return updated;
       });
     };
@@ -160,11 +181,15 @@ function History(): ReactElement {
   }, [showOptions]);
 
   const goToPreviousCard = () => {
-    setCurrentCardIndex((prev) => (prev > 0 ? prev - 1 : postcards.length - 1));
+    if (currentCardIndex > 0) {
+      setCurrentCardIndex(currentCardIndex - 1);
+    }
   };
 
   const goToNextCard = () => {
-    setCurrentCardIndex((prev) => (prev < postcards.length - 1 ? prev + 1 : 0));
+    if (currentCardIndex < postcards.length - 1) {
+      setCurrentCardIndex(currentCardIndex + 1);
+    }
   };
 
   const handleEditPostcard = () => {
@@ -179,16 +204,32 @@ function History(): ReactElement {
     setShowOptions(false);
   };
 
-  const handleDeletePostcard = () => {
-    if (currentPostcard && window.confirm('Möchtest du diese Postkarte wirklich löschen?')) {
+  const handleDeletePostcard = async () => {
+    if (!currentPostcard) return;
+    
+    if (!window.confirm('Möchtest du diese Postkarte wirklich löschen?')) {
+      setShowOptions(false);
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/postcards/${currentPostcard.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Fehler beim Löschen der Postkarte');
+      }
+
+      // Entferne Postkarte aus der lokalen Liste
       const updatedPostcards = postcards.filter((_, index) => index !== currentCardIndex);
       setPostcards(updatedPostcards);
-      
-      // In localStorage speichern
-      if (currentUser) {
-        const userPostcardsKey = `userPostcards_${currentUser.id}`;
-        localStorage.setItem(userPostcardsKey, JSON.stringify(updatedPostcards));
-      }
       
       // Index anpassen
       if (currentCardIndex >= updatedPostcards.length && updatedPostcards.length > 0) {
@@ -196,7 +237,11 @@ function History(): ReactElement {
       } else if (updatedPostcards.length === 0) {
         setCurrentCardIndex(0);
       }
+    } catch (error) {
+      console.error('Fehler beim Löschen:', error);
+      alert('Fehler beim Löschen der Postkarte');
     }
+    
     setShowOptions(false);
   };
 
@@ -206,7 +251,6 @@ function History(): ReactElement {
   console.log('Aktuelle Postkarten:', postcards);
   console.log('Aktueller Index:', currentCardIndex);
   console.log('Aktuelle Postkarte:', currentPostcard);
-  console.log('localStorage userPostcards:', localStorage.getItem('userPostcards'));
 
 
   if (loading) {
@@ -240,6 +284,14 @@ function History(): ReactElement {
     <div className="UserKapselPage">
       <Header />
       <main className="UserKapselMain">
+        {postcards.length > 0 && postcards.length > 1 && (
+          <TimelineSlider
+            postcards={postcards}
+            currentIndex={currentCardIndex}
+            onIndexChange={setCurrentCardIndex}
+          />
+        )}
+        
         {/* Vollbild Container */}
         <div className="FullScreenContainer">
           {postcards.length === 0 ? (
@@ -257,12 +309,14 @@ function History(): ReactElement {
           ) : (
             // Postkarten vorhanden - Anzeige mit Navigation
             <>
+
               {/* Navigation Pfeile */}
               {postcards.length > 1 && (
                 <>
                   <button 
                     className="NavArrow NavArrowLeft" 
                     onClick={goToPreviousCard}
+                    disabled={currentCardIndex === 0}
                   >
                     &lt;
                   </button>
@@ -270,6 +324,7 @@ function History(): ReactElement {
                   <button 
                     className="NavArrow NavArrowRight" 
                     onClick={goToNextCard}
+                    disabled={currentCardIndex === postcards.length - 1}
                   >
                     &gt;
                   </button>
@@ -414,13 +469,6 @@ function History(): ReactElement {
                 </div>
               )}
 
-              {/* Karten-Zähler */}
-              {postcards.length > 1 && (
-                <div className="CardCounter">
-                  {currentCardIndex + 1} / {postcards.length}
-                </div>
-              )}
-
               {/* + Button nach rechts unten */}
               <button 
                 className="AddButton AddButtonBottomRight"
@@ -438,4 +486,3 @@ function History(): ReactElement {
 }
 
 export default History;
-
