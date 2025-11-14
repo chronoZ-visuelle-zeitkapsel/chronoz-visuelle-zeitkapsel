@@ -1,8 +1,8 @@
 .Header {
-    position: fixed;
+    /* keep header in the document flow so it doesn't overlap content
+       use sticky so it stays visible while scrolling but still occupies layout space */
+    position: sticky;
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     z-index: 100;
     width: 100%;
     display: flex;
@@ -11,8 +11,10 @@
 }
 
 .HeaderContainer {
-    width: 1369px;
-    height: 55px;
+    /* make container responsive: full width up to a max */
+    width: 100%;
+    max-width: 1369px;
+    height: var(--header-container-height, 55px);
     margin: 0 auto;
     position: relative;
     display: flex;
@@ -83,6 +85,7 @@
     letter-spacing: 1.6px; /* slightly reduced spacing */
     margin: 0;
     background: linear-gradient(135deg, #1D1B1C 30%, #2D2B2C 100%);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -178,12 +181,47 @@
     background: linear-gradient(135 deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
 }
 
-/* Add spacing helper for content below header */
+/* header variables and spacing handled in :root below */
+
+/* Add spacing helper for content below header and anchor adjustments */
 :root {
-    --header-height: 55px; /* 55px header + 2 * 20px padding */
+    --header-top: 20px; /* distance from top when sticky */
+    --header-container-height: 55px; /* inner header height */
+    --header-height: calc(var(--header-top) + var(--header-container-height) + 8px);
 }
 
-/* Ensure main content starts below header */
+/* With position:sticky the header stays in flow, so main doesn't need a forced margin.
+   Keep main margin at 0 so content isn't shifted twice. */
 main, .Timeline {
-    margin-top: var(--header-height);
+    margin-top: 0;
+}
+
+/* Prevent fixed/sticky header from covering anchor targets when scrolling */
+html {
+    scroll-padding-top: var(--header-height);
+}
+
+:target,
+[id] {
+    scroll-margin-top: var(--header-height);
+}
+
+/* Ensure heading elements with IDs are not hidden behind the fixed header when navigated to */
+h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
+    scroll-margin-top: var(--header-height);
+}
+
+/* Fallback for older browsers: invisible spacer before headings with IDs */
+h1[id]::before,
+h2[id]::before,
+h3[id]::before,
+h4[id]::before,
+h5[id]::before,
+h6[id]::before {
+    content: "";
+    display: block;
+    height: var(--header-height);
+    margin-top: calc(var(--header-height) * -1);
+    visibility: hidden;
+    pointer-events: none;
 }
