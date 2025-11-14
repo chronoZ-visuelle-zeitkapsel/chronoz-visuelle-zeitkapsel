@@ -10,11 +10,13 @@ function CreatePostcard(): ReactElement {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+  const [descFontSize, setDescFontSize] = useState<number>(16);
   const [images, setImages] = useState<File[]>([]);
   const [existingImageUrls, setExistingImageUrls] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingPostcard, setEditingPostcard] = useState<any>(null);
+  const [error, setError] = useState<string>('');
 
   // Lade zu bearbeitende Postkarte
   useEffect(() => {
@@ -63,21 +65,36 @@ function CreatePostcard(): ReactElement {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true);
+    setError('');
 
+    // Client-side validation with friendly messages
+    if (!title || !title.trim()) {
+      setError('Bitte gib einen Titel ein.');
+      return;
+    }
+    if (!date) {
+      setError('Bitte wähle ein Datum.');
+      return;
+    }
+    if (!description || !description.trim()) {
+      setError('Bitte schreibe eine Beschreibung.');
+      return;
+    }
+
+    setLoading(true);
     try {
       // Aktuellen User aus localStorage holen
       const token = localStorage.getItem('token');
       if (!token) {
         console.error('Kein Token gefunden');
-        alert('Bitte melden Sie sich an');
+        setError('Du bist nicht angemeldet. Bitte melde dich an.');
         return;
       }
-      
+
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
       if (!currentUser.id) {
         console.error('Keine User-ID gefunden');
-        alert('Bitte melden Sie sich an');
+        setError('Keine Nutzerinformationen gefunden. Bitte melde dich erneut an.');
         return;
       }
 
@@ -87,9 +104,11 @@ function CreatePostcard(): ReactElement {
         const url = await uploadImage(image, currentUser.id.toString());
         if (url) {
           uploadedImageUrls.push(url);
+        } else {
+          console.warn('Ein Bild konnte nicht hochgeladen werden, wird übersprungen.');
         }
       }
-      
+
       // Kombiniere existierende und neue Bild-URLs
       const allImageUrls = [...existingImageUrls, ...uploadedImageUrls];
 
@@ -110,13 +129,13 @@ function CreatePostcard(): ReactElement {
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Fehler beim Aktualisieren der Postkarte');
+          const payload = await response.json().catch(() => ({}));
+          throw new Error(payload.error || 'Fehler beim Aktualisieren der Postkarte');
         }
 
         const updatedPostcard = await response.json();
         console.log('Postkarte aktualisiert:', updatedPostcard);
-        
+
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('postcardUpdated', { detail: updatedPostcard }));
       } else {
@@ -136,23 +155,23 @@ function CreatePostcard(): ReactElement {
         });
 
         if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Fehler beim Erstellen der Postkarte');
+          const payload = await response.json().catch(() => ({}));
+          throw new Error(payload.error || 'Fehler beim Erstellen der Postkarte');
         }
 
         const newPostcard = await response.json();
         console.log('Postkarte erstellt:', newPostcard);
-        
+
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('newPostcard', { detail: newPostcard }));
       }
-      
+
       // Direkt zur User-Kapsel navigieren
       console.log('Navigiere zurück zur User-Kapsel');
       navigate('/history');
-    } catch (error) {
-      console.error('Error saving postcard:', error);
-      alert(error instanceof Error ? error.message : 'Fehler beim Speichern');
+    } catch (err) {
+      console.error('Error saving postcard:', err);
+      setError(err instanceof Error ? err.message : 'Fehler beim Speichern');
     } finally {
       setLoading(false);
     }
@@ -181,7 +200,6 @@ function CreatePostcard(): ReactElement {
                     onDragOver={(e) => e.preventDefault()}
                     onDragEnter={(e) => e.preventDefault()}
                   >
-                    <label htmlFor="imageUpload" className="VisuallyHidden">Bilder hochladen</label>
                     <input
                       type="file"
                       id="imageUpload"
@@ -199,7 +217,7 @@ function CreatePostcard(): ReactElement {
                       +
                     </button>
 
-                    <div className="UploadHint">Ziehe Bilder hierher oder klicke +</div>
+                    <div className="UploadHint">add your memories</div>
 
                     <div className="ImagePreview">
                       {existingImageUrls.map((url, index) => (
@@ -251,7 +269,7 @@ function CreatePostcard(): ReactElement {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                         className="FormInput"
-                        placeholder="Gib deiner Erinnerung einen Titel"
+                        placeholder="your Titel.."
                       />
                     </div>
 
@@ -269,18 +287,39 @@ function CreatePostcard(): ReactElement {
                   </div>
 
                   <div className="DescriptionField">
-                    <label htmlFor="description">write down your day...</label>
                     <textarea
                       id="description"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       required
                       className="FormTextarea"
-                      placeholder="Beschreibe deinen Tag und deine Erinnerungen..."
+                      placeholder="write down your day..."
                       rows={6}
+                      style={{ fontSize: `${descFontSize}px` }}
                     />
+
+                    <div className="FontSizeControls" aria-hidden={false}>
+                      <button
+                        type="button"
+                        className="FontSizeButton"
+                        onClick={() => setDescFontSize(s => Math.max(12, s - 2))}
+                        title="Schriftgröße verkleinern"
+                      >
+                        A-
+                      </button>
+                      <div className="FontSizeLabel">{descFontSize}px</div>
+                      <button
+                        type="button"
+                        className="FontSizeButton"
+                        onClick={() => setDescFontSize(s => Math.min(28, s + 2))}
+                        title="Schriftgröße vergrößern"
+                      >
+                        A+
+                      </button>
+                    </div>
                   </div>
 
+                  {error && <div className="FormError" role="alert">{error}</div>}
                   <div className="FormActions">
                     <button 
                       type="button" 

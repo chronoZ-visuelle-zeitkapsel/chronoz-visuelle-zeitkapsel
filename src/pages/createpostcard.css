@@ -51,6 +51,9 @@
   letter-spacing: 0.05em;
 }
 
+.TopFields .TitleField :placeholder-shown{
+  color: gray;
+}
 
 .TopFields .TitleField input {
   font-family: 'Scope One', serif;
@@ -65,6 +68,16 @@
   width: auto; /* allow flex to control width */
   padding: 6px 8px;
   font-size: 18px; /* smaller input text so label remains prominent */
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+/* Make the typed title text darker. Works on focus and when input is not placeholder-shown.
+   Note: :not(:placeholder-shown) requires the input to have a placeholder attribute in HTML.
+   If inputs lack placeholders we can add a small JS bit to toggle a `.filled` class instead. */
+.TopFields .TitleField input:focus,
+.TopFields .TitleField input:not(:placeholder-shown) {
+  color: #1D1B1C; /* darker color when user typed or focused */
+  opacity: 1;
 }
 
 /* Make DateField label and input inline (side-by-side) */
@@ -97,6 +110,18 @@
   flex: 1 1 auto;
   width: auto;
   padding: 6px 8px;
+}
+
+/* Make the typed date text darker. Matches TitleField behavior. */
+.TopFields .DateField input {
+  transition: color 160ms ease, opacity 160ms ease;
+}
+
+.TopFields .DateField input:focus,
+.TopFields .DateField input:not(:placeholder-shown) {
+  color: #1D1B1C;
+  opacity: 1;
+  font-size: medium;
 }
 
 
@@ -221,6 +246,19 @@
   color: rgba(13,14,23,0.7);
 }
 
+/* Make DescriptionField layout vertical: textarea + controls underneath */
+.DescriptionField {
+  display: flex;
+  flex-direction: column;
+}
+
+.DescriptionField .FormTextarea {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+}
+
 .DescriptionField textarea {
   width: 100%;
   height: 100%;
@@ -231,12 +269,71 @@
   outline: none;
 }
 
+/* Hide placeholders on focus and once the user has typed (placeholder-shown fallback)
+   Works for both the title input and the description textarea. */
+.TopFields .TitleField input::placeholder,
+.DescriptionField textarea::placeholder {
+  color: rgba(176,181,179,0.85);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.TopFields .TitleField input:focus::placeholder,
+.TopFields .TitleField input:not(:placeholder-shown)::placeholder,
+.DescriptionField textarea:focus::placeholder,
+.DescriptionField textarea:not(:placeholder-shown)::placeholder {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+}
+
 /* Form action buttons - glassy rounded */
 .FormActions {
   display: flex;
-  gap: 12px;
-  justify-content: flex-end;
+  gap: 200px;
+  justify-content: center;
   margin-top: 8px;
+  font-family:Georgia, 'Times New Roman', Times, serif;
+}
+
+/* Form error message */
+.FormError {
+  margin-top: 8px;
+  color: #b00020;
+  background: rgba(176,0,32,0.06);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(176,0,32,0.12);
+  font-size: 0.95rem;
+}
+
+.SubmitButton[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Font size controls for the description textarea */
+.FontSizeControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  justify-content: flex-end;
+}
+
+.FontSizeButton {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  color: rgba(13,14,23,0.8);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.FontSizeLabel {
+  min-width: 48px;
+  text-align: center;
+  color: rgba(13,14,23,0.7);
 }
 
 .ResetButton, .SubmitButton {
@@ -296,7 +393,7 @@
   padding: 24px;
   /* make the upload box fill the left column and grow if needed */
   height: 100%;
-  min-height: 360px;
+  min-height: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
