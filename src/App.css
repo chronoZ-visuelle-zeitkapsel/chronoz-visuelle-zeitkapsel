@@ -23,10 +23,9 @@ body {
 /* Root Layout */
 
 .AppRoot {
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--footer-height);
 }
 
 .CreatePostcardPage,

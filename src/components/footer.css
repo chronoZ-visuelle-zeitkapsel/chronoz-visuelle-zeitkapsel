@@ -1,15 +1,14 @@
 .Footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    /* footer is part of normal document flow (not fixed) */
+    position: relative;
+    width: 100%;
     height: var(--footer-height, 80px);
     min-height: var(--footer-height, 80px);
-    background: rgba(248, 249, 250, 1);
+    background: #000;
+    color: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 60;
     padding: 0 24px; /* horizontal padding only */
 }
 
@@ -22,10 +21,10 @@
 
 /* Newspaper theme overrides for footer */
 .newspaper-theme .Footer {
-    background: transparent;
+    background: #000;
     border-top: 1px solid var(--rule);
     box-shadow: none;
-    color: var(--muted);
+    color: #f5f5f5;
     height: auto;
     padding: 12px 20px;
 }
@@ -34,6 +33,18 @@
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: .08em;
-    color: var(--muted);
+    color: #f5f5f5;
 }
 .newspaper-theme .FooterRight .Logo { filter: grayscale(100%) contrast(1.05); opacity: 0.95; }
+
+/* Impressum link light color */
+.Footer .ImpressumLink,
+.newspaper-theme .Footer .ImpressumLink {
+    color: #f5f5f5;
+    text-decoration: none;
+}
+.Footer .ImpressumLink:hover,
+.newspaper-theme .Footer .ImpressumLink:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
