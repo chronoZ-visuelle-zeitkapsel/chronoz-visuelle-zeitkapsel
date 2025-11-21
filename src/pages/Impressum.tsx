@@ -5,9 +5,9 @@ import './Impressum.css';
 
 function Impressum(): ReactElement {
   const teamMembers = [
-    { name: 'Adin MUTISEVIC', image: null },
-    { name: 'Stefan FRIEDL', image: null },
-    { name: 'Riz GARCIA', image: null }
+    { name: 'Adin MUTISEVIC', image: '/mutisevic.jpg' },
+    { name: 'Stefan FRIEDL', image: '/friedl.jpg' },
+    { name: 'Riz GARCIA', image: '/garcia.jpg' }
   ];
 
   return (
@@ -59,9 +59,9 @@ function Impressum(): ReactElement {
             </section>
 
             <section className="InfoSection">
-              <h3>Diplomarbeit 2024/2025</h3>
+              <h3>Diplomarbeit 2025/2026</h3>
               <p>
-                Dieses Projekt wurde im Schuljahr 2024/2025 als Diplomarbeit im Rahmen der 
+                Dieses Projekt wurde im Schuljahr 2025/2026 als Diplomarbeit im Rahmen der 
                 Abteilung Informatik erstellt. Alle Rechte vorbehalten.
               </p>
             </section>

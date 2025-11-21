@@ -279,11 +279,7 @@
   color: rgba(13,14,23,0.7);
 }
 
-/* Make DescriptionField layout vertical: textarea + controls underneath */
-.DescriptionField {
-  display: flex;
-  flex-direction: column;
-}
+
 
 .DescriptionField .FormTextarea {
   flex: 1 1 auto;
