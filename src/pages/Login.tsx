@@ -1,4 +1,5 @@
 import React, { ReactElement, useMemo, useState } from 'react';
+import './login.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type Mode = 'login' | 'register';
