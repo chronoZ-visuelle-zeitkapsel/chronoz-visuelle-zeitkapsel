@@ -1,11 +1,19 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './footer.css';
 
 function Footer(): React.ReactElement {
+	const location = useLocation();
+	const isImpressumPage = location.pathname === '/impressum';
+
 	return (
 		<footer className="Footer">
 			<div className="FooterCenter">
-				<a href="#impressum" className="ImpressumLink">Impressum</a>
+				{isImpressumPage ? (
+					<Link to="/" className="ImpressumLink">Home</Link>
+				) : (
+					<Link to="/impressum" className="ImpressumLink">Impressum</Link>
+				)}
 			</div>
 			<div className="FooterRight">
 				<img

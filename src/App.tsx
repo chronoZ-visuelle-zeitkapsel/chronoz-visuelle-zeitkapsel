@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-ro
 import Login from './pages/Login';
 import History from './pages/User-Kapsel';
 import CreatePostcard from './pages/CreatePostcard';
+import Impressum from './pages/Impressum';
 
 function Home({ blurred }: { blurred: boolean }): ReactElement {
 	return (
@@ -57,6 +58,7 @@ function App(): ReactElement {
 				<Route path="/login" element={<Shell />} />
 				<Route path="/history" element={<History />} />
 				<Route path="/create-postcard" element={<CreatePostcard />} />
+				<Route path="/impressum" element={<Impressum />} />
 			</Routes>
 		</BrowserRouter>
 	);

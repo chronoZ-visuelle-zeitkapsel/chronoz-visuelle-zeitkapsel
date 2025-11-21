@@ -194,6 +194,14 @@ function CreatePostcard(): ReactElement {
             <form onSubmit={handleSubmit} className="PostcardForm">
               <div className="FormColumns">
                 <div className="LeftColumn">
+                  <button 
+                    type="button" 
+                    className="BackButton"
+                    onClick={() => navigate('/history')}
+                    title="Zurück zur User-Kapsel"
+                  >
+                    ←
+                  </button>
                   <div
                     className="FileUploadBox"
                     onDrop={handleDrop}
