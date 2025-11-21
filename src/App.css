@@ -33,7 +33,6 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: var(--footer-height);
 }
 
 .CreatePostcardMain,
@@ -41,6 +40,9 @@ body {
   flex: 1 1 auto;
   display: block;
 }
+
+/* Ensure main content stretches to push footer to bottom when content is short */
+main { flex: 1 1 auto; }
 
 /* HEADER – Zeitungskopf */
 
