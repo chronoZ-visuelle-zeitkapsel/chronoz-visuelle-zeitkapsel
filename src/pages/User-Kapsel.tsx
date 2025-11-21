@@ -313,20 +313,26 @@ function History(): ReactElement {
               {/* Navigation Pfeile */}
               {postcards.length > 1 && (
                 <>
-                  <button 
-                    className="NavArrow NavArrowLeft" 
+                  <button
+                    className="NavArrow NavArrowLeft"
                     onClick={goToPreviousCard}
                     disabled={currentCardIndex === 0}
+                    aria-label="Vorherige Postkarte"
                   >
-                    &lt;
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
                   </button>
-                  
-                  <button 
-                    className="NavArrow NavArrowRight" 
+
+                  <button
+                    className="NavArrow NavArrowRight"
                     onClick={goToNextCard}
                     disabled={currentCardIndex === postcards.length - 1}
+                    aria-label="Nächste Postkarte"
                   >
-                    &gt;
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
+                    </svg>
                   </button>
                 </>
               )}

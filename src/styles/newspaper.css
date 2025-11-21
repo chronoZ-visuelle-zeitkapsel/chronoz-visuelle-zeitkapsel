@@ -1,5 +1,5 @@
 :root {
-  --paper: #f6f2ea;
+  --paper: #e6e2da;
   --ink: #0b0b0b;
   --muted: #6b6b6b;
   --rule: rgba(0,0,0,0.08);
@@ -68,6 +68,77 @@ body.newspaper-theme {
   column-rule: 1px solid rgba(0,0,0,0.04);
   font-size: 16px;
   line-height: 1.55;
+}
+
+/* Newspaper-style navigation arrows for postcard navigation */
+.newspaper-theme .NavArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04) inset, 0 6px 14px rgba(0,0,0,0.06);
+  border-radius: 6px;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+}
+
+.newspaper-theme .NavArrow:hover {
+  transform: translateY(-50%) scale(1.03);
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+}
+
+.newspaper-theme .NavArrow:active {
+  transform: translateY(-50%) scale(0.99);
+}
+
+/* slightly inset positions to match newspaper margins */
+.newspaper-theme .NavArrowLeft { left: 12px; }
+.newspaper-theme .NavArrowRight { right: 12px; }
+
+/* Make the arrow text slightly smaller on mobile */
+@media (max-width: 768px) {
+  .newspaper-theme .NavArrow { width: 40px; height: 40px; font-size: 1rem; }
+}
+
+/* SVG inside arrows: ink color and crisp rendering */
+.newspaper-theme .NavArrow svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: var(--ink);
+}
+
+/* Decorative tiny ruled lines next to arrows to feel like margin rules */
+.newspaper-theme .NavArrowLeft::after,
+.newspaper-theme .NavArrowRight::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 28px;
+  background: var(--rule);
+  opacity: 0.9;
+}
+
+.newspaper-theme .NavArrowLeft::after { left: calc(100% + 8px); }
+.newspaper-theme .NavArrowRight::after { right: calc(100% + 8px); }
+
+@media (max-width: 768px) {
+  .newspaper-theme .NavArrowLeft::after,
+  .newspaper-theme .NavArrowRight::after { height: 22px; }
 }
 
 /* Collage / Images */
