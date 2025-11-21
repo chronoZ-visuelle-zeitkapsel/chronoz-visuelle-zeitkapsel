@@ -561,3 +561,44 @@
     height: 80px;
   }
 }
+
+/* Newspaper theme overrides for User-Kapsel (visual only) */
+.newspaper-theme .Postcard {
+  background: transparent;
+  border-radius: 6px;
+  box-shadow: none;
+  border-bottom: 1px solid var(--rule);
+}
+.newspaper-theme .PostcardImages img {
+  filter: grayscale(60%) contrast(1.03);
+  border: 2px solid #fff;
+}
+.newspaper-theme .PostcardContent {
+  background: transparent;
+  padding: 28px;
+}
+.newspaper-theme .PostcardTitle {
+  font-family: var(--serif);
+  font-size: 32px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.newspaper-theme .PostcardDate {
+  font-family: var(--serif);
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.newspaper-theme .PostcardDescription {
+  font-family: var(--sans);
+  color: var(--ink);
+  column-count: 2;
+  column-gap: 24px;
+  column-rule: 1px solid rgba(0,0,0,0.04);
+}
+.newspaper-theme .NavArrow,
+.newspaper-theme .OptionsButton,
+.newspaper-theme .AddButtonBottomRight {
+  background: rgba(255,255,255,0.9);
+  border: 1px solid var(--rule);
+}

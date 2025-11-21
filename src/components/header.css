@@ -225,3 +225,45 @@ h6[id]::before {
     visibility: hidden;
     pointer-events: none;
 }
+
+/* Newspaper theme overrides (visual only) */
+.newspaper-theme .Header {
+    position: sticky;
+    top: 12px;
+}
+.newspaper-theme .HeaderContainer {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 0;
+    box-shadow: none;
+    padding: 8px 4px;
+}
+.newspaper-theme .HeaderCenter .LogoLogo {
+    width: auto;
+    height: 56px;
+    filter: grayscale(100%) contrast(1.05);
+    opacity: 0.95;
+}
+.newspaper-theme .HeaderLeft .Logo,
+.newspaper-theme .HeaderRight img {
+    filter: grayscale(100%) contrast(1.05);
+}
+.newspaper-theme .BrandText {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    background: none;
+    -webkit-text-fill-color: unset;
+}
+.newspaper-theme .UserButton,
+.newspaper-theme .AuthButton {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink);
+}
+.newspaper-theme .LogoutPanel {
+    background: white;
+    border: 1px solid var(--rule);
+}

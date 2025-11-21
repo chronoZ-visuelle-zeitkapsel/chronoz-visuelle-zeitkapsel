@@ -74,9 +74,6 @@ function CTA(): ReactElement {
 				<span className="Plus">+</span>
 				<span>Zeig deine Geschichte</span>
 			</button>
-			<div className="CTAHint">
-				{currentUser ? 'Klicke hier, um deine persönliche Timeline zu sehen!' : 'Zum Erstellen der Fotocollage anmelden.'}
-			</div>
 		</div>
 	);
 }

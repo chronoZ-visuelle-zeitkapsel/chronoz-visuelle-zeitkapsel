@@ -19,3 +19,21 @@
     display: flex;
     align-items: center;
 }
+
+/* Newspaper theme overrides for footer */
+.newspaper-theme .Footer {
+    background: transparent;
+    border-top: 1px solid var(--rule);
+    box-shadow: none;
+    color: var(--muted);
+    height: auto;
+    padding: 12px 20px;
+}
+.newspaper-theme .FooterCenter {
+    font-family: var(--serif);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+}
+.newspaper-theme .FooterRight .Logo { filter: grayscale(100%) contrast(1.05); opacity: 0.95; }

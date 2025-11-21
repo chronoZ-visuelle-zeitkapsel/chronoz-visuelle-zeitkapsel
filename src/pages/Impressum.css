@@ -163,3 +163,74 @@
     font-size: 0.95rem;
   }
 }
+
+/* Newspaper theme visual overrides for Impressum */
+.newspaper-theme .ImpressumPage {
+  background: var(--paper);
+  color: var(--ink);
+}
+.newspaper-theme .ImpressumContainer {
+  max-width: 980px;
+  padding: 18px;
+}
+.newspaper-theme .ImpressumTitle {
+  font-family: var(--serif);
+  font-size: 36px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.newspaper-theme .TeamGrid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.newspaper-theme .TeamCard {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.newspaper-theme .TeamCardHeader {
+  background: transparent;
+  padding: 8px 12px;
+  text-align: left;
+}
+.newspaper-theme .TeamCardHeader h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink);
+  text-transform: none;
+}
+.newspaper-theme .TeamCardImage img,
+.newspaper-theme .ImagePlaceholder {
+  filter: grayscale(60%) contrast(1.03);
+  border: 2px solid #fff;
+  background: #fff;
+}
+.newspaper-theme .InfoBox {
+  background: transparent;
+  padding: 18px;
+  border: 0;
+}
+.newspaper-theme .InfoSection h3 {
+  font-family: var(--serif);
+  text-transform: uppercase;
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+}
+.newspaper-theme .InfoSection p {
+  font-family: var(--sans);
+  color: var(--ink);
+  column-count: 2;
+  column-gap: 24px;
+  column-rule: 1px solid rgba(0,0,0,0.04);
+}
+.newspaper-theme .InfoSection a { color: var(--ink); text-decoration: underline; }
+
+@media (max-width: 1024px) {
+  .newspaper-theme .TeamGrid { grid-template-columns: repeat(2, 1fr); }
+  .newspaper-theme .InfoSection p { column-count: 1; }
+}
+

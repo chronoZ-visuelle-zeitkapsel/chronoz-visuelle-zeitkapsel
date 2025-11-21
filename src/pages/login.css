@@ -119,3 +119,33 @@
   .LoginTitle { font-size: 28px; }
   .SwitchButton { padding: 8px 18px; }
 }
+
+/* Newspaper theme overrides for login (visual only) */
+.newspaper-theme .LoginCard {
+  background: white;
+  border: 1px solid var(--rule);
+  box-shadow: none;
+}
+.newspaper-theme .LoginTitle {
+  font-family: var(--serif);
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.newspaper-theme .Input {
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  box-shadow: none;
+}
+.newspaper-theme .SwitchButton {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
+.newspaper-theme .CTAButton {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}

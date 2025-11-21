@@ -15,7 +15,7 @@ function Impressum(): ReactElement {
       <Header />
       <main className="ImpressumMain">
         <div className="ImpressumContainer">
-          <h1 className="ImpressumTitle">chronoZ</h1>
+          <h1 className="ImpressumTitle">5AHITM</h1>
           
           <div className="TeamGrid">
             {teamMembers.map((member, index) => (

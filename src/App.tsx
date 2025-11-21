@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import './App.css';
+import './styles/newspaper.css';
 import Header from './components/Header';
 import Timeline from './components/Timeline';
 import ThreeDStage from './components/ThreeDStage';
@@ -52,15 +53,17 @@ function Shell(): ReactElement {
 
 function App(): ReactElement {
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<Shell />} />
-				<Route path="/login" element={<Shell />} />
-				<Route path="/history" element={<History />} />
-				<Route path="/create-postcard" element={<CreatePostcard />} />
-				<Route path="/impressum" element={<Impressum />} />
-			</Routes>
-		</BrowserRouter>
+		<div className="app newspaper-theme">
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Shell />} />
+					<Route path="/login" element={<Shell />} />
+					<Route path="/history" element={<History />} />
+					<Route path="/create-postcard" element={<CreatePostcard />} />
+					<Route path="/impressum" element={<Impressum />} />
+				</Routes>
+			</BrowserRouter>
+		</div>
 	);
 }
 

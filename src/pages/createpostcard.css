@@ -530,3 +530,78 @@
   padding: 8px 12px;
   border-radius: 10px;
 }
+
+/* Newspaper theme visual overrides (no functional changes) */
+.newspaper-theme .CreatePostcardContainer {
+  background: transparent;
+  box-shadow: none;
+  padding: 12px 8px;
+}
+.newspaper-theme .CreatePostcardContainer .InnerTopBar {
+  background: transparent;
+  text-transform: uppercase;
+  font-family: var(--serif);
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: .08em;
+}
+.newspaper-theme .TopFields .TitleField label,
+.newspaper-theme .TopFields .DateField label {
+  font-family: var(--serif);
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.newspaper-theme .TopFields .TitleField input,
+.newspaper-theme .TopFields .DateField input {
+  font-family: var(--sans);
+  color: var(--ink);
+}
+.newspaper-theme .DescriptionField .FormTextarea,
+.newspaper-theme .DescriptionField textarea {
+  font-family: var(--sans);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.newspaper-theme .DescriptionField .FormTextarea {
+  column-count: 2;
+  column-gap: 22px;
+  column-rule: 1px solid rgba(0,0,0,0.04);
+}
+.newspaper-theme .FileUploadBox {
+  background: #fff;
+  border: 1px solid var(--rule);
+  box-shadow: none;
+  padding: 12px;
+  border-radius: 8px;
+}
+.newspaper-theme .PlusUploadButton {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
+.newspaper-theme .ImagePreview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+.newspaper-theme .PreviewItem {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid #fff;
+}
+.newspaper-theme .PreviewImage {
+  filter: grayscale(60%) contrast(1.03);
+}
+.newspaper-theme .FormActions {
+  gap: 48px;
+}
+.newspaper-theme .ResetButton,
+.newspaper-theme .SubmitButton,
+.newspaper-theme .FontSizeButton {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--ink);
+}
