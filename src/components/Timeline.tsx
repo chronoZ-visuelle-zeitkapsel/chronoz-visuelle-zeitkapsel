@@ -27,7 +27,7 @@ function Timeline(): ReactElement {
         {/* Zeitungstitel über der Leiste */}
         <header className="TimelineHeaderRow">
           <h2 className="SectionTitle">Chronik der Ereignisse</h2>
-          <span className="TimelineRange">1995 – 2025</span>
+          <span className="TimelineRange">1995 – ???</span>
         </header>
 
         <div className="Timeline">
