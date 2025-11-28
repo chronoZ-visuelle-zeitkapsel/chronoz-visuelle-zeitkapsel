@@ -86,6 +86,19 @@ function History(): ReactElement {
       
       setPostcards(sortedPostcards);
       console.log(`Postkarten für User ${currentUser.id} geladen:`, sortedPostcards);
+      
+      // Prüfe ob eine zuletzt bearbeitete/erstellte Postkarte existiert
+      const lastPostcardId = localStorage.getItem('lastViewedPostcardId');
+      if (lastPostcardId) {
+        const index = sortedPostcards.findIndex((card: Postcard) => card.id === lastPostcardId);
+        if (index !== -1) {
+          setCurrentCardIndex(index);
+          console.log(`Springe zu zuletzt bearbeiteter Postkarte: Index ${index}`);
+        }
+        // Entferne nach Verwendung
+        localStorage.removeItem('lastViewedPostcardId');
+      }
+      
       return sortedPostcards;
     } catch (error) {
       console.error('Fehler beim Laden der Postkarten:', error);
@@ -118,6 +131,8 @@ function History(): ReactElement {
     const handleNewPostcard = (event: CustomEvent) => {
       const newPostcard = event.detail;
       console.log('Neue Postkarte erhalten:', newPostcard);
+      // Speichere ID für späteren Abruf nach Seiten-Reload
+      localStorage.setItem('lastViewedPostcardId', newPostcard.id);
       setPostcards(prev => {
         // Füge neue Postkarte hinzu und sortiere nach Datum
         const updated = [...prev, newPostcard].sort((a, b) => {
@@ -136,6 +151,8 @@ function History(): ReactElement {
     const handlePostcardUpdated = (event: CustomEvent) => {
       const updatedPostcard = event.detail;
       console.log('Postkarte aktualisiert erhalten:', updatedPostcard);
+      // Speichere ID für späteren Abruf nach Seiten-Reload
+      localStorage.setItem('lastViewedPostcardId', updatedPostcard.id);
       setPostcards(prev => {
         // Aktualisiere Postkarte und sortiere nach Datum
         const updated = prev.map(card => 

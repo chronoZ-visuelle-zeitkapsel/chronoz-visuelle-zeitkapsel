@@ -136,6 +136,9 @@ function CreatePostcard(): ReactElement {
         const updatedPostcard = await response.json();
         console.log('Postkarte aktualisiert:', updatedPostcard);
 
+        // Speichere ID für Navigation zur richtigen Slide
+        localStorage.setItem('lastViewedPostcardId', updatedPostcard.id);
+
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('postcardUpdated', { detail: updatedPostcard }));
       } else {
@@ -161,6 +164,9 @@ function CreatePostcard(): ReactElement {
 
         const newPostcard = await response.json();
         console.log('Postkarte erstellt:', newPostcard);
+
+        // Speichere ID für Navigation zur richtigen Slide
+        localStorage.setItem('lastViewedPostcardId', newPostcard.id);
 
         // Custom Event für andere Komponenten
         window.dispatchEvent(new CustomEvent('newPostcard', { detail: newPostcard }));
