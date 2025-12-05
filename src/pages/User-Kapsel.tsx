@@ -2,7 +2,6 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import ThreeDStage from '../components/ThreeDStage';
 import TimelineSlider from '../components/TimelineSlider';
 import './User-Kapsel.css';
 
@@ -59,70 +58,95 @@ function History(): ReactElement {
   }, [navigate]);
 
 
-  // Postkarten aus Datenbank laden
-  const loadPostcards = async () => {
-    if (!currentUser) return [];
-    
-    const token = localStorage.getItem('token');
-    if (!token) return [];
-
-    try {
-      const response = await fetch('http://localhost:5000/api/postcards', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Fehler beim Laden der Postkarten');
-      }
-
-      const postcards = await response.json();
-      
-      // Sortiere nach Datum (älteste zuerst)
-      const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      });
-      
-      setPostcards(sortedPostcards);
-      console.log(`Postkarten für User ${currentUser.id} geladen:`, sortedPostcards);
-      
-      // Prüfe ob eine zuletzt bearbeitete/erstellte Postkarte existiert
-      const lastPostcardId = localStorage.getItem('lastViewedPostcardId');
-      if (lastPostcardId) {
-        const index = sortedPostcards.findIndex((card: Postcard) => card.id === lastPostcardId);
-        if (index !== -1) {
-          setCurrentCardIndex(index);
-          console.log(`Springe zu zuletzt bearbeiteter Postkarte: Index ${index}`);
-        }
-        // Entferne nach Verwendung
-        localStorage.removeItem('lastViewedPostcardId');
-      }
-      
-      return sortedPostcards;
-    } catch (error) {
-      console.error('Fehler beim Laden der Postkarten:', error);
-      return [];
-    }
-  };
-
   useEffect(() => {
+    const loadPostcards = async () => {
+      if (!currentUser) return [];
+      
+      const token = localStorage.getItem('token');
+      if (!token) return [];
+
+      try {
+        const response = await fetch('http://localhost:5000/api/postcards', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Fehler beim Laden der Postkarten');
+        }
+
+        const postcards = await response.json();
+        
+        // Sortiere nach Datum (älteste zuerst)
+        const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+        
+        setPostcards(sortedPostcards);
+        console.log(`Postkarten für User ${currentUser.id} geladen:`, sortedPostcards);
+        
+        // Prüfe ob eine zuletzt bearbeitete/erstellte Postkarte existiert
+        const lastPostcardId = localStorage.getItem('lastViewedPostcardId');
+        if (lastPostcardId) {
+          const index = sortedPostcards.findIndex((card: Postcard) => card.id === lastPostcardId);
+          if (index !== -1) {
+            setCurrentCardIndex(index);
+            console.log(`Springe zu zuletzt bearbeiteter Postkarte: Index ${index}`);
+          }
+          // Entferne nach Verwendung
+          localStorage.removeItem('lastViewedPostcardId');
+        }
+        
+        return sortedPostcards;
+      } catch (error) {
+        console.error('Fehler beim Laden der Postkarten:', error);
+        return [];
+      }
+    };
+
     if (currentUser) {
       loadPostcards();
     }
   }, [currentUser]);
 
   // Postkarten neu laden wenn Seite fokussiert wird (nach Navigation zurück)
+  // Postkarten neu laden wenn Seite fokussiert wird (nach Navigation zurück)
   useEffect(() => {
-    const handleFocus = () => {
+    const handleFocus = async () => {
+      if (!currentUser) return;
+      
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
       console.log('Seite fokussiert - lade Postkarten neu');
-      loadPostcards();
+      try {
+        const response = await fetch('http://localhost:5000/api/postcards', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Fehler beim Laden der Postkarten');
+        }
+
+        const postcards = await response.json();
+        
+        // Sortiere nach Datum (älteste zuerst)
+        const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+        
+        setPostcards(sortedPostcards);
+      } catch (error) {
+        console.error('Fehler beim Laden der Postkarten:', error);
+      }
     };
 
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
-  }, []);
-
+  }, [currentUser]);
   // Postkarten in Datenbank speichern nicht mehr notwendig - wird durch API gemacht
   // useEffect entfernt
 

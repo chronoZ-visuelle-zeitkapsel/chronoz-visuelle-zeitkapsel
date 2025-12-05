@@ -21,7 +21,7 @@ function Impressum(): ReactElement {
       name: 'Riz GARCIA', 
       role: '3D-Modell, Frontend', 
       image: '/garcia.jpg',
-      description: 'Erstellung des 3D-Modells und Frontend-Entwicklung. Umsetzung der interaktiven Benutzeroberfläche und 3D-Visualisierung.'
+      description: 'Erstellung des 3D-Modells und Frontend-Entwicklung. Umsetzung der Animationen des 3D-Modells.'
     }
   ]; 
 
@@ -30,7 +30,7 @@ function Impressum(): ReactElement {
       <Header />
       <main className="ImpressumMain">
         <div className="ImpressumContainer">
-          <h1 className="ImpressumTitle">5AHITM</h1>
+          <h1 className="ImpressumTitle">5AHITM</h1> 
           
           <div className="TeamGrid">
             {teamMembers.map((member, index) => (

@@ -1,0 +1,48 @@
+.VerifyPage {
+  min-height: calc(100vh - 140px);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.VerifyCard {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.VerifyCard h1 {
+  margin: 0 0 16px;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.VerifyForm {
+  display: grid;
+  gap: 12px;
+}
+
+.SuccessMessage {
+  padding: 16px;
+  background: rgba(127, 255, 159, 0.2);
+  border: 1px solid rgba(127, 255, 159, 0.4);
+  border-radius: 10px;
+  color: #7fff9f;
+  text-align: center;
+  font-weight: 500;
+}
+
+.ErrorMessage {
+  padding: 12px;
+  background: rgba(255, 138, 138, 0.2);
+  border: 1px solid rgba(255, 138, 138, 0.4);
+  border-radius: 10px;
+  color: #ff8a8a;
+  text-align: center;
+  font-size: 0.9rem;
+}
