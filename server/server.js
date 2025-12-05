@@ -34,9 +34,7 @@ const supabase = createClient(
 
 // CORS Configuration
 const corsOptions = {
-  origin: NODE_ENV === 'production' 
-    ? ['https://chronoz-visuelle-zeitkapsel.vercel.app']
-    : ['http://10.13.51.28:5002', 'http://localhost:3000', 'http://localhost:5002'],
+  origin: '*', // Temporär für Debugging
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
