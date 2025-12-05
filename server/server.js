@@ -6,8 +6,10 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const SECRET_KEY = process.env.JWT_SECRET;
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const APP_URL = NODE_ENV === 'production' ? process.env.PROD_APP_URL : process.env.DEV_APP_URL;
 
 // Supabase Client mit direkter Verbindung initialisieren
 const supabase = createClient(
@@ -96,7 +98,7 @@ app.post('/api/auth/register', async (req, res) => {
 
     // Sende Verifizierungsmail über Supabase Auth
     try {
-      await supabase.auth.signUp({
+      const { error: authError } = await supabase.auth.signUp({
         email: email,
         password: Math.random().toString(36), // Dummy password für Auth
         options: {
@@ -104,9 +106,15 @@ app.post('/api/auth/register', async (req, res) => {
             verification_code: verificationCode,
             username: username
           },
-          emailRedirectTo: `${process.env.APP_URL || 'http://localhost:3000'}/verify`
+          emailRedirectTo: `${APP_URL}/verify?email=${encodeURIComponent(email)}`
         }
       });
+      
+      if (authError) {
+        console.error('Email send error (non-critical):', authError);
+      } else {
+        console.log(`[DEV] E-Mail gesendet an ${email}`);
+      }
       console.log(`[DEV] Verifizierungscode für ${email}: ${verificationCode}`);
     } catch (authError) {
       console.error('Email send error (non-critical):', authError);

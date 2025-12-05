@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './settings.css';
+import { apiUrl } from '../config/api';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
 
@@ -23,7 +24,7 @@ function Settings(): ReactElement {
     }
 
     // Verify token and get user data
-    fetch('http://10.13.51.28:5000/api/auth/me', {
+    fetch(apiUrl('/api/auth/me'), {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -62,7 +63,7 @@ function Settings(): ReactElement {
     }
 
     try {
-      const res = await fetch('http://10.13.51.28:5000/api/auth/toggle-2fa', {
+      const res = await fetch(apiUrl('/api/auth/toggle-2fa'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

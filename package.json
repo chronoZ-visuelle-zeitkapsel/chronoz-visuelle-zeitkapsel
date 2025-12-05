@@ -29,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "powershell -ExecutionPolicy Bypass -File ./start-dev.ps1",
+    "stop": "powershell -ExecutionPolicy Bypass -File ./stop-dev.ps1"
   },
   "eslintConfig": {
     "extends": [

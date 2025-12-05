@@ -1,6 +1,7 @@
 import React, { ReactElement, useMemo, useState } from 'react';
 import './login.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { apiUrl } from '../config/api';
 
 type Mode = 'login' | 'register';
 
@@ -52,7 +53,7 @@ function Login(): ReactElement {
     try {
       if (mode === 'login') {
       
-        const res = await fetch('http://10.13.51.28:5000/api/auth/login', {
+        const res = await fetch(apiUrl('/api/auth/login'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier: email, password })
@@ -93,7 +94,7 @@ function Login(): ReactElement {
           navigate('/');
         }
       } else {
-        const res = await fetch('http://10.13.51.28:5000/api/auth/register', {
+        const res = await fetch(apiUrl('/api/auth/register'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, email, password })
@@ -135,7 +136,7 @@ function Login(): ReactElement {
     setLoading(true);
 
     try {
-      const res = await fetch('http://10.13.51.28:5000/api/auth/verify-2fa', {
+      const res = await fetch(apiUrl('/api/auth/verify-2fa'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, code: twoFactorCode })
