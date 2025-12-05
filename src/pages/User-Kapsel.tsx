@@ -350,8 +350,8 @@ function History(): ReactElement {
           ) : (
             // Postkarten vorhanden - Anzeige mit Navigation
             <>
-
-              {/* Navigation Pfeile */}
+    
+              {/* Navigation Pfeil e */}
               {postcards.length > 1 && (
                 <>
                   <button
