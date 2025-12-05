@@ -66,6 +66,18 @@ const initDb = async () => {
 
 initDb();
 
+// Test endpoint
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'Server is running',
+    nodeEnv: NODE_ENV,
+    appUrl: APP_URL,
+    corsOrigin: NODE_ENV === 'production' 
+      ? ['https://chronoz-visuelle-zeitkapsel.vercel.app']
+      : ['http://10.13.51.28:5002', 'http://localhost:3000', 'http://localhost:5002']
+  });
+});
+
 // ----------- Register -----------
 app.post('/api/auth/register', async (req, res) => {
   try {
