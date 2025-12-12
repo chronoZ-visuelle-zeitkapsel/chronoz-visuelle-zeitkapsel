@@ -120,10 +120,13 @@ app.post('/api/auth/register', async (req, res) => {
     }
 
     // Sende Verifizierungsmail über Supabase Auth
+    let emailSent = false;
+    let emailError = null;
+    
     try {
-      console.log(`[EMAIL] Versuche Email zu senden an: ${normalizedEmail}`);
-      console.log(`[EMAIL] APP_URL: ${APP_URL}`);
-      console.log(`[EMAIL] Redirect URL: ${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`);
+      console.error(`[EMAIL] Versuche Email zu senden an: ${normalizedEmail}`);
+      console.error(`[EMAIL] APP_URL: ${APP_URL}`);
+      console.error(`[EMAIL] Redirect URL: ${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`);
       
       const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: normalizedEmail,
@@ -141,13 +144,16 @@ app.post('/api/auth/register', async (req, res) => {
         console.error(`[EMAIL ERROR] Fehler beim Senden an ${normalizedEmail}:`, authError);
         console.error(`[EMAIL ERROR] Error Code:`, authError.code);
         console.error(`[EMAIL ERROR] Error Message:`, authError.message);
+        emailError = authError.message;
       } else {
-        console.log(`[EMAIL SUCCESS] E-Mail erfolgreich gesendet an ${normalizedEmail}`);
-        console.log(`[EMAIL SUCCESS] SignUp Response:`, signUpData);
+        console.error(`[EMAIL SUCCESS] E-Mail erfolgreich gesendet an ${normalizedEmail}`);
+        console.error(`[EMAIL SUCCESS] SignUp Response:`, JSON.stringify(signUpData));
+        emailSent = true;
       }
-      console.log(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
+      console.error(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
     } catch (authError) {
       console.error(`[EMAIL EXCEPTION] Exception beim Email-Versand an ${normalizedEmail}:`, authError);
+      emailError = authError.message || 'Unknown error';
     }
 
     const token = jwt.sign({ 
@@ -160,7 +166,9 @@ app.post('/api/auth/register', async (req, res) => {
     res.json({ 
       token, 
       user,
-      message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.'
+      message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.',
+      emailSent: emailSent,
+      emailError: emailError
     });
   } catch (err) {
     console.error(err);
