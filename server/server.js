@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const SECRET_KEY = process.env.JWT_SECRET;
 const NODE_ENV = process.env.NODE_ENV || 'development';
-const APP_URL = NODE_ENV === 'production' ? process.env.PROD_APP_URL : process.env.DEV_APP_URL;
+const APP_URL = process.env.APP_URL || (NODE_ENV === 'production' ? process.env.PROD_APP_URL : process.env.DEV_APP_URL);
 
 // Supabase Client mit direkter Verbindung initialisieren
 const supabase = createClient(
