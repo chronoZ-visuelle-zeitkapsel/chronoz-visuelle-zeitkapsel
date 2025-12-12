@@ -85,6 +85,9 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: "Alle Felder erforderlich" });
     }
 
+    // Email in Kleinbuchstaben konvertieren
+    const normalizedEmail = email.toLowerCase();
+
     // Passwort hashen
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -98,7 +101,7 @@ app.post('/api/auth/register', async (req, res) => {
       .insert([
         { 
           username, 
-          email, 
+          email: normalizedEmail, 
           password: hashedPassword,
           email_verified: false,
           two_factor_enabled: false,
@@ -119,23 +122,23 @@ app.post('/api/auth/register', async (req, res) => {
     // Sende Verifizierungsmail über Supabase Auth
     try {
       const { error: authError } = await supabase.auth.signUp({
-        email: email,
+        email: normalizedEmail,
         password: Math.random().toString(36), // Dummy password für Auth
         options: {
           data: {
             verification_code: verificationCode,
             username: username
           },
-          emailRedirectTo: `${APP_URL}/verify?email=${encodeURIComponent(email)}`
+          emailRedirectTo: `${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`
         }
       });
       
       if (authError) {
         console.error('Email send error (non-critical):', authError);
       } else {
-        console.log(`[DEV] E-Mail gesendet an ${email}`);
+        console.log(`[DEV] E-Mail gesendet an ${normalizedEmail}`);
       }
-      console.log(`[DEV] Verifizierungscode für ${email}: ${verificationCode}`);
+      console.log(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
     } catch (authError) {
       console.error('Email send error (non-critical):', authError);
     }
@@ -167,11 +170,14 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ error: "Alle Felder erforderlich" });
     }
 
+    // Identifier in Kleinbuchstaben für Email-Vergleich
+    const normalizedIdentifier = identifier.toLowerCase();
+
     // Benutzer in Supabase suchen
     const { data: user, error } = await supabase
       .from('users')
       .select('*')
-      .or(`username.eq.${identifier},email.eq.${identifier}`)
+      .or(`username.eq.${identifier},email.eq.${normalizedIdentifier}`)
       .single();
 
     if (error || !user) {
@@ -427,10 +433,13 @@ app.post('/api/auth/verify-email', async (req, res) => {
       return res.status(400).json({ error: "Code und E-Mail erforderlich" });
     }
 
+    // Email in Kleinbuchstaben konvertieren
+    const normalizedEmail = email.toLowerCase();
+
     const { data: user, error } = await supabase
       .from('users')
       .select('*')
-      .eq('email', email)
+      .eq('email', normalizedEmail)
       .eq('verification_code', code)
       .single();
 
