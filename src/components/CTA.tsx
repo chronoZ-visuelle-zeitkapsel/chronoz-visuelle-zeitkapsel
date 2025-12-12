@@ -1,5 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../config/api';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
 
@@ -15,7 +16,7 @@ function CTA(): ReactElement {
 		}
 
 		// Verify token and get user data
-		fetch('/api/auth/me', {
+		fetch(apiUrl('/api/auth/me'), {
 			headers: { Authorization: `Bearer ${token}` }
 		})
 		.then(res => {

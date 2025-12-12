@@ -1,6 +1,7 @@
 import './header.css';
 import React, { ReactElement, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiUrl } from '../config/api';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
 
@@ -39,7 +40,7 @@ function Header(): ReactElement {
 		let cancelled = false;
 		(async () => {
 			try {
-				const res = await fetch('/api/auth/me', {
+				const res = await fetch(apiUrl('/api/auth/me'), {
 					headers: { Authorization: `Bearer ${token}` }
 				});
 				if (!res.ok) {

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { uploadImage } from '../utils/supabase';
+import { apiUrl } from '../config/api';
 import './createpostcard.css';
 
 function CreatePostcard(): ReactElement {
@@ -114,7 +115,7 @@ function CreatePostcard(): ReactElement {
 
       if (isEditing && editingPostcard) {
         // Bearbeitungsmodus: Postkarte aktualisieren
-        const response = await fetch(`http://localhost:5000/api/postcards/${editingPostcard.id}`, {
+        const response = await fetch(apiUrl(`/api/postcards/${editingPostcard.id}`), {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -143,7 +144,7 @@ function CreatePostcard(): ReactElement {
         window.dispatchEvent(new CustomEvent('postcardUpdated', { detail: updatedPostcard }));
       } else {
         // Neuerstellungsmodus: Neue Postkarte hinzufügen
-        const response = await fetch('http://localhost:5000/api/postcards', {
+        const response = await fetch(apiUrl('/api/postcards'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
