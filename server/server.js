@@ -121,7 +121,11 @@ app.post('/api/auth/register', async (req, res) => {
 
     // Sende Verifizierungsmail über Supabase Auth
     try {
-      const { error: authError } = await supabase.auth.signUp({
+      console.log(`[EMAIL] Versuche Email zu senden an: ${normalizedEmail}`);
+      console.log(`[EMAIL] APP_URL: ${APP_URL}`);
+      console.log(`[EMAIL] Redirect URL: ${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`);
+      
+      const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: normalizedEmail,
         password: Math.random().toString(36), // Dummy password für Auth
         options: {
@@ -134,13 +138,16 @@ app.post('/api/auth/register', async (req, res) => {
       });
       
       if (authError) {
-        console.error('Email send error (non-critical):', authError);
+        console.error(`[EMAIL ERROR] Fehler beim Senden an ${normalizedEmail}:`, authError);
+        console.error(`[EMAIL ERROR] Error Code:`, authError.code);
+        console.error(`[EMAIL ERROR] Error Message:`, authError.message);
       } else {
-        console.log(`[DEV] E-Mail gesendet an ${normalizedEmail}`);
+        console.log(`[EMAIL SUCCESS] E-Mail erfolgreich gesendet an ${normalizedEmail}`);
+        console.log(`[EMAIL SUCCESS] SignUp Response:`, signUpData);
       }
       console.log(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
     } catch (authError) {
-      console.error('Email send error (non-critical):', authError);
+      console.error(`[EMAIL EXCEPTION] Exception beim Email-Versand an ${normalizedEmail}:`, authError);
     }
 
     const token = jwt.sign({ 
