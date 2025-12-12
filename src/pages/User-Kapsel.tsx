@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TimelineSlider from '../components/TimelineSlider';
+import { apiUrl } from '../config/api';
 import './User-Kapsel.css';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
@@ -32,7 +33,7 @@ function History(): ReactElement {
     }
 
     // Verify token and get user data
-    fetch('/api/auth/me', {
+    fetch(apiUrl('/api/auth/me'), {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
@@ -66,7 +67,7 @@ function History(): ReactElement {
       if (!token) return [];
 
       try {
-        const response = await fetch('http://localhost:5000/api/postcards', {
+        const response = await fetch(apiUrl('/api/postcards'), {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -121,7 +122,7 @@ function History(): ReactElement {
 
       console.log('Seite fokussiert - lade Postkarten neu');
       try {
-        const response = await fetch('http://localhost:5000/api/postcards', {
+        const response = await fetch(apiUrl('/api/postcards'), {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -257,7 +258,7 @@ function History(): ReactElement {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/postcards/${currentPostcard.id}`, {
+      const response = await fetch(apiUrl(`/api/postcards/${currentPostcard.id}`), {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
