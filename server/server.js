@@ -120,13 +120,17 @@ app.post('/api/auth/register', async (req, res) => {
     }
 
     // Sende Verifizierungsmail über Supabase Auth
-    let emailSent = false;
-    let emailError = null;
+    let emailDebug = {
+      sent: false,
+      error: null,
+      appUrl: APP_URL,
+      redirectUrl: `${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`,
+      email: normalizedEmail,
+      timestamp: new Date().toISOString()
+    };
     
     try {
-      console.error(`[EMAIL] Versuche Email zu senden an: ${normalizedEmail}`);
-      console.error(`[EMAIL] APP_URL: ${APP_URL}`);
-      console.error(`[EMAIL] Redirect URL: ${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`);
+      console.error(`[EMAIL] Sending to: ${normalizedEmail}, APP_URL: ${APP_URL}`);
       
       const { data: signUpData, error: authError } = await supabase.auth.signUp({
         email: normalizedEmail,
@@ -141,19 +145,24 @@ app.post('/api/auth/register', async (req, res) => {
       });
       
       if (authError) {
-        console.error(`[EMAIL ERROR] Fehler beim Senden an ${normalizedEmail}:`, authError);
-        console.error(`[EMAIL ERROR] Error Code:`, authError.code);
-        console.error(`[EMAIL ERROR] Error Message:`, authError.message);
-        emailError = authError.message;
+        emailDebug.error = {
+          code: authError.code,
+          message: authError.message,
+          status: authError.status
+        };
+        console.error(`[EMAIL ERROR]`, authError);
       } else {
-        console.error(`[EMAIL SUCCESS] E-Mail erfolgreich gesendet an ${normalizedEmail}`);
-        console.error(`[EMAIL SUCCESS] SignUp Response:`, JSON.stringify(signUpData));
-        emailSent = true;
+        emailDebug.sent = true;
+        emailDebug.response = signUpData;
+        console.error(`[EMAIL SUCCESS] Sent to ${normalizedEmail}`);
       }
       console.error(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
     } catch (authError) {
-      console.error(`[EMAIL EXCEPTION] Exception beim Email-Versand an ${normalizedEmail}:`, authError);
-      emailError = authError.message || 'Unknown error';
+      emailDebug.error = {
+        exception: true,
+        message: authError.message || 'Unknown error'
+      };
+      console.error(`[EMAIL EXCEPTION]`, authError);
     }
 
     const token = jwt.sign({ 
@@ -167,8 +176,7 @@ app.post('/api/auth/register', async (req, res) => {
       token, 
       user,
       message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.',
-      emailSent: emailSent,
-      emailError: emailError
+      emailDebug: emailDebug
     });
   } catch (err) {
     console.error(err);
