@@ -151,6 +151,15 @@ app.post('/api/auth/register', async (req, res) => {
           status: authError.status
         };
         console.error(`[EMAIL ERROR]`, authError);
+      } else if (!signUpData.user) {
+        // User existiert bereits in auth.users - keine Email gesendet
+        emailDebug.sent = false;
+        emailDebug.error = {
+          code: 'USER_ALREADY_EXISTS_IN_AUTH',
+          message: 'User bereits in Supabase Auth registriert, keine Email gesendet'
+        };
+        emailDebug.response = signUpData;
+        console.error(`[EMAIL WARNING] User already exists in auth.users: ${normalizedEmail}`);
       } else {
         emailDebug.sent = true;
         emailDebug.response = signUpData;
