@@ -98,6 +98,110 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
     backdrop-filter: blur(10px);
     cursor: pointer;
+}
+
+/* Responsive Header */
+@media (max-width: 1024px) {
+  .HeaderContainer {
+    max-width: 95%;
+    margin: 0 12px;
+  }
+  
+  .HeaderLeft {
+    left: 25px;
+  }
+  
+  .HeaderRight {
+    right: 25px;
+  }
+  
+  .BrandText {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .Header {
+    top: 10px;
+  }
+  
+  .HeaderContainer {
+    height: 50px;
+    border-radius: 25px;
+    margin: 0 8px;
+  }
+  
+  .HeaderLeft {
+    left: 15px;
+  }
+  
+  .HeaderRight {
+    right: 15px;
+  }
+  
+  .Logo {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .BrandText {
+    font-size: 28px;
+    letter-spacing: 1.2px;
+  }
+  
+  .UserButton {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 600px) {
+  .HeaderContainer {
+    height: 45px;
+    border-radius: 22px;
+  }
+  
+  .HeaderLeft {
+    left: 12px;
+  }
+  
+  .HeaderRight {
+    right: 12px;
+  }
+  
+  .Logo {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .BrandText {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+  
+  .UserButton {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 400px) {
+  .BrandText {
+    font-size: 20px;
+  }
+  
+  .Logo {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .UserButton {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+.UserButton {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -24,6 +24,7 @@ function History(): ReactElement {
   const [postcards, setPostcards] = useState<Postcard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -416,6 +417,8 @@ function History(): ReactElement {
                           <img 
                             src={currentPostcard.images[0]} 
                             alt={`${currentPostcard.title} - Bild 1`}
+                            onClick={() => setLightboxImage(currentPostcard.images[0])}
+                            style={{ cursor: 'pointer' }}
                             onError={(e) => {
                               console.error('Fehler beim Laden des Bildes:', e);
                               (e.target as HTMLImageElement).src = 'placeholder.png';
@@ -430,12 +433,16 @@ function History(): ReactElement {
                           <img 
                             src={currentPostcard.images[0]} 
                             alt={`${currentPostcard.title} - Bild 1`}
+                            onClick={() => setLightboxImage(currentPostcard.images[0])}
+                            style={{ cursor: 'pointer' }}
                           />
                         </div>
                         <div className="TemplateImage">
                           <img 
                             src={currentPostcard.images[1]} 
                             alt={`${currentPostcard.title} - Bild 2`}
+                            onClick={() => setLightboxImage(currentPostcard.images[1])}
+                            style={{ cursor: 'pointer' }}
                           />
                         </div>
                       </div>
@@ -446,6 +453,8 @@ function History(): ReactElement {
                           <img 
                             src={currentPostcard.images[0]} 
                             alt={`${currentPostcard.title} - Bild 1`}
+                            onClick={() => setLightboxImage(currentPostcard.images[0])}
+                            style={{ cursor: 'pointer' }}
                           />
                         </div>
                         <div className="TemplateImageRow">
@@ -453,12 +462,16 @@ function History(): ReactElement {
                             <img 
                               src={currentPostcard.images[1]} 
                               alt={`${currentPostcard.title} - Bild 2`}
+                              onClick={() => setLightboxImage(currentPostcard.images[1])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                           <div className="TemplateImage">
                             <img 
                               src={currentPostcard.images[2]} 
                               alt={`${currentPostcard.title} - Bild 3`}
+                              onClick={() => setLightboxImage(currentPostcard.images[2])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                         </div>
@@ -471,12 +484,16 @@ function History(): ReactElement {
                             <img 
                               src={currentPostcard.images[0]} 
                               alt={`${currentPostcard.title} - Bild 1`}
+                              onClick={() => setLightboxImage(currentPostcard.images[0])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                           <div className="TemplateImage">
                             <img 
                               src={currentPostcard.images[1]} 
                               alt={`${currentPostcard.title} - Bild 2`}
+                              onClick={() => setLightboxImage(currentPostcard.images[1])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                         </div>
@@ -485,12 +502,16 @@ function History(): ReactElement {
                             <img 
                               src={currentPostcard.images[2]} 
                               alt={`${currentPostcard.title} - Bild 3`}
+                              onClick={() => setLightboxImage(currentPostcard.images[2])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                           <div className="TemplateImage">
                             <img 
                               src={currentPostcard.images[3]} 
                               alt={`${currentPostcard.title} - Bild 4`}
+                              onClick={() => setLightboxImage(currentPostcard.images[3])}
+                              style={{ cursor: 'pointer' }}
                             />
                           </div>
                         </div>
@@ -529,6 +550,28 @@ function History(): ReactElement {
         </div>
       </main>
       <Footer />
+      
+      {/* Lightbox für Bildanzeige */}
+      {lightboxImage && (
+        <div 
+          className="Lightbox" 
+          onClick={() => setLightboxImage(null)}
+        >
+          <div className="LightboxContent">
+            <button 
+              className="LightboxClose"
+              onClick={() => setLightboxImage(null)}
+            >
+              ✕
+            </button>
+            <img 
+              src={lightboxImage} 
+              alt="Vergrößertes Bild"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

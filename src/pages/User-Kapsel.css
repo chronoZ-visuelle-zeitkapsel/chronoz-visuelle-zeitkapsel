@@ -383,17 +383,33 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .Postcard {
+    width: 95%;
+    max-width: 900px;
+  }
+  
+  .PostcardContent {
+    padding: 30px;
+  }
+  
+  .PostcardTitle {
+    font-size: 2.2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .Postcard {
     flex-direction: column;
     width: 95%;
-    height: 90%;
+    height: auto;
+    max-height: 90vh;
   }
   
   .PostcardImages {
     flex: 1;
     min-height: 250px;
-    max-height: 300px;
+    max-height: 350px;
   }
   
   /* Template 3 - Mobile */
@@ -425,27 +441,104 @@
   
   .PostcardTitle {
     font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .PostcardDate {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  .PostcardDescription {
+    font-size: 1.05rem;
   }
   
   .NavArrow {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
   }
   
   .NavArrowLeft {
-    left: 15px;
+    left: 10px;
   }
   
   .NavArrowRight {
-    right: 15px;
+    right: 10px;
   }
   
   .CardCounter {
     top: 15px;
     right: 15px;
     padding: 8px 16px;
-    font-size: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .AddButtonBottomRight {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .AddButtonBottomRight .Plus {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .Postcard {
+    width: 98%;
+    border-radius: 15px;
+  }
+  
+  .PostcardImages {
+    min-height: 200px;
+    max-height: 280px;
+  }
+  
+  .PostcardContent {
+    padding: 15px;
+  }
+  
+  .PostcardTitle {
+    font-size: 1.5rem;
+  }
+  
+  .PostcardDate {
+    font-size: 0.9rem;
+  }
+  
+  .PostcardDescription {
+    font-size: 0.95rem;
+  }
+  
+  .NavArrow {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .NavArrowLeft {
+    left: 5px;
+  }
+  
+  .NavArrowRight {
+    right: 5px;
+  }
+  
+  .CardCounter {
+    top: 10px;
+    right: 10px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .AddButtonBottomRight {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    right: 15px;
   }
 
   /* Options Button - Mobile */
@@ -605,4 +698,99 @@
 .newspaper-theme .AddButtonBottomRight {
   background: rgba(255,255,255,0.9);
   border: 1px solid var(--rule);
+}
+
+/* Lightbox Styles */
+.Lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: pointer;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.LightboxContent {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.LightboxContent img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.LightboxClose {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.LightboxClose:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+/* Responsive Lightbox */
+@media (max-width: 768px) {
+  .LightboxClose {
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    font-size: 20px;
+  }
+  
+  .LightboxContent img {
+    max-width: 95vw;
+    max-height: 80vh;
+  }
 }

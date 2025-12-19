@@ -374,11 +374,84 @@
   cursor: pointer;
 }
 
+@media (max-width: 1024px) {
+  .CreatePostcardContainer {
+    width: 90%;
+    padding: 24px;
+  }
+  
+  .LeftColumn {
+    max-width: 50%;
+  }
+}
+
 @media (max-width: 900px) {
-  .CreatePostcardContainer { left: 24px; top: 100px; transform: none; }
-  .CreatePostcardContainer { width: calc(100% - 48px); height: calc(100% - 200px); }
-  .FormColumns { flex-direction: column; height: auto; }
-  .LeftColumn, .RightColumn { width: 100%; }
+  .CreatePostcardContainer {
+    left: 24px;
+    top: 100px;
+    transform: none;
+    width: calc(100% - 48px);
+    height: auto;
+    min-height: calc(100vh - 200px);
+    padding: 20px;
+  }
+  
+  .FormColumns {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .LeftColumn,
+  .RightColumn {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .TopFields .TitleField label {
+    font-size: 24px;
+  }
+  
+  .TopFields .TitleField input {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .CreatePostcardContainer {
+    left: 12px;
+    top: 90px;
+    width: calc(100% - 24px);
+    padding: 16px;
+    border-radius: 16px;
+  }
+  
+  .TopFields {
+    padding: 10px;
+  }
+  
+  .TopFields .TitleField {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .TopFields .TitleField label {
+    font-size: 20px;
+  }
+  
+  .TopFields .TitleField input {
+    font-size: 18px;
+    width: 100%;
+  }
+  
+  .DateField input {
+    font-size: 14px;
+  }
+  
+  .DescriptionField textarea {
+    font-size: 14px;
+    min-height: 120px;
+  }
 }
 
 /* Optional modifier class: make the postcard full-screen

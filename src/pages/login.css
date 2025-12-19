@@ -114,10 +114,56 @@
 .CTAHint { text-align:center; font-size:13px; color: rgba(120,120,125,0.9); margin-top:8px; }
 
 /* smaller screens: keep card full height look */
+@media (max-width: 768px) {
+  .LoginPage {
+    padding: 20px;
+  }
+  
+  .LoginCard {
+    padding: 24px;
+  }
+  
+  .LoginTitle {
+    font-size: 32px;
+  }
+}
+
 @media (max-width: 520px) {
-  .LoginCard { width: calc(100vw - 36px); padding: 20px; border-radius: 22px; }
-  .LoginTitle { font-size: 28px; }
-  .SwitchButton { padding: 8px 18px; }
+  .LoginCard {
+    width: calc(100vw - 36px);
+    padding: 20px;
+    border-radius: 22px;
+  }
+  
+  .LoginTitle {
+    font-size: 28px;
+  }
+  
+  .SwitchButton {
+    padding: 8px 18px;
+    font-size: 14px;
+  }
+  
+  .Input {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .CTAButton {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .LoginTitle {
+    font-size: 24px;
+  }
+  
+  .SwitchButton {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
 }
 
 /* Newspaper theme overrides for login (visual only) */

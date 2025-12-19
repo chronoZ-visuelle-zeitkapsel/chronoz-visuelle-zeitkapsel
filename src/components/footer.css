@@ -55,3 +55,36 @@
     color: #ffffff;
     text-decoration: underline;
 }
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+  .Footer {
+    height: auto;
+    min-height: 70px;
+    padding: 12px 20px;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .FooterRight {
+    position: static;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Footer {
+    min-height: 60px;
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  .FooterCenter {
+    font-size: 12px;
+    text-align: center;
+  }
+  
+  .FooterRight img {
+    height: 30px;
+  }
+}
