@@ -1,10 +1,12 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import './App.css';
 import './styles/newspaper.css';
 import Header from './components/Header';
 import Timeline from './components/Timeline';
 import ThreeDStage from './components/ThreeDStage';
 import CTA from './components/CTA';
+import Archive from './components/Archive';
+import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
@@ -15,6 +17,13 @@ import VerifyEmail from './pages/VerifyEmail';
 import Settings from './pages/Settings';
 
 function Home({ blurred }: { blurred: boolean }): ReactElement {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setIsLoggedIn(!!token);
+	}, []);
+
 	return (
 		<div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
 			<Header />
@@ -29,6 +38,8 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
 					<CTA />
 				</section>
 			</main>
+			{isLoggedIn && <Archive />}
+			<FAQ />
 			<Footer />
 		</div>
 	);
