@@ -104,17 +104,6 @@ function Header(): ReactElement {
 			<div className="HeaderContainer">
 				<div className="HeaderLeft">
 					<img
-						src="/CzLogo.png"
-						alt="chronoZ Logo"
-						className="Logo"
-						onClick={() => navigate('/')}
-						loading="lazy"
-						role="button"
-					/>
-				</div>
-
-				<div className="HeaderCenter">
-					<img
 						src="/chronoZLogo.png"
 						alt="chronoZ Logo"
 						className="LogoLogo"
@@ -122,6 +111,13 @@ function Header(): ReactElement {
 						loading="lazy"
 						role="button"
 					/>
+				</div>
+
+				<div className="HeaderCenter">
+					<button className="NavItem" onClick={() => navigate('/history')}>chronik</button>
+					<button className="NavItem" onClick={() => navigate('/archive')}>archiv</button>
+					<button className="NavItem" onClick={() => navigate('/impressum')}>impressum</button>
+					<button className="NavItem" onClick={() => navigate('/#faq')}>faq</button>
 				</div>
 
 				<div className="HeaderRight">
@@ -136,7 +132,7 @@ function Header(): ReactElement {
 							onFocus={() => setMenuOpen(true)}
 							onBlur={() => setMenuOpen(false)}
 						>
-							<button className="UserButton" title={currentUser.email}>
+							<button className="NavItem UserButton" title={currentUser.email}>
 								<svg viewBox="0 0 24 24" className="UserIcon">
 									<path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
 								</svg>
@@ -148,7 +144,7 @@ function Header(): ReactElement {
 							</div>
 						</div>
 					) : (
-						<button className="AuthButton" onClick={() => navigate('/login')}>Login</button>
+						<button className="NavItem LoginButton" onClick={() => navigate('/login')}>Login</button>
 					)}
 				</div>
 			</div>
