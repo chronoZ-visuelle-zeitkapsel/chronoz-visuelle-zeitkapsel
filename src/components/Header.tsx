@@ -120,7 +120,7 @@ function Header(): ReactElement {
 					<button className="NavItem" onClick={() => navigate('/#faq')}>faq</button>
 				</div>
 
-				<div className="HeaderRight">
+				<div className="HeaderRight"> 
 					{currentUser ? (
 						<div
 							ref={userAreaRef}
