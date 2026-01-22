@@ -48,34 +48,44 @@
   letter-spacing: -0.02em;
 }
 
+.LoginLogo {
+  width: 150px;
+  height: 80px;
+  display: block;
+  margin: 0 auto 20px;
+  object-fit: contain;
+}
+
 .SwitchContainer {
-  display: flex;
-  gap: 0;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  justify-items: stretch;
   margin-bottom: 18px;
 }
 
 .SwitchButton {
-  padding: 10px 26px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.65);
-  border: 1px solid rgba(255,255,255,0.75);
-  color: rgba(22,60,84,0.6);
+  padding: 10px 26px !important;
+  border-radius: 18px !important;
+  background: transparent !important;
+  border: 1px solid #000000 !important;
+  color: #000000 !important;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 150;
 }
-.SwitchButton + .SwitchButton { margin-left: -6px; }
+.SwitchButton + .SwitchButton { margin-left: 0; }
 .SwitchButton.active {
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.98));
-  box-shadow: 0 8px 18px rgba(8,18,30,0.06);
-  color: rgba(12,57,86,0.95);
+  background: #000000 !important;
+  box-shadow: 0 8px 10px rgba(116, 115, 115, 0.3) !important;
+  color: #f5f1e8 !important;
+  border: 1px solid #000000 !important;
+  transform: translateY(-2px);
 }
 
-.LoginForm { display:flex; flex-direction:column; gap:16px; }
+.LoginForm { display:flex; flex-direction:column; gap:16px; font-family: 'Montserrat', sans-serif !important; }
 
-.Field { display:flex; flex-direction:column; gap:8px; }
-.Field span { color: rgba(200,200,205,0.9); font-weight:600; }
+.Field { display:flex; flex-direction:column; gap:1px; }
+.Field span { color: rgba(60, 60, 62, 0.9); font-weight:600; font-family: 'Montserrat', sans-serif !important; }
 
 .Input {
   padding: 14px 14px 14px 18px;
@@ -90,10 +100,10 @@
 .Input::placeholder { color: rgba(160,170,175,0.6); }
 
 .PasswordInputWrapper { position: relative; display:flex; align-items:center; }
-.PasswordInputWrapper .Input { padding-right: 54px; }
+.PasswordInputWrapper .Input { padding-right: 132px; }
 .PasswordToggle {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  width:36px; height:36px; border-radius:18px; border:none; background:transparent; cursor:pointer; color: rgba(20,40,60,0.6);
+  width:36px; height:36px; border-radius:18px; border:none !important; background:transparent; cursor:pointer; color: rgba(20,40,60,0.6);
 }
 
 .Actions { display:flex; gap:12px; }
@@ -101,17 +111,23 @@
   margin-top:8px;
   align-self:center;
   padding: 10px 22px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,248,250,0.96));
-  border: 1px solid rgba(255,255,255,0.9);
-  box-shadow: 0 8px 22px rgba(8,18,30,0.06);
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid #000000 !important;
+  box-shadow: none;
   cursor: pointer;
   font-weight: 700;
-  color: rgba(12,57,86,0.95);
+  color: #000000;
 }
 .CTAButton[disabled] { opacity: 0.6; cursor: not-allowed; }
 
-.CTAHint { text-align:center; font-size:13px; color: rgba(120,120,125,0.9); margin-top:8px; }
+.CTAHint { 
+  text-align:center; 
+  font-size:10px; 
+  color: rgba(120,120,125,0.9); 
+  margin-top:8px; 
+  text-transform: lowercase;
+  }
 
 /* smaller screens: keep card full height look */
 @media (max-width: 768px) {

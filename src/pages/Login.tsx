@@ -124,7 +124,7 @@ function Login(): ReactElement {
 
   function Rule({ ok, label }: { ok: boolean; label: string }) {
     return (
-      <div className="CTAHint" style={{ color: ok ? '#7fff9f' : '#ffb3b3' }}>
+      <div className="CTAHint" style={{ color: ok ? '#539e66' : '#f17e7e' }}>
         {ok ? '✓' : '•'} {label}
       </div>
     );
@@ -166,7 +166,7 @@ function Login(): ReactElement {
   return (
     <div className="LoginPage">
       <div className="LoginCard">
-        <h1 className="LoginTitle">chronoZ</h1>
+        <img src="/chronoZLogo.png" alt="chronoZ Logo" className="LoginLogo" />
         
         {requires2FA ? (
           // 2FA Code Entry Form
@@ -202,8 +202,8 @@ function Login(): ReactElement {
                 Zurück
               </button>
             </div>
-            {registrationSuccess && <div className="CTAHint" style={{ color: '#7fff9f' }}>{registrationSuccess}</div>}
-            {error && <div className="CTAHint" style={{ color: '#ff8a8a' }}>{error}</div>}
+            {registrationSuccess && <div className="CTAHint" style={{ color: '#539e66' }}>{registrationSuccess}</div>}
+            {error && <div className="CTAHint" style={{ color: '#f17e7e' }}>{error}</div>}
           </form>
         ) : (
           // Normal Login/Register Form
@@ -253,7 +253,7 @@ function Login(): ReactElement {
                         onClick={() => setShowPassword(!showPassword)}
                         aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
                       >
-                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                        <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
                       </button>
                     </div>
                   </label>
@@ -301,7 +301,7 @@ function Login(): ReactElement {
                         onClick={() => setShowPassword(!showPassword)}
                         aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
                       >
-                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                        <img src={showPassword ? "/eye-open.svg" : "/eye-closed.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
                       </button>
                     </div>
                     <Rule ok={passLenOk} label="Mindestens 8 Zeichen" />
@@ -316,7 +316,7 @@ function Login(): ReactElement {
                   </div>
                 </>
               )}
-              {registrationSuccess && <div className="CTAHint" style={{ color: '#7fff9f' }}>{registrationSuccess}</div>}
+              {registrationSuccess && <div className="CTAHint" style={{ color: '#4abd66' }}>{registrationSuccess}</div>}
               {error && <div className="CTAHint" style={{ color: '#ff8a8a' }}>{error}</div>}
             </form>
           </>
