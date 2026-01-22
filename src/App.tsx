@@ -28,9 +28,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
 		<div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
 			<Header />
 			<main className="HomeMain">
-				<section className="TimelineSection">
-					<Timeline />
-				</section>
 				<section className="StageSection">
 					<ThreeDStage />
 				</section>

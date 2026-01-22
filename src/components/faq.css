@@ -1,6 +1,6 @@
 .faq-section {
 	padding: 80px 20px;
-	background: #D0BF9E;
+	background: #e1d5bb;
 	min-height: 400px;
 }
 
@@ -97,7 +97,7 @@
 
 .faq-answer p {
 	margin: 0;
-	color: #666666;
+	color: #414040;
 	font-size: 1rem;
 	line-height: 1.7;
 }
