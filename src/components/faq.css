@@ -1,6 +1,6 @@
 .faq-section {
 	padding: 80px 20px;
-	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	background: #D0BF9E;
 	min-height: 400px;
 }
 
@@ -10,83 +10,94 @@
 }
 
 .faq-title {
-	font-size: 2.5rem;
+	font-size: 2rem;
 	font-weight: 700;
-	text-align: center;
-	margin-bottom: 15px;
-	color: #2c3e50;
+	text-align: left;
+	margin-bottom: 40px;
+	color: #000000;
 	font-family: 'Georgia', serif;
+	text-transform: uppercase;
 }
 
 .faq-subtitle {
-	font-size: 1.1rem;
-	text-align: center;
-	margin-bottom: 50px;
-	color: #546e7a;
-	font-weight: 400;
+	font-size: 0.9rem;
+	text-align: left;
+	margin-bottom: 30px;
+	color: #999999;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
 }
 
 .faq-list {
-	display: flex;
-	flex-direction: column;
-	gap: 15px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
 }
 
 .faq-item {
-	background: white;
-	border-radius: 12px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	overflow: hidden;
+	background: transparent;
+	border-radius: 0;
+	border: none;
+	border-bottom: 1px solid #000000;
+	box-shadow: none;
+	overflow: visible;
 	transition: all 0.3s ease;
+	padding: 0;
+	margin: 0;
 }
 
 .faq-item:hover {
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-	transform: translateY(-2px);
+	box-shadow: none;
+	transform: none;
 }
 
 .faq-question {
 	width: 100%;
-	padding: 20px 25px;
+	padding: 20px 0;
 	background: none;
 	border: none;
 	text-align: left;
-	font-size: 1.1rem;
-	font-weight: 600;
-	color: #2c3e50;
+	font-size: 1rem;
+	font-weight: 700;
+	color: #000000;
 	cursor: pointer;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	transition: all 0.2s ease;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
 }
 
 .faq-question:hover {
-	background: #f8f9fa;
+	background: none;
+	color: #666666;
 }
 
 .faq-question:focus {
-	outline: 2px solid #667eea;
-	outline-offset: -2px;
+	outline: none;
 }
 
 .faq-icon {
 	font-size: 1.5rem;
 	font-weight: 300;
-	color: #667eea;
+	color: #000000;
 	transition: transform 0.3s ease;
 	min-width: 30px;
 	text-align: center;
 }
 
 .faq-answer {
-	padding: 0 25px 20px 25px;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
 	animation: slideDown 0.3s ease;
 }
 
 .faq-answer p {
 	margin: 0;
-	color: #546e7a;
+	color: #666666;
 	font-size: 1rem;
 	line-height: 1.7;
 }
