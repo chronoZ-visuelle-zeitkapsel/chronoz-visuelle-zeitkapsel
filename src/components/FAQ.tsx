@@ -68,7 +68,6 @@ function FAQ(): ReactElement {
 		<section className="faq-section">
 			<div className="faq-container">
 				<h2 className="faq-title">Häufig gestellte Fragen</h2>
-				<p className="faq-subtitle">Hier finden Sie Antworten auf die wichtigsten Fragen zu ChronoZ</p>
 				<div className="faq-list">
 					{faqData.map((faq, index) => (
 						<FAQItem key={index} question={faq.question} answer={faq.answer} />

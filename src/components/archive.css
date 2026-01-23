@@ -1,6 +1,6 @@
 .archive-section {
 	padding: 100px 20px 80px 20px;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background: linear-gradient(135deg, #CBC0A8 0%, #E1D5BB 100%);
 	min-height: 500px;
 	position: relative;
 	overflow: hidden;
@@ -188,7 +188,7 @@
 
 .carousel-card-date {
 	font-size: 1.1rem;
-	color: #667eea;
+	color: #8b8a65;
 	font-weight: 700;
 }
 
@@ -203,7 +203,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #667eea;
+	color: #d6c58b;
 	transition: all 0.3s ease;
 	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 	flex-shrink: 0;
@@ -287,13 +287,13 @@
 
 .autoplay-toggle.active {
 	background: white;
-	color: #667eea;
+	color: #d6c58b;
 	border-color: white;
 }
 
 .archive-view-all-btn {
 	background: white;
-	color: #667eea;
+	color: #d6c58b;
 	border: none;
 	padding: 10px 20px;
 	border-radius: 8px;
@@ -323,7 +323,7 @@
 
 .archive-create-btn {
 	background: white;
-	color: #667eea;
+	color: #d6c58b;
 	border: none;
 	padding: 12px 30px;
 	border-radius: 8px;
