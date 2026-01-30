@@ -99,6 +99,22 @@
 }
 .Input::placeholder { color: rgba(160,170,175,0.6); }
 
+.ForgotPasswordLink {
+  background: none;
+  border: none;
+  color: rgba(60, 60, 62, 0.8);
+  font-size: 14px;
+  text-align: right;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin: -8px 0 0 auto;
+  text-decoration: underline;
+  font-family: 'Montserrat', sans-serif !important;
+}
+.ForgotPasswordLink:hover {
+  color: rgba(18, 30, 40, 0.95);
+}
+
 .PasswordInputWrapper { position: relative; display:flex; align-items:center; }
 .PasswordInputWrapper .Input { padding-right: 132px; }
 .PasswordToggle {

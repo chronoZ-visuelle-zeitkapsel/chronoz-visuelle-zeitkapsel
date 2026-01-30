@@ -3,7 +3,7 @@ import './login.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { apiUrl } from '../config/api';
 
-type Mode = 'login' | 'register';
+type Mode = 'login' | 'register' | 'forgot-password';
 
 function Login(): ReactElement {
   const navigate = useNavigate();
@@ -19,6 +19,9 @@ function Login(): ReactElement {
   const [userId, setUserId] = useState<number | null>(null);
   const [twoFactorCode, setTwoFactorCode] = useState('');
   const [registrationSuccess, setRegistrationSuccess] = useState<string | null>(null);
+  const [resetCode, setResetCode] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [resetStep, setResetStep] = useState<'request' | 'confirm'>('request');
 
   const passLenOk = useMemo(() => password.length >= 8, [password]);
   const passLowerOk = useMemo(() => /[a-z]/.test(password), [password]);
@@ -163,6 +166,75 @@ function Login(): ReactElement {
     }
   }
 
+  async function handleForgotPassword(event: React.FormEvent) {
+    event.preventDefault();
+    setError(null);
+    setRegistrationSuccess(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch(apiUrl('/api/auth/forgot-password'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Fehler beim Senden des Reset-Codes');
+
+      setRegistrationSuccess('Ein Reset-Code wurde an Ihre E-Mail-Adresse gesendet.');
+      setResetStep('confirm');
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unbekannter Fehler');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResetPassword(event: React.FormEvent) {
+    event.preventDefault();
+    setError(null);
+    setRegistrationSuccess(null);
+    
+    // Client-side validation for new password
+    const newPassLenOk = newPassword.length >= 8;
+    const newPassLowerOk = /[a-z]/.test(newPassword);
+    const newPassUpperOk = /[A-Z]/.test(newPassword);
+    const newPassDigitOk = /[0-9]/.test(newPassword);
+
+    if (!newPassLenOk || !newPassLowerOk || !newPassUpperOk || !newPassDigitOk) {
+      setError('Das neue Passwort erfüllt nicht die Anforderungen');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(apiUrl('/api/auth/reset-password'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code: resetCode, newPassword })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Fehler beim Zurücksetzen des Passworts');
+
+      setRegistrationSuccess('Passwort erfolgreich zurückgesetzt! Sie können sich jetzt anmelden.');
+      setTimeout(() => {
+        setMode('login');
+        setResetStep('request');
+        setResetCode('');
+        setNewPassword('');
+        setEmail('');
+        setPassword('');
+      }, 2000);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Unbekannter Fehler');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div className="LoginPage">
       <div className="LoginCard">
@@ -204,6 +276,102 @@ function Login(): ReactElement {
             </div>
             {registrationSuccess && <div className="CTAHint" style={{ color: '#539e66' }}>{registrationSuccess}</div>}
             {error && <div className="CTAHint" style={{ color: '#f17e7e' }}>{error}</div>}
+          </form>
+        ) : mode === 'forgot-password' ? (
+          // Password Reset Form
+          <form onSubmit={resetStep === 'request' ? handleForgotPassword : handleResetPassword} className="LoginForm">
+            <h2 style={{ textAlign: 'center', marginBottom: '16px' }}>Passwort zurücksetzen</h2>
+            {resetStep === 'request' ? (
+              <>
+                <label className="Field">
+                  <span>E-Mail</span>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="Input"
+                    placeholder="ihre@email.com"
+                  />
+                </label>
+                <div className="Actions" style={{ flexDirection: 'column' as const }}>
+                  <button type="submit" className="CTAButton" disabled={loading}>
+                    {loading ? 'Bitte warten…' : 'Reset-Code senden'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="CTAButton" 
+                    style={{ background: 'rgba(255,255,255,0.1)' }}
+                    onClick={() => {
+                      setMode('login');
+                      setResetStep('request');
+                    }}
+                  >
+                    Zurück zum Login
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <label className="Field">
+                  <span>6-stelliger Reset-Code</span>
+                  <input
+                    type="text"
+                    value={resetCode}
+                    onChange={(e) => setResetCode(e.target.value)}
+                    maxLength={6}
+                    pattern="[0-9]{6}"
+                    required
+                    className="Input"
+                    placeholder="123456"
+                  />
+                </label>
+                <label className="Field">
+                  <span>Neues Passwort</span>
+                  <div className="PasswordInputWrapper">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      required
+                      className="Input"
+                    />
+                    <button
+                      type="button"
+                      className="PasswordToggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                    >
+                      <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
+                    </button>
+                  </div>
+                  <Rule ok={newPassword.length >= 8} label="Mindestens 8 Zeichen" />
+                  <Rule ok={/[a-z]/.test(newPassword)} label="Mindestens 1 Kleinbuchstabe (a–z)" />
+                  <Rule ok={/[A-Z]/.test(newPassword)} label="Mindestens 1 Großbuchstabe (A–Z)" />
+                  <Rule ok={/[0-9]/.test(newPassword)} label="Mindestens 1 Zahl (0–9)" />
+                </label>
+                <div className="Actions" style={{ flexDirection: 'column' as const }}>
+                  <button type="submit" className="CTAButton" disabled={loading}>
+                    {loading ? 'Bitte warten…' : 'Passwort zurücksetzen'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="CTAButton" 
+                    style={{ background: 'rgba(255,255,255,0.1)' }}
+                    onClick={() => {
+                      setMode('login');
+                      setResetStep('request');
+                      setResetCode('');
+                      setNewPassword('');
+                    }}
+                  >
+                    Abbrechen
+                  </button>
+                </div>
+              </>
+            )}
+            {registrationSuccess && <div className="CTAHint" style={{ color: '#4abd66' }}>{registrationSuccess}</div>}
+            {error && <div className="CTAHint" style={{ color: '#ff8a8a' }}>{error}</div>}
           </form>
         ) : (
           // Normal Login/Register Form
@@ -257,6 +425,18 @@ function Login(): ReactElement {
                       </button>
                     </div>
                   </label>
+                  <button 
+                    type="button" 
+                    className="ForgotPasswordLink"
+                    onClick={() => {
+                      setMode('forgot-password');
+                      setResetStep('request');
+                      setError(null);
+                      setRegistrationSuccess(null);
+                    }}
+                  >
+                    Passwort vergessen?
+                  </button>
                   <div className="Actions" style={{ flexDirection: 'column' as const }}>
                     <button type="submit" className="CTAButton" disabled={loading}>
                       {loading ? 'Bitte warten…' : 'Login'}

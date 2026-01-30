@@ -3,6 +3,7 @@ const { createClient } = require('@supabase/supabase-js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const brevo = require('@getbrevo/brevo');
 require('dotenv').config();
 
 const app = express();
@@ -10,6 +11,10 @@ const PORT = process.env.PORT || 5000;
 const SECRET_KEY = process.env.JWT_SECRET;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const APP_URL = process.env.APP_URL || (NODE_ENV === 'production' ? process.env.PROD_APP_URL : process.env.DEV_APP_URL);
+
+// Brevo API Setup
+const brevoApiInstance = new brevo.TransactionalEmailsApi();
+brevoApiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY || '');
 
 // Supabase Client mit direkter Verbindung initialisieren
 const supabase = createClient(
@@ -119,59 +124,48 @@ app.post('/api/auth/register', async (req, res) => {
       throw error;
     }
 
-    // Sende Verifizierungsmail über Supabase Auth
-    let emailDebug = {
-      sent: false,
-      error: null,
-      appUrl: APP_URL,
-      redirectUrl: `${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`,
-      email: normalizedEmail,
-      timestamp: new Date().toISOString()
-    };
-    
-    try {
-      console.error(`[EMAIL] Sending to: ${normalizedEmail}, APP_URL: ${APP_URL}`);
-      
-      const { data: signUpData, error: authError } = await supabase.auth.signUp({
-        email: normalizedEmail,
-        password: Math.random().toString(36), // Dummy password für Auth
-        options: {
-          data: {
-            verification_code: verificationCode,
-            username: username
-          },
-          emailRedirectTo: `${APP_URL}/verify?email=${encodeURIComponent(normalizedEmail)}`
-        }
-      });
-      
-      if (authError) {
-        emailDebug.error = {
-          code: authError.code,
-          message: authError.message,
-          status: authError.status
+    console.log(`[REGISTRATION] New user: ${normalizedEmail}`);
+    console.log(`[DEV] Verification Code: ${verificationCode}`);
+
+    // Sende Verifizierungs-E-Mail über Brevo
+    if (process.env.BREVO_API_KEY) {
+      try {
+        const sendSmtpEmail = new brevo.SendSmtpEmail();
+        sendSmtpEmail.subject = 'chronoZ - E-Mail Verifizierung';
+        sendSmtpEmail.to = [{ email: normalizedEmail, name: username }];
+        sendSmtpEmail.htmlContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #4F46E5;">Willkommen bei chronoZ!</h2>
+            <p>Hallo ${username},</p>
+            <p>Vielen Dank für deine Registrierung bei chronoZ.</p>
+            <p>Dein Verifizierungscode lautet:</p>
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+              <h1 style="font-size: 32px; letter-spacing: 8px; color: #4F46E5; font-family: monospace; margin: 0;">${verificationCode}</h1>
+            </div>
+            <p>Dieser Code ist <strong>24 Stunden</strong> gültig.</p>
+            <p>Bitte gib diesen Code auf der Verifizierungsseite ein, um deine E-Mail-Adresse zu bestätigen.</p>
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">
+              Falls du dich nicht registriert hast, ignoriere diese E-Mail.
+            </p>
+            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+            <p style="color: #666; font-size: 12px;">
+              Viele Grüße,<br>Dein chronoZ Team
+            </p>
+          </div>
+        `;
+        sendSmtpEmail.sender = { 
+          name: process.env.BREVO_SENDER_NAME || 'chronoZ', 
+          email: process.env.BREVO_SENDER_EMAIL || 'chronoz.noreply@gmail.com' 
         };
-        console.error(`[EMAIL ERROR]`, authError);
-      } else if (!signUpData.user) {
-        // User existiert bereits in auth.users - keine Email gesendet
-        emailDebug.sent = false;
-        emailDebug.error = {
-          code: 'USER_ALREADY_EXISTS_IN_AUTH',
-          message: 'User bereits in Supabase Auth registriert, keine Email gesendet'
-        };
-        emailDebug.response = signUpData;
-        console.error(`[EMAIL WARNING] User already exists in auth.users: ${normalizedEmail}`);
-      } else {
-        emailDebug.sent = true;
-        emailDebug.response = signUpData;
-        console.error(`[EMAIL SUCCESS] Sent to ${normalizedEmail}`);
+
+        await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log(`[EMAIL SUCCESS] Verification email sent to ${normalizedEmail}`);
+      } catch (emailError) {
+        console.error('[EMAIL ERROR]', emailError);
+        // Registrierung trotzdem erfolgreich, User kann Code in DB finden
       }
-      console.error(`[DEV] Verifizierungscode für ${normalizedEmail}: ${verificationCode}`);
-    } catch (authError) {
-      emailDebug.error = {
-        exception: true,
-        message: authError.message || 'Unknown error'
-      };
-      console.error(`[EMAIL EXCEPTION]`, authError);
+    } else {
+      console.log('[EMAIL SKIPPED] No BREVO_API_KEY found');
     }
 
     const token = jwt.sign({ 
@@ -184,8 +178,7 @@ app.post('/api/auth/register', async (req, res) => {
     res.json({ 
       token, 
       user,
-      message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.',
-      emailDebug: emailDebug
+      message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.'
     });
   } catch (err) {
     console.error(err);
@@ -307,6 +300,174 @@ app.get('/api/auth/me', async (req, res) => {
     }
     console.error(err);
     res.status(500).json({ error: "Server Fehler" });
+  }
+});
+
+// ----------- Forgot Password -----------
+app.post('/api/auth/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ error: "E-Mail erforderlich" });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // Prüfe ob Benutzer in unserer DB existiert
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id, email, username')
+      .eq('email', normalizedEmail)
+      .single();
+
+    if (userError || !user) {
+      // Aus Sicherheitsgründen immer Success zurückgeben
+      return res.json({ message: "Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Code gesendet." });
+    }
+
+    // Generiere 6-stelligen Reset-Code
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const codeExpires = new Date(Date.now() + 60 * 60 * 1000); // 60 Minuten gültig
+
+    console.log(`[PASSWORD RESET] Generating code for: ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Current server time: ${new Date().toISOString()}`);
+    console.log(`[PASSWORD RESET] Code will expire at: ${codeExpires.toISOString()}`);
+
+    // Speichere Code in DB
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({
+        verification_code: resetCode,
+        verification_code_expires: codeExpires.toISOString()
+      })
+      .eq('id', user.id);
+
+    if (updateError) {
+      console.error('[PASSWORD RESET] Error updating user:', updateError);
+      throw updateError;
+    }
+
+    console.log(`[PASSWORD RESET] Code saved to database for: ${normalizedEmail}`);
+    console.log(`[DEV] Reset Code: ${resetCode}`);
+
+    // Sende E-Mail über Brevo
+    if (process.env.BREVO_API_KEY) {
+      try {
+        const sendSmtpEmail = new brevo.SendSmtpEmail();
+        sendSmtpEmail.subject = 'chronoZ - Passwort zurücksetzen';
+        sendSmtpEmail.to = [{ email: normalizedEmail, name: user.username }];
+        sendSmtpEmail.htmlContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #4F46E5;">Passwort zurücksetzen</h2>
+            <p>Hallo ${user.username},</p>
+            <p>Du hast einen Passwort-Reset für deinen chronoZ Account angefordert.</p>
+            <p>Dein Reset-Code lautet:</p>
+            <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+              <h1 style="font-size: 32px; letter-spacing: 8px; color: #4F46E5; font-family: monospace; margin: 0;">${resetCode}</h1>
+            </div>
+            <p>Dieser Code ist <strong>30 Minuten</strong> gültig.</p>
+            <p style="color: #666; font-size: 14px; margin-top: 30px;">
+              Falls du keinen Reset angefordert hast, ignoriere diese E-Mail.
+            </p>
+            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+            <p style="color: #666; font-size: 12px;">
+              Viele Grüße,<br>Dein chronoZ Team
+            </p>
+          </div>
+        `;
+        sendSmtpEmail.sender = { 
+          name: process.env.BREVO_SENDER_NAME || 'chronoZ', 
+          email: process.env.BREVO_SENDER_EMAIL || 'noreply@chronoz.app' 
+        };
+
+        await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
+        console.log(`[EMAIL SUCCESS] Password reset email sent to ${normalizedEmail}`);
+      } catch (emailError) {
+        console.error('[EMAIL ERROR]', emailError);
+        // Trotzdem weitermachen, Code ist in DB gespeichert
+      }
+    } else {
+      console.log('[EMAIL SKIPPED] No BREVO_API_KEY found');
+    }
+
+    res.json({ 
+      message: "Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Code gesendet."
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Fehler beim Passwort-Reset" });
+  }
+});
+
+// ----------- Reset Password -----------
+app.post('/api/auth/reset-password', async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ error: "Alle Felder erforderlich" });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
+    // Finde User in unserer DB
+    const { data: user, error: dbError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', normalizedEmail)
+      .single();
+
+    if (dbError || !user) {
+      return res.status(400).json({ error: "Ungültiger Reset-Code" });
+    }
+
+    console.log(`[PASSWORD RESET] User found: ${user.email}`);
+    console.log(`[PASSWORD RESET] Code from DB: ${user.verification_code}`);
+    console.log(`[PASSWORD RESET] Expires from DB: ${user.verification_code_expires}`);
+
+    // Prüfe Code
+    if (user.verification_code !== code) {
+      console.log(`[PASSWORD RESET] Code mismatch. Expected: ${user.verification_code}, Got: ${code}`);
+      return res.status(400).json({ error: "Ungültiger Reset-Code" });
+    }
+
+    // Prüfe ob Code abgelaufen ist
+    const now = new Date();
+    // Stelle sicher dass der Timestamp als UTC interpretiert wird
+    const expiresString = user.verification_code_expires.endsWith('Z') 
+      ? user.verification_code_expires 
+      : user.verification_code_expires + 'Z';
+    const expiresAt = new Date(expiresString);
+    
+    console.log(`[PASSWORD RESET] Checking expiration for ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Current time: ${now.toISOString()}`);
+    console.log(`[PASSWORD RESET] Code expires at: ${expiresAt.toISOString()}`);
+    console.log(`[PASSWORD RESET] Code expired: ${now > expiresAt}`);
+    
+    if (now > expiresAt) {
+      return res.status(400).json({ error: "Reset-Code ist abgelaufen. Bitte fordern Sie einen neuen an." });
+    }
+
+    // Hash neues Passwort
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update Passwort und lösche Verification Code
+    await supabase
+      .from('users')
+      .update({
+        password: hashedPassword,
+        verification_code: null,
+        verification_code_expires: null
+      })
+      .eq('id', user.id);
+
+    console.log(`[PASSWORD RESET] Password updated for: ${normalizedEmail}`);
+
+    res.json({ message: "Passwort erfolgreich zurückgesetzt" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Fehler beim Passwort-Reset" });
   }
 });
 

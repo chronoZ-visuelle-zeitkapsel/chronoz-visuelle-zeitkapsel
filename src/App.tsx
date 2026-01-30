@@ -14,6 +14,7 @@ import CreatePostcard from './pages/CreatePostcard';
 import Impressum from './pages/Impressum';
 import VerifyEmail from './pages/VerifyEmail';
 import Settings from './pages/Settings';
+import ResetPassword from './pages/ResetPassword';
 
 function Home({ blurred }: { blurred: boolean }): ReactElement {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -87,6 +88,7 @@ function App(): ReactElement {
                     <Route path="/" element={<Shell />} />
                     <Route path="/login" element={<Shell />} />
                     <Route path="/verify" element={<VerifyEmail />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/history" element={<History />} />
                     <Route path="/create-postcard" element={<CreatePostcard />} />
