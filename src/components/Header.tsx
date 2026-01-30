@@ -135,7 +135,13 @@ function Header(): ReactElement {
 
 				<div className="HeaderCenter">
 					<button className="NavItem" onClick={() => navigate('/history')}>chronik</button>
-					<button className="NavItem" onClick={() => scrollToSection('archive')}>archiv</button>
+					<button className="NavItem" onClick={() => {
+						if (!currentUser) {
+							navigate('/login');
+						} else {
+							scrollToSection('archive');
+						}
+					}}>archiv</button>
 					<button className="NavItem" onClick={() => navigate('/impressum')}>impressum</button>
 					<button className="NavItem" onClick={() => scrollToSection('faq')}>faq</button>
 				</div>

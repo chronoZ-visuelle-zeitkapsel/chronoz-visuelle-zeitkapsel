@@ -23,6 +23,25 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
         setIsLoggedIn(!!token);
     }, []);
 
+    // Listen for login/logout events to update Archive visibility
+    useEffect(() => {
+        const handleUserLogin = () => {
+            setIsLoggedIn(true);
+        };
+
+        const handleUserLogout = () => {
+            setIsLoggedIn(false);
+        };
+
+        window.addEventListener('userLogin', handleUserLogin);
+        window.addEventListener('userLogout', handleUserLogout);
+
+        return () => {
+            window.removeEventListener('userLogin', handleUserLogin);
+            window.removeEventListener('userLogout', handleUserLogout);
+        };
+    }, []);
+
     return (
         <div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
