@@ -155,6 +155,18 @@ export default function FrameByFrameCanvas({
         </div>
       ) : null}
 
+      {!frames && !error ? (
+        <div style={{ 
+          padding: 40, 
+          textAlign: "center", 
+          color: "#666",
+          fontSize: "18px",
+          fontWeight: 500
+        }}>
+          Loading...
+        </div>
+      ) : null}
+
       <canvas
         ref={canvasRef}
         width={800}
@@ -164,7 +176,7 @@ export default function FrameByFrameCanvas({
           console.log("Canvas clicked, animation started");
         }}
         style={{
-          display: "block",
+          display: frames ? "block" : "none",
           background: "transparent",
           borderRadius: 12,
           maxWidth: "100%",
