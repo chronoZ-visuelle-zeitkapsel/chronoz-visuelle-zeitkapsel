@@ -515,20 +515,28 @@ app.get('/api/postcards', async (req, res) => {
 // Create a new postcard
 app.post('/api/postcards', async (req, res) => {
   try {
+    console.log('[POSTCARD CREATE] Request received');
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(" ")[1];
     
     if (!token) {
+      console.log('[POSTCARD CREATE] No token provided');
       return res.status(401).json({ error: "Token erforderlich" });
     }
 
+    console.log('[POSTCARD CREATE] Verifying token...');
     const decoded = jwt.verify(token, SECRET_KEY);
+    console.log('[POSTCARD CREATE] Token valid, user_id:', decoded.id);
+    
     const { title, description, date, images } = req.body;
+    console.log('[POSTCARD CREATE] Data:', { title, description, date, imageCount: images?.length || 0 });
 
     if (!title || !description || !date) {
+      console.log('[POSTCARD CREATE] Missing required fields');
       return res.status(400).json({ error: "Titel, Beschreibung und Datum sind erforderlich" });
     }
 
+    console.log('[POSTCARD CREATE] Inserting into database...');
     const { data: postcard, error } = await supabase
       .from('postcards')
       .insert([
@@ -543,11 +551,21 @@ app.post('/api/postcards', async (req, res) => {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error('[POSTCARD CREATE] Database error:', error);
+      throw error;
+    }
 
+    console.log('[POSTCARD CREATE] Success, postcard created:', postcard.id);
     res.json(postcard);
   } catch (err) {
-    console.error(err);
+    console.error('[POSTCARD CREATE] Error:', err);
+    console.error('[POSTCARD CREATE] Error details:', {
+      message: err.message,
+      code: err.code,
+      details: err.details,
+      hint: err.hint
+    });
     res.status(500).json({ error: "Fehler beim Erstellen der Postkarte" });
   }
 });
