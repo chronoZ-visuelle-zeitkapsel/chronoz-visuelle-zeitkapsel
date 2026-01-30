@@ -321,16 +321,16 @@
 }
 
 /* + Button rechts unten */
-.AddButtonBottomRight {
+.UserKapselPage .AddButtonBottomRight {
   position: absolute;
   bottom: 30px;
   right: 30px;
   width: 60px;
   height: 60px;
-  border: none;
+  border: 1px solid #000000;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  background: #ffffff;
+  color: #000000;
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
@@ -342,8 +342,9 @@
   justify-content: center;
 }
 
-.AddButtonBottomRight:hover {
-  background: white;
+.UserKapselPage .AddButtonBottomRight:hover {
+  background: #000000;
+  color: #ffffff;
   transform: scale(1.1);
 }
 
@@ -360,24 +361,33 @@
 }
 
 /* Zentraler + Button für leere Kapsel */
-.AddMemoryButton {
+.UserKapselPage .AddMemoryButton {
   width: 80px;
   height: 80px;
-  border: none;
+  border: 1px solid #000000;
   border-radius: 50%;
-  background: linear-gradient(
-        111deg,
-        rgba(255, 255, 255, 0.4) -4.87%,
-        rgba(255, 255, 255, 0.1) 103.95%
-  );
-  backdrop-filter: blur(20px);
+  background: #ffffff;
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.AddMemoryButton:hover {
-  background: rgb(104, 123, 139);
+.AddMemoryButton .Plus {
+  width: auto;
+  height: auto;
+  top: auto;
+  left: auto;
+  transform: none;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserKapselPage .AddMemoryButton:hover {
+  background: #000000;
+  color: #ffffff;
   transform: scale(1.1);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
 }
