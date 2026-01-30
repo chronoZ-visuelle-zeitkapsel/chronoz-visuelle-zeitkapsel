@@ -147,10 +147,6 @@ export default function FrameByFrameCanvas({
     };
   }, [frames, frameDuration, loop, playOnLoad]);
 
-  const togglePlay = () => {
-    stateRef.current.isPlaying = !stateRef.current.isPlaying;
-  };
-
   return (
     <div className={className} style={{ display: "grid", gap: 8, ...style }}>
       {error ? (
