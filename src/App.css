@@ -223,7 +223,8 @@ main { flex: 1 1 auto; }
 .CTASection {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  margin-top: 0;
+  width: 100%;
 }
 
 .CTAButton {

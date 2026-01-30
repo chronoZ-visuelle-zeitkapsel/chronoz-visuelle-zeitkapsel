@@ -1,9 +1,24 @@
-.ThreeDStage {
+.StageSection {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
     padding: 20px;
+}
+
+.StageGlass {
+    width: 100%;
+    max-width: 1600px;
+    height: 684px;
+    background: linear-gradient(134deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0) 100%);
+    border-radius: 32px;
+    border: 1.80px white solid;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .StageContainer {
