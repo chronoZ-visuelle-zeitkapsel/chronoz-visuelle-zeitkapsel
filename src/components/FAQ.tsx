@@ -65,7 +65,7 @@ function FAQ(): ReactElement {
 	];
 
 	return (
-		<section className="faq-section">
+		<section className="faq-section" id="faq">
 			<div className="faq-container">
 				<h2 className="faq-title">Häufig gestellte Fragen</h2>
 				<div className="faq-list">

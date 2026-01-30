@@ -99,6 +99,26 @@ function Header(): ReactElement {
 		navigate('/');
 	}
 
+	function scrollToSection(sectionId: string) {
+		// Wenn wir nicht auf der Hauptseite sind, zuerst dorthin navigieren
+		if (window.location.pathname !== '/') {
+			navigate('/');
+			// Warten bis die Seite geladen ist, dann scrollen
+			setTimeout(() => {
+				const element = document.getElementById(sectionId);
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				}
+			}, 100);
+		} else {
+			// Direkt zum Abschnitt scrollen
+			const element = document.getElementById(sectionId);
+			if (element) {
+				element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+		}
+	}
+
 	return (
 		<header className="Header">
 			<div className="HeaderContainer">
@@ -115,9 +135,9 @@ function Header(): ReactElement {
 
 				<div className="HeaderCenter">
 					<button className="NavItem" onClick={() => navigate('/history')}>chronik</button>
-					<button className="NavItem" onClick={() => navigate('/archive')}>archiv</button>
+					<button className="NavItem" onClick={() => scrollToSection('archive')}>archiv</button>
 					<button className="NavItem" onClick={() => navigate('/impressum')}>impressum</button>
-					<button className="NavItem" onClick={() => navigate('/#faq')}>faq</button>
+					<button className="NavItem" onClick={() => scrollToSection('faq')}>faq</button>
 				</div>
 
 				<div className="HeaderRight"> 
