@@ -182,8 +182,13 @@ function Login(): ReactElement {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Fehler beim Senden des Reset-Codes');
 
-      setRegistrationSuccess('Ein Reset-Code wurde an Ihre E-Mail-Adresse gesendet.');
-      setResetStep('confirm');
+      // Zeige die Email-Adresse an (vom Backend)
+      if (data.email) {
+        setRegistrationSuccess(`Ein Reset-Code wurde an folgende Email versendet: ${data.email}`);
+        setResetStep('confirm');
+      } else {
+        setError('Benutzer nicht gefunden.');
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Unbekannter Fehler');
     } finally {
@@ -284,14 +289,14 @@ function Login(): ReactElement {
             {resetStep === 'request' ? (
               <>
                 <label className="Field">
-                  <span>E-Mail</span>
+                  <span>E-Mail oder Benutzername</span>
                   <input
-                    type="email"
+                    type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="Input"
-                    placeholder="ihre@email.com"
+                    placeholder="ihre@email.com oder benutzername"
                   />
                 </label>
                 <div className="Actions" style={{ flexDirection: 'column' as const }}>

@@ -309,17 +309,38 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ error: "E-Mail erforderlich" });
+      return res.status(400).json({ error: "E-Mail oder Benutzername erforderlich" });
     }
 
-    const normalizedEmail = email.toLowerCase();
+    const normalizedInput = email.toLowerCase();
 
-    // Prüfe ob Benutzer in unserer DB existiert
-    const { data: user, error: userError } = await supabase
+    // Prüfe ob Benutzer in unserer DB existiert (per Email oder Username)
+    let user;
+    let userError;
+
+    // Versuche zuerst per Email
+    const emailResult = await supabase
       .from('users')
       .select('id, email, username')
-      .eq('email', normalizedEmail)
+      .eq('email', normalizedInput)
       .single();
+
+    if (emailResult.data) {
+      user = emailResult.data;
+    } else {
+      // Falls nicht gefunden, versuche per Username (case-insensitive mit ilike)
+      const usernameResult = await supabase
+        .from('users')
+        .select('id, email, username')
+        .ilike('username', normalizedInput)
+        .single();
+      
+      if (usernameResult.data) {
+        user = usernameResult.data;
+      } else {
+        userError = usernameResult.error;
+      }
+    }
 
     if (userError || !user) {
       // Aus Sicherheitsgründen immer Success zurückgeben
@@ -328,9 +349,9 @@ app.post('/api/auth/forgot-password', async (req, res) => {
 
     // Generiere 6-stelligen Reset-Code
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
-    const codeExpires = new Date(Date.now() + 60 * 60 * 1000); // 60 Minuten gültig
+    const codeExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 Minuten gültig
 
-    console.log(`[PASSWORD RESET] Generating code for: ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Generating code for: ${user.email}`);
     console.log(`[PASSWORD RESET] Current server time: ${new Date().toISOString()}`);
     console.log(`[PASSWORD RESET] Code will expire at: ${codeExpires.toISOString()}`);
 
@@ -348,7 +369,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       throw updateError;
     }
 
-    console.log(`[PASSWORD RESET] Code saved to database for: ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Code saved to database for: ${user.email}`);
     console.log(`[DEV] Reset Code: ${resetCode}`);
 
     // Sende E-Mail über Brevo
@@ -356,7 +377,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       try {
         const sendSmtpEmail = new brevo.SendSmtpEmail();
         sendSmtpEmail.subject = 'chronoZ - Passwort zurücksetzen';
-        sendSmtpEmail.to = [{ email: normalizedEmail, name: user.username }];
+        sendSmtpEmail.to = [{ email: user.email, name: user.username }];
         sendSmtpEmail.htmlContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #4F46E5;">Passwort zurücksetzen</h2>
@@ -382,7 +403,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         };
 
         await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log(`[EMAIL SUCCESS] Password reset email sent to ${normalizedEmail}`);
+        console.log(`[EMAIL SUCCESS] Password reset email sent to ${user.email}`);
       } catch (emailError) {
         console.error('[EMAIL ERROR]', emailError);
         // Trotzdem weitermachen, Code ist in DB gespeichert
@@ -392,7 +413,8 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     }
 
     res.json({ 
-      message: "Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Code gesendet."
+      message: "Falls ein Konto mit dieser E-Mail existiert, wurde ein Reset-Code gesendet.",
+      email: user.email
     });
   } catch (err) {
     console.error(err);
@@ -409,14 +431,35 @@ app.post('/api/auth/reset-password', async (req, res) => {
       return res.status(400).json({ error: "Alle Felder erforderlich" });
     }
 
-    const normalizedEmail = email.toLowerCase();
+    const normalizedInput = email.toLowerCase();
 
-    // Finde User in unserer DB
-    const { data: user, error: dbError } = await supabase
+    // Finde User in unserer DB (per Email oder Username)
+    let user;
+    let dbError;
+
+    // Versuche zuerst per Email
+    const emailResult = await supabase
       .from('users')
       .select('*')
-      .eq('email', normalizedEmail)
+      .eq('email', normalizedInput)
       .single();
+
+    if (emailResult.data) {
+      user = emailResult.data;
+    } else {
+      // Falls nicht gefunden, versuche per Username (case-insensitive)
+      const usernameResult = await supabase
+        .from('users')
+        .select('*')
+        .ilike('username', normalizedInput)
+        .single();
+      
+      if (usernameResult.data) {
+        user = usernameResult.data;
+      } else {
+        dbError = usernameResult.error;
+      }
+    }
 
     if (dbError || !user) {
       return res.status(400).json({ error: "Ungültiger Reset-Code" });
@@ -425,6 +468,8 @@ app.post('/api/auth/reset-password', async (req, res) => {
     console.log(`[PASSWORD RESET] User found: ${user.email}`);
     console.log(`[PASSWORD RESET] Code from DB: ${user.verification_code}`);
     console.log(`[PASSWORD RESET] Expires from DB: ${user.verification_code_expires}`);
+    console.log(`[PASSWORD RESET] Expires type: ${typeof user.verification_code_expires}`);
+    console.log(`[PASSWORD RESET] Input code: ${code}`);
 
     // Prüfe Code
     if (user.verification_code !== code) {
@@ -434,16 +479,19 @@ app.post('/api/auth/reset-password', async (req, res) => {
 
     // Prüfe ob Code abgelaufen ist
     const now = new Date();
-    // Stelle sicher dass der Timestamp als UTC interpretiert wird
+    // Stelle sicher, dass der Timestamp korrekt als UTC interpretiert wird
     const expiresString = user.verification_code_expires.endsWith('Z') 
       ? user.verification_code_expires 
       : user.verification_code_expires + 'Z';
     const expiresAt = new Date(expiresString);
     
-    console.log(`[PASSWORD RESET] Checking expiration for ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Checking expiration for ${user.email}`);
     console.log(`[PASSWORD RESET] Current time: ${now.toISOString()}`);
+    console.log(`[PASSWORD RESET] Current time (ms): ${now.getTime()}`);
     console.log(`[PASSWORD RESET] Code expires at: ${expiresAt.toISOString()}`);
-    console.log(`[PASSWORD RESET] Code expired: ${now > expiresAt}`);
+    console.log(`[PASSWORD RESET] Code expires at (ms): ${expiresAt.getTime()}`);
+    console.log(`[PASSWORD RESET] Is expired: ${now > expiresAt}`);
+    console.log(`[PASSWORD RESET] Difference in minutes: ${(expiresAt.getTime() - now.getTime()) / 1000 / 60}`);
     
     if (now > expiresAt) {
       return res.status(400).json({ error: "Reset-Code ist abgelaufen. Bitte fordern Sie einen neuen an." });
@@ -462,7 +510,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
       })
       .eq('id', user.id);
 
-    console.log(`[PASSWORD RESET] Password updated for: ${normalizedEmail}`);
+    console.log(`[PASSWORD RESET] Password updated for: ${user.email}`);
 
     res.json({ message: "Passwort erfolgreich zurückgesetzt" });
   } catch (err) {
