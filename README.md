@@ -69,39 +69,55 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-## Backend (Mailserver)
+## Setup für lokale Entwicklung
 
-1. Server starten
-```
-cd server
+### 1. Frontend Setup
+
+```bash
+# .env.development erstellen
+cp .env.example .env.development
+
+# Dependencies installieren
 npm install
+```
+
+### 2. Backend Setup
+
+```bash
+cd server
+
+# .env erstellen
+cp .env.example .env
+
+# Wichtig: In server/.env die folgenden Werte anpassen:
+# - JWT_SECRET (generiere einen sicheren, zufälligen String)
+# - BREVO_API_KEY (von deinem Brevo Account)
+# - SUPABASE_ANON_KEY (vom Projekt-Owner erfragen)
+
+# Dependencies installieren
+npm install
+```
+
+### 3. Starten
+
+```bash
+# Beide Server gleichzeitig starten (im Hauptverzeichnis)
 npm run dev
+
+# Oder manuell:
+# Terminal 1 - Backend
+cd server
+node server.js
+
+# Terminal 2 - Frontend
+npm start
 ```
 
-2. .env anlegen (unter `server/.env`)
-```
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your_smtp_user
-SMTP_PASS=your_smtp_password
-MAIL_FROM="chronoZ <no-reply@example.com>"
-PORT=4000
-```
+Frontend läuft auf: http://localhost:3000
+Backend läuft auf: http://localhost:5000
 
-3. Test
-- Health: GET http://localhost:4000/health
-- Reminder: POST http://localhost:4000/api/reminder
-```
-{
-  "email": "deine@mail.tld",
-  "subject": "Test",
-  "message": "Hallo von chronoZ"
-}
-```
+### 4. Stoppen
 
-4. Frontend Proxy (optional)
-In `package.json` auf Projektebene:
-```
-"proxy": "http://localhost:4000"
+```bash
+npm run stop
 ```
