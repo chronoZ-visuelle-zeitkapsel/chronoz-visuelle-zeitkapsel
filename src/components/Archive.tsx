@@ -2,6 +2,7 @@ import React, { ReactElement, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiUrl } from '../config/api';
 import './archive.css';
+import './archive-vintage.css';
 
 type Postcard = {
   id: string;
@@ -127,7 +128,7 @@ function Archive(): ReactElement {
     return (
       <section className="archive-section">
         <div className="archive-container">
-          <h2 className="archive-title">Dein Archiv</h2>
+          <h2 className="archive-title">DEIN ARCHIVE</h2>
           <div className="archive-empty">
             <p>Du hast noch keine Postkarten erstellt.</p>
             <button 
@@ -145,7 +146,7 @@ function Archive(): ReactElement {
   return (
     <section className="archive-section">
       <div className="archive-container" id="archive">
-        <h2 className="archive-title">Dein Archiv</h2>
+        <h2 className="archive-title">DEIN ARCHIVE</h2>
         
         <div className="carousel-wrapper">
           <button 
@@ -162,6 +163,19 @@ function Archive(): ReactElement {
             <div className="carousel-track">
               {postcards.map((postcard, index) => {
                 const position = getSlidePosition(index);
+                const imageCount = postcard.images ? postcard.images.length : 0;
+                const featureImages = postcard.images ? postcard.images : [];
+                const isSingleImage = imageCount === 1;
+                const isCollage = imageCount >= 2 && imageCount <= 4;
+                const isMontage = imageCount >= 5;
+                const featureClassName = isSingleImage
+                  ? 'feature-single'
+                  : isCollage
+                    ? 'feature-collage'
+                    : isMontage
+                      ? 'feature-montage'
+                      : '';
+                const featureSliceCount = isMontage ? 8 : imageCount;
                 return (
                   <div 
                     key={postcard.id}
@@ -169,29 +183,60 @@ function Archive(): ReactElement {
                     data-position={position}
                     onClick={() => position === 'active' && handlePostcardClick(postcard)}
                   >
-                    <div className="carousel-card">
-                      {postcard.images && postcard.images.length > 0 ? (
-                        <div className="carousel-card-image">
-                          <img src={postcard.images[0]} alt={postcard.title} />
-                        </div>
-                      ) : (
-                        <div className="carousel-card-placeholder">
-                          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <polyline points="21 15 16 10 5 21"/>
-                          </svg>
+                    <div className="postcard-card vintage-newsprint">
+                      {/* Extra Edition Masthead Banner */}
+                      <div className="extra-edition-banner">
+                        <span className="banner-ornament">★</span>
+                        <span className="banner-text">EXTRA EDITION</span>
+                        <span className="banner-ornament">★</span>
+                      </div>
+
+                      {/* Postcard Masthead with Edition Date */}
+                      <div className="postcard-masthead">
+                        <p className="postcard-edition-date">
+                          Ausgabe vom {formatDate(postcard.createdAt)}
+                        </p>
+                        <h3 className="postcard-title">{postcard.title}</h3>
+                      </div>
+
+                      {/* Main Feature Image with Halftone Effect */}
+                      {featureImages.length > 0 && (
+                        <div
+                          className={`postcard-feature-image halftone-photo ${featureClassName} feature-count-${imageCount}`}
+                        >
+                          <div className="feature-image-grid">
+                            {featureImages.slice(0, featureSliceCount).map((src, imgIndex) => (
+                              <div
+                                key={`${postcard.id}-feature-${imgIndex}`}
+                                className={`feature-image feature-image-${imgIndex + 1} ${imgIndex === 0 ? 'feature-lead' : ''} ${isMontage && imgIndex >= 4 ? 'feature-faded' : ''}`}
+                              >
+                                <img src={src} alt={postcard.title} />
+                              </div>
+                            ))}
+                          </div>
+                          <p className="photo-caption">Historisches Archiv • {formatDate(postcard.date)}</p>
                         </div>
                       )}
-                      <div className="carousel-card-content">
-                        <h3 className="carousel-card-title">{postcard.title}</h3>
-                        <p className="carousel-card-description">{postcard.description}</p>
-                        <div className="carousel-card-footer">
-                          <span className="carousel-card-date">
-                            📅 {formatDate(postcard.date)}
-                          </span>
-                        </div>
+
+                      <div className="postcard-content">
+                        <p className="postcard-description">
+                          {postcard.description}
+                        </p>
                       </div>
+
+                      {/* Postage Stamp Style Element */}
+                      <div className="postage-stamp-corner">
+                        <div className="stamp-perforation"></div>
+                        <span className="stamp-text">ARCHIV</span>
+                      </div>
+
+                      {/* Carousel Divider Silhouette */}
+                      <div className="carousel-silhouette-divider">
+                        <svg viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0,20 Q50,10 100,20 T200,20" stroke="currentColor" fill="none" strokeWidth="2" opacity="0.3"/>
+                        </svg>
+                      </div>
+
                     </div>
                   </div>
                 );
@@ -207,36 +252,6 @@ function Archive(): ReactElement {
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="9 18 15 12 9 6"/>
             </svg>
-          </button>
-        </div>
-
-        <div className="carousel-indicators">
-          {postcards.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => goToSlide(index)}
-              aria-label={`Gehe zu Postkarte ${index + 1}`}
-            />
-          ))}
-        </div>
-
-        <div className="carousel-info">
-          <p className="carousel-counter">
-            {currentIndex + 1} / {postcards.length}
-          </p>
-          <button 
-            className={`autoplay-toggle ${isAutoPlaying ? 'active' : ''}`}
-            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            aria-label={isAutoPlaying ? 'Auto-Play pausieren' : 'Auto-Play starten'}
-          >
-            {isAutoPlaying ? '⏸' : '▶'}
-          </button>
-          <button 
-            className="archive-view-all-btn"
-            onClick={() => navigate('/history')}
-          >
-            Alle ansehen →
           </button>
         </div>
       </div>

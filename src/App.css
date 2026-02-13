@@ -14,10 +14,14 @@ html, body, #root { height: 100%; }
 
 body {
   margin: 0;
-  background: radial-gradient(ellipse at center, #FEF9F1 0%, #F3EBE0 100%);
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  background-image: 
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>'),
+    linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
   color: var(--color-text);
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  line-height: 1.6;
+  font-family: 'Times New Roman', Times, Georgia, serif;
+  line-height: 1.75;
+  text-rendering: optimizeLegibility;
 }
 
 /* Root Layout */
@@ -44,31 +48,53 @@ body {
 /* Ensure main content stretches to push footer to bottom when content is short */
 main { flex: 1 1 auto; }
 
-/* HEADER – Zeitungskopf */
+/* HEADER – Newspaper Masthead */
+
+.NewspaperMastheadBanner {
+  background: var(--color-surface);
+  border-bottom: 4px double var(--color-border);
+  padding: 8px 50px 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-secondary);
+}
+
+.NewspaperDate {
+  letter-spacing: 0.5px;
+}
 
 .Header {
   position: sticky;
   top: 0;
   z-index: 10;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 20px 50px;
-  background: radial-gradient(ellipse at center, #FEF9F1 0%, #F3EBE0 100%);
-  border-bottom: 1px solid var(--color-text);
+  padding: 25px 50px 15px;
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .Logo {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-weight: 900;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--color-text);
-  transition: transform 0.2s ease;
-  font-size: 20px;
+  font-size: 3rem;
+  text-align: center;
+  border-top: 3px solid var(--color-border);
+  border-bottom: 3px solid var(--color-border);
+  padding: 15px 0;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
 }
 
 .Logo:hover {
-  transform: scale(1.03);
+  opacity: 0.85;
 }
 
 /* Header Center / Right */

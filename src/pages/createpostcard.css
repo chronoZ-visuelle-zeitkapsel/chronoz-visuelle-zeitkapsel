@@ -1,679 +1,416 @@
+/* createpostcard.css - Premium 90's Newspaper Desktop Design */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Libre+Baskerville&display=swap');
 
-/* TopFields: group title + date into a single box */
-.TopFields {
-  background: linear-gradient(
-     111deg,
-     rgba(255, 255, 255, 0.4) -4.87%,
-     rgba(255, 255, 255, 0.1) 103.95%
-  );
-  border-radius: 12px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column; /* stack title above date */
-  gap: 8px;
+* {
+  box-sizing: border-box;
 }
 
-.TopFields .TitleField,
-.TopFields .DateField {
-  background: transparent;
-  border: none;
-  box-shadow: none;
+body {
+  margin: 0;
   padding: 0;
-  margin: 0;
-  width: 100%; /* ensure full width so date is under title */
 }
 
-/* Place title label and input side-by-side */
-.TopFields .TitleField {
+.CreatePostcardPage {
+  background: linear-gradient(135deg, 
+    #F8F1E8 0%, 
+    #F2EDE5 50%, 
+    #EDE6DC 100%);
+  min-height: 100vh;
+  font-family: 'Crimson Text', 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #1A1A1A;
+  position: relative;
+  padding: 0;
+}
+
+.CreatePostcardPage::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(4px 4px at 20px 30px, #B8977815, transparent 50%),
+    radial-gradient(4px 4px at 40px 70px, transparent, #D4C4B015 50%),
+    radial-gradient(2px 2px at 10px 50px, #B8977810, transparent 50%);
+  background-size: 60px 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.CreatePostcardMain {
+  width: 100%;
+  max-width: none;
+  padding: 0px;
+  position: relative;
+  z-index: 2;
+}
+
+.CreatePostcardContainer {
+  background: #F8F1E8;
+  border: 8px solid #D4C4B0;
+  box-shadow: 
+    0 15px 50px rgba(26, 26, 26, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.1) inset;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  width: 1300px;
+  margin: 0px auto 10px;
+  aspect-ratio: 7/4;
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
 }
 
-/* Title typography - applied to title input and label inside the TopFields box
-   Note: 'leading-trim' is not a standard CSS property and is omitted. */
-.TopFields .TitleField label{
-  font-family: 'Scope One', serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 25px;
-  line-height: 23.71px;
-  /* letter-spacing: 5% converted to 0.05em for compatibility */
-  letter-spacing: 0.05em;
-  color: #1D1B1C;
-  flex: 0 0 auto;
-  margin: 0;
-  /* keep the visual typography for the label */
-  font-family: 'Scope One', serif;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 23.71px;
-  letter-spacing: 0.05em;
+.CreatePostcardContainer::before {
+  display: none;
 }
 
-.TopFields .TitleField :placeholder-shown{
-  color: gray;
+.CreatePostcardContainer::after {
+  display: none;
 }
-
-.TopFields .TitleField input {
-  font-family: 'Scope One', serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 15px;
-  line-height: 23.71px;
-  /* letter-spacing: 5% converted to 0.05em for compatibility */
-  letter-spacing: 0.05em;
-  color: #B0B5B3;
-  flex: 1 1 auto;
-  width: auto; /* allow flex to control width */
-  padding: 6px 8px;
-  font-size: 18px; /* smaller input text so label remains prominent */
-  transition: color 160ms ease, opacity 160ms ease;
-}
-
-/* Make the typed title text darker. Works on focus and when input is not placeholder-shown.
-   Note: :not(:placeholder-shown) requires the input to have a placeholder attribute in HTML.
-   If inputs lack placeholders we can add a small JS bit to toggle a `.filled` class instead. */
-.TopFields .TitleField input:focus,
-.TopFields .TitleField input:not(:placeholder-shown) {
-  color: #1D1B1C; /* darker color when user typed or focused */
-  opacity: 1;
-}
-
-/* Make DateField label and input inline (side-by-side) */
-.TopFields .DateField {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.TopFields .DateField label{ 
-  font-family: 'Scope One', serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 25px; 
-  line-height: 23.71px;
-  /* letter-spacing: 5% converted to 0.05em for compatibility */
-  letter-spacing: 0.05em;
-  color: #1D1B1C;
-}
-
-.TopFields .DateField input {
-  font-family: 'Scope One', serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 15px; 
-  line-height: 23.71px;
-  /* letter-spacing: 5% converted to 0.05em for compatibility */  
-  letter-spacing: 0.05em;
-  color: #B0B5B3;
-  flex: 1 1 auto;
-  width: auto;
-  padding: 6px 8px;
-}
-
-/* Make the typed date text darker. Matches TitleField behavior. */
-.TopFields .DateField input {
-  transition: color 160ms ease, opacity 160ms ease;
-}
-
-.TopFields .DateField input:focus,
-.TopFields .DateField input:not(:placeholder-shown) {
-  color: #1D1B1C;
-  opacity: 1;
-  font-size: medium;
-}
-
 
 .FormSection {
-  width: 100%;
-
-}
-
-
-
-/* Position the whole postcard area: centered horizontally and wider on desktop.
-   Place it below the header and make it responsive. */
-.CreatePostcardContainer {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  /* keep the container below the header and finish 25px above the footer */
-  top: calc(var(--header-height, 64px) + 24px);
-  bottom: calc(var(--footer-height, 75px) + 25px);
-
-  /* make it wide but responsive: 95vw up to 1200px */
-  width: min(1200px, 95vw);
-  max-width: 1200px;
-
-  /* let height be determined by top/bottom with overflow if needed */
-  height: auto;
-  max-height: calc(100vh - var(--header-height, 64px) - var(--footer-height, 75px) - 48px);
-
-  box-sizing: border-box;
-  opacity: 1;
-  z-index: 70;
-  overflow: auto;
-}
-
-
-/* Top centered header inside postcard (visual only, do not change site header) */
-.CreatePostcardContainer .InnerTopBar {
-  width: 100%;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.15));
+  padding: 80px 60px 60px;
+  max-width: 100%;
+  margin: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-weight: 700;
-  color: rgba(13,14,23,0.6);
-  letter-spacing: 0.12em;
+  width: 100%;
 }
 
-/* Layout: two columns inside the framed postcard */
-.CreatePostcardContainer .FormColumns {
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-  height: calc(100% - 80px);
-}
-
-.CreatePostcardContainer .LeftColumn {
-  width: 48%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  /* fill vertical space of the columns area */
-  height: 100%;
+.PostcardForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 80px;
+  align-items: start;
   position: relative;
 }
 
-.BackButton {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  color: #1D1B1C;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 10;
-}
-
-.BackButton:hover {
-  background: rgba(255, 255, 255, 0.95);
-  transform: translateX(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.BackButton:active {
-  transform: translateX(0);
-}
-
-.CreatePostcardContainer .RightColumn {
-  width: 52%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Big left upload panel styling */
-.FileUploadBox {
-  width: 100%;
-  height: 100%;
-  max-height: 680px;
-  border-radius: 14px;
-  padding: 28px 18px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.35));
-  border: 1px solid rgba(255,255,255,0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.FileUploadBox .PlusUploadButton {
-  width: 84px;
-  height: 84px;
-  font-size: 36px;
-  box-shadow: 0 6px 18px rgba(13,14,23,0.12), inset 0 2px 6px rgba(255,255,255,0.6);
-}
-
-.FileUploadBox .UploadHint {
-  margin-top: 12px;
-  color: rgba(29,27,28,0.55);
-}
-
-/* Right column boxes: small title/date box and large description box */
-.TopFields {
-  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.22));
-  border-radius: 12px;
-  padding: 12px 16px;
-  border: 1px solid rgba(255,255,255,0.7);
-}
-
-.TopFields .TitleField label,
-.TopFields .DateField label {
-  color: rgba(13,14,23,0.7);
-  font-weight: 600;
-}
-
-.DescriptionField {
-  background: linear-gradient(180deg, rgba(255,255,255,0.65), rgba(255,255,255,0.24));
-  border-radius: 12px;
-  padding: 16px;
-  min-height: 260px;
-  border: 1px solid rgba(255,255,255,0.7);
-  color: rgba(13,14,23,0.7);
-}
-
-
-
-.DescriptionField .FormTextarea {
-  flex: 1 1 auto;
-  width: 100%;
-  min-height: 160px;
-  resize: vertical;
-}
-
-.DescriptionField textarea {
-  width: 100%;
-  height: 100%;
-  resize: none;
-  background: transparent;
-  color: inherit;
-  border: none;
-  outline: none;
-}
-
-/* Hide placeholders on focus and once the user has typed (placeholder-shown fallback)
-   Works for both the title input and the description textarea. */
-.TopFields .TitleField input::placeholder,
-.DescriptionField textarea::placeholder {
-  color: rgba(176,181,179,0.85);
-  transition: opacity 160ms ease, transform 160ms ease;
-}
-
-.TopFields .TitleField input:focus::placeholder,
-.TopFields .TitleField input:not(:placeholder-shown)::placeholder,
-.DescriptionField textarea:focus::placeholder,
-.DescriptionField textarea:not(:placeholder-shown)::placeholder {
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-4px);
-}
-
-/* Form action buttons - glassy rounded */
-.FormActions {
-  display: flex;
-  gap: 200px;
-  justify-content: center;
-  margin-top: 8px;
-  font-family:Georgia, 'Times New Roman', Times, serif;
-}
-
-/* Form error message */
-.FormError {
-  margin-top: 8px;
-  color: #b00020;
-  background: rgba(176,0,32,0.06);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(176,0,32,0.12);
-  font-size: 0.95rem;
-}
-
-.SubmitButton[disabled] {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Font size controls for the description textarea */
-.FontSizeControls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  justify-content: flex-end;
-}
-
-.FontSizeButton {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-  color: rgba(13,14,23,0.8);
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.FontSizeLabel {
-  min-width: 48px;
-  text-align: center;
-  color: rgba(13,14,23,0.7);
-}
-
-.ResetButton, .SubmitButton {
-  padding: 8px 18px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.6);
-  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.28));
-  color: rgba(13,14,23,0.8);
-  cursor: pointer;
-}
-
-@media (max-width: 1024px) {
-  .CreatePostcardContainer {
-    width: 90%;
-    padding: 24px;
-  }
-  
-  .LeftColumn {
-    max-width: 50%;
-  }
-}
-
-@media (max-width: 900px) {
-  .CreatePostcardContainer {
-    left: 24px;
-    top: 100px;
-    transform: none;
-    width: calc(100% - 48px);
-    height: auto;
-    min-height: calc(100vh - 200px);
-    padding: 20px;
-  }
-  
-  .FormColumns {
-    flex-direction: column;
-    height: auto;
-  }
-  
-  .LeftColumn,
-  .RightColumn {
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .TopFields .TitleField label {
-    font-size: 24px;
-  }
-  
-  .TopFields .TitleField input {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 600px) {
-  .CreatePostcardContainer {
-    left: 12px;
-    top: 90px;
-    width: calc(100% - 24px);
-    padding: 16px;
-    border-radius: 16px;
-  }
-  
-  .TopFields {
-    padding: 10px;
-  }
-  
-  .TopFields .TitleField {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .TopFields .TitleField label {
-    font-size: 20px;
-  }
-  
-  .TopFields .TitleField input {
-    font-size: 18px;
-    width: 100%;
-  }
-  
-  .DateField input {
-    font-size: 14px;
-  }
-  
-  .DescriptionField textarea {
-    font-size: 14px;
-    min-height: 120px;
-  }
-}
-
-/* Optional modifier class: make the postcard full-screen
-   add the class `fullscreen` to the container to expand it */
-.CreatePostcardContainer.fullscreen {
-  left: 0;
-  right: 0;
-  /* keep fullscreen content visible under header and finish 25px above footer */
-  top: var(--header-height, 100px);
-  bottom: calc(var(--footer-height, 100px) + 30px);
-  transform: none;
-  width: 100%;
-  height: auto;
-  border-radius: 0;
-  padding: 32px;
-  box-sizing: border-box;
-  overflow: auto;
-}
-
-/* Two-column form layout */
 .FormColumns {
-  display: flex;
-  gap: 24px;
+  display: contents;
 }
 
 .LeftColumn {
-  width: 420px;
-  max-width: 45%;
-  align-self: stretch;
-  height: 100%;
+  position: sticky;
+  top: 80px;
 }
 
-.RightColumn {
-  flex: 1 1 0;
-  min-width: 320px;
+.BackButton {
+  position: fixed;
+  top: calc(var(--header-height, 64px) + 100px);
+  left: 40px;
+  width: 50px;
+  height: 50px;
+  background: #2D4A4A;
+  color: #F8F1E8;
+  border: 2px solid #F8F1E8;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(45, 74, 74, 0.3);
+  z-index: 100;
 }
 
-/* Glass-style file upload box */
+.BackButton:hover {
+  background: #F8F1E8;
+  color: #2D4A4A;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(45, 74, 74, 0.4);
+}
+
 .FileUploadBox {
-  border-radius: 16px;
-  padding: 24px;
-  /* make the upload box fill the left column and grow if needed */
-  height: 100%;
-  min-height: 480px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: linear-gradient(111deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 32px rgba(13,14,23,0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(145deg, #F8F1E8, #F2EDE5);
+  border: 3px dashed #D4C4B0;
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  min-height: 520px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  box-shadow: 
+    0 15px 45px rgba(26, 26, 26, 0.08),
+    inset 0 2px 8px rgba(248, 241, 232, 0.8);
 }
 
-.HiddenFileInput { display:none; }
+.FileUploadBox:hover {
+  border-color: #B89778;
+  background: linear-gradient(145deg, #F2EDE5, #F8F1E8);
+  transform: translateY(-8px);
+  box-shadow: 
+    0 25px 60px rgba(184, 151, 120, 0.25),
+    inset 0 2px 12px rgba(248, 241, 232, 0.9);
+}
 
 .PlusUploadButton {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.35);
-  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08));
-  backdrop-filter: blur(6px);
-  display: grid;
-  place-items: center;
-  font-size: 32px;
-  color: #1D1B1C;
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 30px;
+  background: linear-gradient(145deg, #B89778, #D4C4B0);
+  color: #1A1A1A;
+  border: 3px solid #F8F1E8;
+  border-radius: 20px;
+  font-size: 42px;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 
+    0 15px 40px rgba(184, 151, 120, 0.4),
+    inset 0 3px 8px rgba(248, 241, 232, 0.8);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.PlusUploadButton:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 
+    0 25px 60px rgba(184, 151, 120, 0.6),
+    inset 0 3px 12px rgba(248, 241, 232, 0.9);
 }
 
 .UploadHint {
-  color: rgba(29,27,28,0.7);
-  font-size: 0.95rem;
-}
-
-.FileUploadBox.dragover {
-  box-shadow: 0 10px 40px rgba(20,92,158,0.12);
-  border-color: rgba(20,92,158,0.25);
+  color: #2D4A4A;
+  font-size: 20px;
+  font-weight: 500;
+  font-style: italic;
+  margin-bottom: 40px;
+  letter-spacing: 0.5px;
 }
 
 .ImagePreview {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding: 25px;
+  background: rgba(184, 151, 120, 0.06);
+  border: 1px solid rgba(212, 196, 176, 0.3);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
 }
 
 .PreviewItem {
   position: relative;
-  width: 88px;
-  height: 88px;
-  border-radius: 8px;
+  aspect-ratio: 1;
+  border-radius: 10px;
   overflow: hidden;
+  box-shadow: 0 12px 35px rgba(26, 26, 26, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.PreviewItem:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(45, 74, 74, 0.3);
+  border-color: #B89778;
+}
+
+.RemoveImageButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  background: rgba(184, 151, 120, 0.95);
+  color: #1A1A1A;
+  border: 1px solid #F8F1E8;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.PreviewItem:hover .RemoveImageButton {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .PreviewImage {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  object-position: center;
-  background: #fff;
-  display: block;
+  object-fit: cover;
 }
 
-.RemoveImageButton {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border: none;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  cursor: pointer;
+.RightColumn {
+  padding-left: 0;
 }
 
-
-
-.DateField input,
-.DateField textarea,
-.TitelField input,
-.TitelField textarea,
-.TitleField input,
-.TitleField textarea,
-.FormInput,
-#DateField input,
-#DateField textarea {
-  background: transparent;
-  border: none;
-  outline: none;
-  width: 100%;
-  color: inherit;
-  font-size: 1rem;
-  line-height: 1.2;
-  padding: 0;
-}
-
-/* optional small utility styles */
-.TitelField.small,
-.DateField.small,
-#TitelField.small,
-#DateField.small {
-  padding: 8px 12px;
-  border-radius: 10px;
-}
-
-/* Newspaper theme visual overrides (no functional changes) */
-.newspaper-theme .CreatePostcardContainer {
-  background: transparent;
-  box-shadow: none;
-  padding: 12px 8px;
-}
-.newspaper-theme .CreatePostcardContainer .InnerTopBar {
-  background: transparent;
-  text-transform: uppercase;
-  font-family: var(--serif);
-  color: var(--muted);
-  font-size: 14px;
-  letter-spacing: .08em;
-}
-.newspaper-theme .TopFields .TitleField label,
-.newspaper-theme .TopFields .DateField label {
-  font-family: var(--serif);
-  color: var(--muted);
-  text-transform: uppercase;
-  font-size: 12px;
-}
-.newspaper-theme .TopFields .TitleField input,
-.newspaper-theme .TopFields .DateField input {
-  font-family: var(--sans);
-  color: var(--ink);
-}
-.newspaper-theme .DescriptionField .FormTextarea,
-.newspaper-theme .DescriptionField textarea {
-  font-family: var(--sans);
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.6;
-}
-.newspaper-theme .DescriptionField .FormTextarea {
-  column-count: 2;
-  column-gap: 22px;
-  column-rule: 1px solid rgba(0,0,0,0.04);
-}
-.newspaper-theme .FileUploadBox {
-  background: #fff;
-  border: 1px solid var(--rule);
-  box-shadow: none;
-  padding: 12px;
-  border-radius: 8px;
-}
-.newspaper-theme .PlusUploadButton {
-  background: transparent;
-  border: 1px solid var(--rule);
-  color: var(--ink);
-}
-.newspaper-theme .ImagePreview {
+.TopFields {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 8px;
-  margin-top: 8px;
+  gap: 35px;
+  margin-bottom: 25px;
 }
-.newspaper-theme .PreviewItem {
-  border-radius: 4px;
+
+.TitleField, .DateField {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  position: relative;
+}
+
+label::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: #B89778;
+}
+
+.FormInput, .FormTextarea {
+  background: rgba(248, 241, 232, 0.8);
+  border: 2px solid #D4C4B0;
+  border-radius: 8px;
+  padding: 18px 22px;
+  font-family: inherit;
+  font-size: 18px;
+  color: #1A1A1A;
+  line-height: 1.5;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(26, 26, 26, 0.08);
+}
+
+.FormInput:focus, .FormTextarea:focus {
+  outline: none;
+  border-color: #2D4A4A;
+  background: #F8F1E8;
+  box-shadow: 0 8px 25px rgba(26, 26, 26, 0.08);
+}
+
+.FormInput::placeholder {
+  color: #8A7A6A;
+  font-style: italic;
+}
+
+.DescriptionField {
+  margin-bottom: 20px;
+}
+
+.FormTextarea {
+  resize: vertical;
+  min-height: 220px;
+  font-size: 17px;
+  width: 100%;
+}
+
+.FontSizeControls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.FontSizeButton {
+  background: linear-gradient(145deg, #D4C4B0, #B89778);
+  color: #1A1A1A;
+  border: 2px solid #F8F1E8;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 25px rgba(184, 151, 120, 0.3);
+}
+
+.FontSizeButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(184, 151, 120, 0.45);
+}
+
+.FontSizeLabel {
+  font-weight: 700;
+  color: #2D4A4A;
+  font-size: 20px;
+  min-width: 50px;
+  text-align: center;
+  font-variant: tabular-nums;
+}
+
+.FormError {
+  background: linear-gradient(145deg, #FDF2E8, #FCE8D9);
+  color: #8A5A2B;
+  padding: 20px 25px;
+  border-radius: 10px;
+  border-left: 5px solid #B89778;
+  margin-bottom: 40px;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(184, 151, 120, 0.2);
+}
+
+.FormActions {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.ResetButton, .SubmitButton {
+  flex: 1;
+  padding: 22px 30px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
   overflow: hidden;
-  border: 2px solid #fff;
 }
-.newspaper-theme .PreviewImage {
-  filter: grayscale(60%) contrast(1.03);
+
+.ResetButton {
+  background: linear-gradient(145deg, #D4C4B0, #B89778);
+  color: #1A1A1A;
+  box-shadow: 0 12px 35px rgba(184, 151, 120, 0.3);
 }
-.newspaper-theme .FormActions {
-  gap: 48px;
+
+.ResetButton:hover:not(:disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 60px rgba(184, 151, 120, 0.5);
+  border-color: #B89778;
 }
-.newspaper-theme .ResetButton,
-.newspaper-theme .SubmitButton,
-.newspaper-theme .FontSizeButton {
-  background: transparent;
-  border: 1px solid var(--rule);
-  color: var(--ink);
+
+.SubmitButton {
+  background: linear-gradient(145deg, #2D4A4A, #1A1A1A);
+  color: #F8F1E8;
+  box-shadow: 0 12px 35px rgba(45, 74, 74, 0.4);
 }
+
+.SubmitButton:hover:not(:disabled) {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 60px rgba(45, 74, 74, 0.6);
+  border-color: #2D4A4A;
+}
+
+.SubmitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 5px 15px rgba(45, 74, 74, 0.2);
+}
+
+.HiddenFileInput {
+  display: none;
+}
+

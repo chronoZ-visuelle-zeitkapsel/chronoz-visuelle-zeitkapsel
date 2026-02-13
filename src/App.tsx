@@ -1,6 +1,7 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import './App.css';
 import './styles/newspaper.css';
+import './styles/vintage-newspaper.css';
 import Header from './components/Header';
 import ThreeDStage from './components/ThreeDStage';
 import CTA from './components/CTA';
@@ -43,17 +44,107 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
         };
     }, []);
 
+    const currentDate = new Date().toLocaleDateString('de-DE', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    });
+
     return (
         <div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
-            <main className="HomeMain">
-                <section className="StageSection">
-                    <ThreeDStage />
-                </section>
-                <section className="CTASection">
-                    <CTA />
-                </section>
-            </main>
+            
+            {/* Broadsheet Layout */}
+            <div className="BroadsheetContainer">
+                {/* Left Sidebar - Table of Contents */}
+                <aside className="BroadsheetSidebar">
+                    <div className="SidebarSection">
+                        <h3 className="SidebarTitle">In Kürze</h3>
+                        <ul className="SidebarList">
+                            <li>• Private Archive</li>
+                            <li>• Individuelle Kapseln</li>
+                            <li>• E-Mail-Benachrichtigung</li>
+                            <li>• Sicherheit</li>
+                            <li>• Zeitlinie</li>
+                            <li>• Historische Ansicht</li>
+                        </ul>
+                    </div>
+                    
+                    <div className="SidebarSection PageCurl">
+                        <h3 className="SidebarTitle">Hinweis</h3>
+                        <p className="ArticleText">
+                            Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. 
+                            Ihre Inhalte bleiben privat.
+                        </p>
+                    </div>
+                </aside>
+
+                {/* Main Content Area */}
+                <main className="BroadsheetMain">
+                    <article>
+                        <h2 className="VintageHeadline">
+                            VISUELLE ZEITKAPSELN FÜR IHRE GESCHICHTEN
+                        </h2>
+                        
+                        <p className="VintageSubhead">
+                            Eine neue Ausgabe für Erinnerungen – klassisch gesetzt, digital bewahrt
+                        </p>
+                        
+                        <div className="FauxFold"></div>
+                        
+                        <div className="VintagePhoto">
+                            <ThreeDStage />
+                            <p className="PhotoCaption">
+                                Die Schatzkiste der Erinnerungen öffnet sich digital
+                            </p>
+                        </div>
+                        
+                        <div className="ArticleText DropCap BroadsheetMainColumned">
+                            <p>
+                                Zeitkapsel bewahren Momente, die zu Geschichten werden. 
+                                In einer Welt der flüchtigen Feeds bietet Chronoz eine ruhige Seite 
+                                für Erinnerungen – gestaltet wie Zeitung, geschrieben für die Zukunft.
+                            </p>
+                            <p>
+                                Von der ersten Aufnahme bis zum letzten Satz sammelt die Postkarte 
+                                Bilder und Gedanken in einem Format, das bleibt. Jede Karte wird zu 
+                                einem Zeitzeugnis, archiviert in Ihrem persönlichen Tresor.
+                            </p>
+                            <p>
+                                Die Plattform verbindet die Nostalgie handgeschriebener Briefe mit 
+                                der Beständigkeit digitaler Speicherung. Ihre Geschichten, Ihre Bilder, 
+                                Ihre Zukunft – alles an einem Ort, geschützt vor dem Vergessen.
+                            </p>
+                        </div>
+                        
+                        <div className="OrnateBorder">
+                            <CTA />
+                        </div>
+                    </article>
+                </main>
+
+                {/* Right Sidebar - Features */}
+                <aside className="BroadsheetRightSidebar">
+                    <div className="SidebarSection">
+                        <h3 className="SidebarTitle">Ausgabe</h3>
+                        <p className="ArticleText" style={{fontSize: '0.95rem'}}>
+                            Nächste Edition erscheint automatisch, während Sie scrollen. 
+                            Bleiben Sie dran für weitere Geschichten.
+                        </p>
+                    </div>
+                    
+                    {isLoggedIn && (
+                        <div className="SidebarSection">
+                            <h3 className="SidebarTitle">Ihr Archiv</h3>
+                            <p className="ArticleText" style={{fontSize: '0.95rem'}}>
+                                Zugriff auf Ihre persönliche Sammlung gespeicherter Zeitkapseln.
+                            </p>
+                        </div>
+                    )}
+                </aside>
+            </div>
+            
             {isLoggedIn && <Archive />}
             <FAQ />
             <Footer />

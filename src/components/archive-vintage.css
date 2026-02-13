@@ -1,0 +1,978 @@
+/* Vintage Newspaper Archive Carousel */
+
+.archive-section {
+  padding: 40px 50px 250px;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  background-image: 
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.05"/></svg>'),
+    linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 3px solid var(--color-border);
+  border-bottom: 3px solid var(--color-border);
+  min-height: 850px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.archive-container {
+  max-width: 1500px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Edition Archive Banner */
+.archive-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0 0 40px 0;
+  border-top: 4px double var(--color-border);
+  border-bottom: 4px double var(--color-border);
+  padding: 20px 0;
+  text-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 5;
+}
+
+.archive-subtitle {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--color-secondary);
+  margin: 0 0 40px 0;
+  letter-spacing: 0.12em;
+}
+
+/* Brass Tab Year Filters */
+.archive-filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.brass-tab {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 12px 24px;
+  border: 2px solid var(--color-border);
+  background: linear-gradient(180deg, #c9b896 0%, #a89968 100%);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.brass-tab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.05) 2px,
+    rgba(0,0,0,0.05) 4px
+  );
+  pointer-events: none;
+}
+
+.brass-tab:hover {
+  background: linear-gradient(180deg, #d4c4a0 0%, #b8a378 100%);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 12px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.brass-tab.active {
+  background: linear-gradient(180deg, #8b7355 0%, #6b5642 100%);
+  color: #f4ede1;
+  box-shadow: 
+    inset 0 3px 8px rgba(0,0,0,0.4),
+    0 2px 4px rgba(0,0,0,0.2);
+  transform: translateY(1px);
+}
+
+/* Library Card Catalog Search */
+.archive-search {
+  max-width: 600px;
+  margin: 0 auto 50px;
+  position: relative;
+}
+
+.catalog-search {
+  width: 100%;
+  padding: 18px 50px 18px 20px;
+  font-family: 'Courier New', 'Courier', monospace;
+  font-size: 1rem;
+  border: 3px solid var(--color-border);
+  background: #faf7f2;
+  color: var(--color-text);
+  box-shadow: 
+    inset 0 2px 6px rgba(0,0,0,0.1),
+    0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+}
+
+.catalog-search::placeholder {
+  color: var(--color-secondary);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.catalog-search:focus {
+  outline: none;
+  border-color: var(--color-secondary);
+  background: #ffffff;
+}
+
+.search-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color: var(--color-secondary);
+  pointer-events: none;
+}
+
+/* Newsstand Carousel - Brass Spinner Rack */
+.carousel-wrapper {
+  position: relative;
+  padding: 20px 0 60px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin-top: 350px;
+  z-index: 1;
+}
+
+.carousel-nav-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--color-border);
+  background: linear-gradient(180deg, #c9b896 0%, #a89968 100%);
+  color: var(--color-text);
+  font-size: 1.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 6px 15px rgba(0,0,0,0.3),
+    inset 0 2px 0 rgba(255,255,255,0.3),
+    inset 0 -2px 0 rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.carousel-nav-button:hover {
+  background: linear-gradient(180deg, #d4c4a0 0%, #b8a378 100%);
+  transform: scale(1.1);
+  box-shadow: 
+    0 8px 20px rgba(0,0,0,0.4),
+    inset 0 2px 0 rgba(255,255,255,0.4);
+}
+
+.carousel-nav-button:active {
+  transform: scale(0.95);
+  box-shadow: 
+    inset 0 3px 8px rgba(0,0,0,0.4),
+    0 2px 4px rgba(0,0,0,0.2);
+}
+
+.carousel-container {
+  flex: 1;
+  overflow: visible;
+  position: relative;
+  padding: 0 0 100px;
+}
+
+.carousel-track {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  perspective: 2000px;
+  margin-top: 30px;
+  z-index: 1;
+}
+
+/* Newspaper Front Page Cards */
+.carousel-slide {
+  position: absolute;
+  width: 100%;
+  max-width: 450px;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.carousel-slide[data-position="prev"] {
+  opacity: 0.4;
+  transform: translateX(-70%) scale(0.75) rotateY(20deg);
+  z-index: 2;
+  filter: grayscale(80%);
+}
+
+.carousel-slide[data-position="active"] {
+  opacity: 1;
+  transform: translateX(0) scale(1) rotateY(0deg);
+  z-index: 10;
+  pointer-events: auto;
+  filter: grayscale(0%);
+}
+
+.carousel-slide[data-position="next"] {
+  opacity: 0.4;
+  transform: translateX(70%) scale(0.75) rotateY(-20deg);
+  z-index: 2;
+  filter: grayscale(80%);
+}
+
+/* Front Page Card Styling */
+.postcard-card {
+  background: var(--color-surface);
+  border: 4px solid var(--color-border);
+  padding: 20px;
+  box-shadow: 
+    0 15px 40px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(0,0,0,0.1) inset;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+/* Vintage Newsprint Texture */
+.vintage-newsprint {
+  background: 
+    linear-gradient(0deg, transparent 24%, rgba(0,0,0,0.02) 25%, rgba(0,0,0,0.02) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.02) 75%, rgba(0,0,0,0.02) 76%, transparent 77%, transparent),
+    linear-gradient(90deg, transparent 24%, rgba(0,0,0,0.02) 25%, rgba(0,0,0,0.02) 26%, transparent 27%, transparent 74%, rgba(0,0,0,0.02) 75%, rgba(0,0,0,0.02) 76%, transparent 77%, transparent),
+    linear-gradient(180deg, #faf7f2 0%, #f4ede1 100%);
+  background-size: 50px 50px, 50px 50px, 100% 100%;
+}
+
+/* EXTRA EDITION Banner */
+.extra-edition-banner {
+  background: var(--color-border);
+  color: var(--color-surface);
+  padding: 6px 12px;
+  text-align: center;
+  font-family: 'Georgia', serif;
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: -20px -20px 15px -20px;
+  border-bottom: 3px double var(--color-surface);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.banner-ornament {
+  font-size: 1.3rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.banner-text {
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+/* Main Feature Image with Halftone */
+.postcard-feature-image {
+  margin: 20px 0;
+  border: 4px solid var(--color-border);
+  padding: 8px;
+  background: var(--color-surface);
+  box-shadow: 
+    inset 0 0 20px rgba(0,0,0,0.1),
+    3px 3px 10px rgba(0,0,0,0.2);
+}
+
+.halftone-photo {
+  position: relative;
+  overflow: hidden;
+}
+
+.halftone-photo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
+  background-size: 4px 4px;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: multiply;
+}
+
+.halftone-photo::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0,0,0,0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 3;
+}
+
+.halftone-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(100%) contrast(1.2) brightness(0.95);
+  transition: filter 0.5s ease;
+}
+
+.carousel-slide[data-position="active"] .halftone-photo:hover img {
+  filter: grayscale(50%) contrast(1.1) brightness(1);
+}
+
+.photo-caption {
+  font-family: 'Georgia', serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: center;
+  padding: 8px 5px 0;
+  color: var(--color-secondary);
+  border-top: 1px solid var(--color-border);
+  margin: 0;
+  background: var(--color-surface);
+}
+
+/* Feature Image Grid Layouts */
+.feature-image-grid {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.feature-single .feature-image-grid {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.feature-single .feature-image-grid .feature-image {
+  border: none;
+  padding: 8px;
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.25);
+}
+
+.feature-single .feature-image {
+  max-width: 100%;
+  display: block;
+  padding: 8px;
+  background: var(--color-surface);
+  box-shadow: 4px 6px 12px rgba(0,0,0,0.25);
+}
+
+.feature-image {
+  position: relative;
+  border: 3px solid var(--color-border);
+  padding: 6px;
+  background: var(--color-surface);
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%) contrast(1.15) brightness(0.92) sepia(12%);
+}
+
+.feature-image::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.12) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  z-index: 2;
+}
+
+.feature-image::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 2-Picture Grid: 60% dominant + 40% square thumbnail */
+.feature-count-2 .feature-image-grid {
+  grid-template-columns: 1fr 0.67fr;
+  grid-template-rows: 1fr 0.67fr;
+  grid-template-areas:
+    "lead lead"
+    "lead thumb";
+  min-height: 240px;
+  border-right: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.feature-count-2 .feature-image-1 { 
+  grid-area: lead;
+  border-right: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.feature-count-2 .feature-image-2 { 
+  grid-area: thumb;
+}
+
+/* 3-Picture Grid: L-shape/pyramid - 2/3 top lead, 2x1/3 thumbnails below */
+.feature-count-3 .feature-image-grid {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "lead lead"
+    "thumb1 thumb2";
+  min-height: 240px;
+}
+
+.feature-count-3 .feature-image-1 { 
+  grid-area: lead;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: -1px;
+}
+
+.feature-count-3 .feature-image-2 { 
+  grid-area: thumb1;
+  border-right: 2px solid var(--color-border);
+  margin-right: -1px;
+}
+
+.feature-count-3 .feature-image-3 { 
+  grid-area: thumb2;
+}
+
+/* 4-Picture Grid: 2x2 newspaper quadrants with dividers */
+.feature-count-4 .feature-image-grid {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "q1 q2"
+    "q3 q4";
+  min-height: 240px;
+}
+
+.feature-count-4 .feature-image-1 { 
+  grid-area: q1;
+  border-right: 2px solid var(--color-border);
+  border-bottom: 2px solid var(--color-border);
+  margin-right: -1px;
+  margin-bottom: -1px;
+}
+
+.feature-count-4 .feature-image-2 { 
+  grid-area: q2;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: -1px;
+}
+
+.feature-count-4 .feature-image-3 { 
+  grid-area: q3;
+  border-right: 2px solid var(--color-border);
+  margin-right: -1px;
+}
+
+.feature-count-4 .feature-image-4 { 
+  grid-area: q4;
+}
+
+.feature-image-1 { grid-area: lead; }
+.feature-image-2 { grid-area: thumb1; }
+.feature-image-3 { grid-area: thumb2; }
+.feature-image-4 { grid-area: thumb3; }
+.feature-image-5 { grid-area: side4; }
+
+.feature-montage .feature-image-grid {
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 60px;
+  align-content: start;
+}
+
+.feature-montage .feature-image {
+  border-width: 2px;
+}
+
+.feature-faded {
+  opacity: 0.65;
+}
+
+/* Multi-Column Layout Grid */
+.postcard-layout-grid {
+  display: block;
+  margin: 15px 0;
+}
+
+/* Side Column Vignette Photos */
+.side-column-photo {
+  border: 3px solid var(--color-border);
+  padding: 5px;
+  background: var(--color-surface);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.vignette-frame::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0,0,0,0.4) 100%
+  );
+  pointer-events: none;
+}
+
+.side-column-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(100%) sepia(30%) contrast(1.1);
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+
+/* Postage Stamp Corner */
+.postage-stamp-corner {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--color-border);
+  background: linear-gradient(135deg, #f4ede1 0%, #ebe3d5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 8px rgba(0,0,0,0.2),
+    inset 0 0 10px rgba(0,0,0,0.1);
+  transform: rotate(12deg);
+  z-index: 10;
+}
+
+.stamp-perforation {
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: 
+    repeating-linear-gradient(
+      0deg,
+      var(--color-border) 0px,
+      var(--color-border) 2px,
+      transparent 2px,
+      transparent 6px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--color-border) 0px,
+      var(--color-border) 2px,
+      transparent 2px,
+      transparent 6px
+    );
+  pointer-events: none;
+}
+
+.stamp-text {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-align: center;
+  z-index: 2;
+  letter-spacing: 0.05em;
+}
+
+/* Carousel Silhouette Divider */
+.carousel-silhouette-divider {
+  width: 100%;
+  height: 40px;
+  margin: 20px 0;
+  opacity: 0.5;
+  color: var(--color-secondary);
+}
+
+.carousel-silhouette-divider svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Grain Overlay Effect */
+.postcard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="5" result="noise"/><feColorMatrix in="noise" type="saturate" values="0"/></filter><rect width="200" height="200" filter="url(%23grain)" opacity="0.08"/></svg>');
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+/* Text Content with Grain */
+.postcard-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* Responsive Grid Adjustment */
+@media (max-width: 768px) {
+  .postcard-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .side-column-photo {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  
+  .extra-edition-banner {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+  
+  .postage-stamp-corner {
+    width: 50px;
+    height: 50px;
+    top: 10px;
+    right: 10px;
+  }
+}
+
+/* Sepia & Halftone Effect */
+.postcard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-radial-gradient(
+      circle at 0 0,
+      transparent 0,
+      rgba(0,0,0,0.03) 2px,
+      transparent 4px
+    ),
+    linear-gradient(180deg, rgba(245, 235, 220, 0.3) 0%, rgba(255,255,255,0.1) 100%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Page Curl Animation on Hover */
+.postcard-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  background: linear-gradient(225deg, 
+    rgba(0,0,0,0.2) 0%,
+    rgba(0,0,0,0.1) 50%,
+    transparent 51%);
+  border-bottom-right-radius: 8px;
+  transition: all 0.5s ease;
+  box-shadow: -3px 3px 8px rgba(0,0,0,0.3);
+}
+
+.carousel-slide[data-position="active"] .postcard-card:hover::after {
+  width: 100px;
+  height: 100px;
+}
+
+.carousel-slide[data-position="active"] .postcard-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 25px 60px rgba(0,0,0,0.4),
+    0 0 0 1px rgba(0,0,0,0.2) inset;
+}
+
+/* Edition Masthead */
+.postcard-masthead {
+  text-align: center;
+  border-bottom: 4px double var(--color-border);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.postcard-edition-date {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.postcard-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  color: var(--color-text);
+  margin: 0;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  word-wrap: break-word;
+}
+
+/* Article Preview - Columned Layout */
+.postcard-content {
+  column-rule: none;
+  text-align: justify;
+  hyphens: auto;
+  margin-top: 20px;
+}
+
+.postcard-date-display {
+  font-family: 'Georgia', serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-secondary);
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.postcard-description {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  margin: 0;
+  text-align: justify;
+}
+
+.postcard-description::first-letter {
+  font-family: 'Georgia', serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  float: none;
+  line-height: 1;
+  margin: 0 2px 0 0;
+  vertical-align: baseline;
+  color: var(--color-text);
+}
+
+/* Image Preview with Vintage Treatment */
+.postcard-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+  break-inside: avoid;
+  column-span: all;
+}
+
+.postcard-image-wrapper {
+  border: 3px solid var(--color-border);
+  padding: 6px;
+  background: var(--color-surface);
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  filter: grayscale(100%) contrast(1.1) sepia(20%);
+  transition: filter 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.postcard-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+}
+
+.carousel-slide[data-position="active"] .postcard-image-wrapper:hover {
+  filter: grayscale(0%) contrast(1) sepia(0%);
+}
+
+.postcard-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+}
+
+/* Action Buttons */
+.postcard-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid var(--color-border);
+}
+
+.action-button {
+  font-family: 'Georgia', serif;
+  font-variant: small-caps;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+  letter-spacing: 0.08em;
+}
+
+.action-button:hover {
+  background: var(--color-border);
+  color: var(--color-surface);
+  transform: translateY(-2px);
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+}
+
+.print-view-button {
+  background: var(--color-accent);
+  color: #ffffff;
+  border-color: var(--color-accent);
+}
+
+.print-view-button:hover {
+  background: #a00000;
+  border-color: #a00000;
+}
+
+/* Loading & Empty States */
+.archive-loading,
+.archive-empty {
+  text-align: center;
+  padding: 60px 20px;
+  font-family: 'Georgia', serif;
+  font-size: 1.2rem;
+  color: var(--color-secondary);
+  font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .archive-title {
+    font-size: 2.5rem;
+  }
+  
+  .postcard-content {
+    column-count: 1;
+  }
+  
+  .carousel-slide {
+    max-width: 600px;
+  }
+  
+  .postcard-title {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-section {
+    padding: 10px 20px;
+  }
+  
+  .archive-title {
+    font-size: 2rem;
+  }
+  
+  .carousel-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .carousel-nav-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+  
+  .carousel-slide[data-position="prev"],
+  .carousel-slide[data-position="next"] {
+    display: none;
+  }
+  
+  .postcard-card {
+    padding: 20px;
+  }
+  
+  .archive-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .brass-tab {
+    width: 100%;
+    max-width: 300px;
+  }
+}
