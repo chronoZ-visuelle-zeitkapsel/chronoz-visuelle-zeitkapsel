@@ -264,16 +264,6 @@ label {
   position: relative;
 }
 
-label::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: #B89778;
-}
-
 .FormInput, .FormTextarea {
   background: rgba(248, 241, 232, 0.8);
   border: 2px solid #D4C4B0;

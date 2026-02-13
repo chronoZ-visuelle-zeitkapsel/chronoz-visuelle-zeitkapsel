@@ -191,7 +191,7 @@ body.newspaper-theme {
 }
 
 /* Buttons subtle */
-.newspaper-theme button {
+.newspaper-theme button:not(.footer-link):not(.edition-link):not(.CTAButton) {
   background: transparent;
   border: 1px solid var(--rule);
   padding: 8px 12px;
@@ -199,19 +199,15 @@ body.newspaper-theme {
   font-family: var(--sans);
 }
 
-/* CTA button: darker on hover for emphasis */
-.newspaper-theme .CTAButton {
-  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+/* Footer links should stay white */
+.newspaper-theme .footer-link {
+  color: #ffffff !important;
+  background: none !important;
+  border: none !important;
 }
-.newspaper-theme .CTAButton:hover,
-.newspaper-theme .CTAButton:focus {
-  background: #000;
-  color: #fafafa;
-  border-color: #000;
-}
-.newspaper-theme .CTAButton:focus-visible {
-  outline: 2px solid rgba(0,0,0,0.12);
-  outline-offset: 2px;
+
+.newspaper-theme .footer-link:hover {
+  color: #f9f6f0 !important;
 }
 
 /* Responsive: single column on small screens */

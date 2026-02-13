@@ -241,182 +241,114 @@ function Login(): ReactElement {
   }
 
   return (
-    <div className="LoginPage">
-      <div className="LoginCard">
-        <img src="/chronoZLogo.png" alt="chronoZ Logo" className="LoginLogo" />
-        
-        {requires2FA ? (
-          // 2FA Code Entry Form
-          <form onSubmit={handle2FASubmit} className="LoginForm">
-            <h2 style={{ textAlign: 'center', marginBottom: '16px' }}>Zwei-Faktor-Authentifizierung</h2>
-            <label className="Field">
-              <span>6-stelliger Code</span>
-              <input
-                type="text"
-                value={twoFactorCode}
-                onChange={(e) => setTwoFactorCode(e.target.value)}
-                maxLength={6}
-                pattern="[0-9]{6}"
-                required
-                className="Input"
-                placeholder="123456"
-              />
-            </label>
-            <div className="Actions" style={{ flexDirection: 'column' as const }}>
-              <button type="submit" className="CTAButton" disabled={loading}>
-                {loading ? 'Bitte warten…' : 'Verifizieren'}
+    <div className="newspaper-spread-page">
+        {/* Form Panel */}
+        <div className="form-notice-panel">
+          {requires2FA ? (
+            // 2FA Code Entry Form
+            <form onSubmit={handle2FASubmit} className="archive-form">
+              <div className="notice-header">
+                <h2 className="notice-title">Verifizierung</h2>
+                <div className="rivet top-left"></div>
+                <div className="rivet top-right"></div>
+                <div className="rivet bottom-left"></div>
+                <div className="rivet bottom-right"></div>
+              </div>
+              <label className="Field">
+                <span>Versandcode</span>
+                <span className="dispatch-label">(6-stellige Verifizierung)</span>
+                <input
+                  type="text"
+                  value={twoFactorCode}
+                  onChange={(e) => setTwoFactorCode(e.target.value)}
+                  maxLength={6}
+                  pattern="[0-9]{6}"
+                  required
+                  className="Input"
+                  placeholder="123456"
+                />
+              </label>
+              <button type="submit" className="grant-entry-button" disabled={loading}>
+                {loading ? 'Verifiziere…' : 'Zugang gewähren'}
               </button>
               <button 
                 type="button" 
-                className="CTAButton" 
-                style={{ background: 'rgba(255,255,255,0.1)' }}
+                className="archive-link" 
                 onClick={() => {
                   setRequires2FA(false);
                   setTwoFactorCode('');
                   setUserId(null);
                 }}
+                style={{ marginTop: '12px', textAlign: 'center', width: '100%' }}
               >
-                Zurück
+                Zurück zum Login
               </button>
-            </div>
-            {registrationSuccess && <div className="CTAHint" style={{ color: '#539e66' }}>{registrationSuccess}</div>}
-            {error && <div className="CTAHint" style={{ color: '#f17e7e' }}>{error}</div>}
-          </form>
-        ) : mode === 'forgot-password' ? (
-          // Password Reset Form
-          <form onSubmit={resetStep === 'request' ? handleForgotPassword : handleResetPassword} className="LoginForm">
-            <h2 style={{ textAlign: 'center', marginBottom: '16px' }}>Passwort zurücksetzen</h2>
-            {resetStep === 'request' ? (
-              <>
-                <label className="Field">
-                  <span>E-Mail oder Benutzername</span>
-                  <input
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="Input"
-                    placeholder="ihre@email.com oder benutzername"
-                  />
-                </label>
-                <div className="Actions" style={{ flexDirection: 'column' as const }}>
-                  <button type="submit" className="CTAButton" disabled={loading}>
-                    {loading ? 'Bitte warten…' : 'Reset-Code senden'}
-                  </button>
-                  <button 
-                    type="button" 
-                    className="CTAButton" 
-                    style={{ background: 'rgba(255,255,255,0.1)' }}
-                    onClick={() => {
-                      setMode('login');
-                      setResetStep('request');
-                    }}
-                  >
-                    Zurück zum Login
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <label className="Field">
-                  <span>6-stelliger Reset-Code</span>
-                  <input
-                    type="text"
-                    value={resetCode}
-                    onChange={(e) => setResetCode(e.target.value)}
-                    maxLength={6}
-                    pattern="[0-9]{6}"
-                    required
-                    className="Input"
-                    placeholder="123456"
-                  />
-                </label>
-                <label className="Field">
-                  <span>Neues Passwort</span>
-                  <div className="PasswordInputWrapper">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                      className="Input"
-                    />
-                    <button
-                      type="button"
-                      className="PasswordToggle"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
-                    >
-                      <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
-                    </button>
-                  </div>
-                  <Rule ok={newPassword.length >= 8} label="Mindestens 8 Zeichen" />
-                  <Rule ok={/[a-z]/.test(newPassword)} label="Mindestens 1 Kleinbuchstabe (a–z)" />
-                  <Rule ok={/[A-Z]/.test(newPassword)} label="Mindestens 1 Großbuchstabe (A–Z)" />
-                  <Rule ok={/[0-9]/.test(newPassword)} label="Mindestens 1 Zahl (0–9)" />
-                </label>
-                <div className="Actions" style={{ flexDirection: 'column' as const }}>
-                  <button type="submit" className="CTAButton" disabled={loading}>
-                    {loading ? 'Bitte warten…' : 'Passwort zurücksetzen'}
-                  </button>
-                  <button 
-                    type="button" 
-                    className="CTAButton" 
-                    style={{ background: 'rgba(255,255,255,0.1)' }}
-                    onClick={() => {
-                      setMode('login');
-                      setResetStep('request');
-                      setResetCode('');
-                      setNewPassword('');
-                    }}
-                  >
-                    Abbrechen
-                  </button>
-                </div>
-              </>
-            )}
-            {registrationSuccess && <div className="CTAHint" style={{ color: '#4abd66' }}>{registrationSuccess}</div>}
-            {error && <div className="CTAHint" style={{ color: '#ff8a8a' }}>{error}</div>}
-          </form>
-        ) : (
-          // Normal Login/Register Form
-          <>
-            <div className="SwitchContainer">
-              <button 
-                type="button" 
-                className={`SwitchButton ${mode === 'login' ? 'active' : ''}`}
-                onClick={() => setMode('login')}
-              >
-                Anmelden
-              </button>
-              <button 
-                type="button" 
-                className={`SwitchButton ${mode === 'register' ? 'active' : ''}`}
-                onClick={() => setMode('register')}
-              >
-                Registrieren
-              </button>
-            </div>
-            <form onSubmit={handleSubmit} className="LoginForm">
-              {mode === 'login' ? (
+              {registrationSuccess && <div className="archive-message success">{registrationSuccess}</div>}
+              {error && <div className="archive-message error">{error}</div>}
+            </form>
+          ) : mode === 'forgot-password' ? (
+            // Password Reset Form
+            <form onSubmit={resetStep === 'request' ? handleForgotPassword : handleResetPassword} className="archive-form">
+              <div className="notice-header">
+                <h2 className="notice-title">Passwort zurücksetzen</h2>
+                <div className="rivet top-left"></div>
+                <div className="rivet top-right"></div>
+                <div className="rivet bottom-left"></div>
+                <div className="rivet bottom-right"></div>
+              </div>
+              {resetStep === 'request' ? (
                 <>
                   <label className="Field">
-                    <span>E-Mail oder Benutzername</span>
+                    <span>Versandadresse</span>
+                    <span className="dispatch-label">(E-Mail oder Benutzername)</span>
                     <input
                       type="text"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       className="Input"
+                      placeholder="ihre@email.com oder Benutzername"
+                    />
+                  </label>
+                  <button type="submit" className="grant-entry-button" disabled={loading}>
+                    {loading ? 'Sende…' : 'Code senden'}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="archive-link" 
+                    onClick={() => {
+                      setMode('login');
+                      setResetStep('request');
+                    }}
+                    style={{ marginTop: '12px', textAlign: 'center', width: '100%' }}
+                  >
+                    Zurück zum Login
+                  </button>
+                </>
+              ) : (
+                <>
+                  <label className="Field">
+                    <span>Zurücksetzen Code</span>
+                    <span className="dispatch-label">(6-stelliger Code)</span>
+                    <input
+                      type="text"
+                      value={resetCode}
+                      onChange={(e) => setResetCode(e.target.value)}
+                      maxLength={6}
+                      pattern="[0-9]{6}"
+                      required
+                      className="Input"
+                      placeholder="123456"
                     />
                   </label>
                   <label className="Field">
-                    <span>Passwort</span>
+                    <span>Neues Passwort</span>
+                    <span className="dispatch-label">(Passwort)</span>
                     <div className="PasswordInputWrapper">
                       <input
                         type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
                         required
                         className="Input"
                       />
@@ -429,84 +361,189 @@ function Login(): ReactElement {
                         <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
                       </button>
                     </div>
+                    <Rule ok={newPassword.length >= 8} label="Mindestens 8 Zeichen" />
+                    <Rule ok={/[a-z]/.test(newPassword)} label="Mindestens 1 Kleinbuchstabe (a–z)" />
+                    <Rule ok={/[A-Z]/.test(newPassword)} label="Mindestens 1 Großbuchstabe (A–Z)" />
+                    <Rule ok={/[0-9]/.test(newPassword)} label="Mindestens 1 Zahl (0–9)" />
                   </label>
+                  <button type="submit" className="grant-entry-button" disabled={loading}>
+                    {loading ? 'Setze zurück…' : 'Passwort zurücksetzen'}
+                  </button>
                   <button 
                     type="button" 
-                    className="ForgotPasswordLink"
+                    className="archive-link" 
                     onClick={() => {
-                      setMode('forgot-password');
+                      setMode('login');
                       setResetStep('request');
-                      setError(null);
-                      setRegistrationSuccess(null);
+                      setResetCode('');
+                      setNewPassword('');
                     }}
+                    style={{ marginTop: '12px', textAlign: 'center', width: '100%' }}
                   >
-                    Passwort vergessen?
+                    Abbrechen
                   </button>
-                  <div className="Actions" style={{ flexDirection: 'column' as const }}>
-                    <button type="submit" className="CTAButton" disabled={loading}>
-                      {loading ? 'Bitte warten…' : 'Login'}
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <label className="Field">
-                    <span>Benutzername</span>
-                    <input
-                      type="text"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      required
-                      className="Input"
-                    />
-                  </label>
-                  <label className="Field">
-                    <span>E-Mail</span>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="Input"
-                    />
-                  </label>
-                  <label className="Field">
-                    <span>Passwort</span>
-                    <div className="PasswordInputWrapper">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="Input"
-                      />
-                      <button
-                        type="button"
-                        className="PasswordToggle"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
-                      >
-                        <img src={showPassword ? "/eye-open.svg" : "/eye-closed.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
-                      </button>
-                    </div>
-                    <Rule ok={passLenOk} label="Mindestens 8 Zeichen" />
-                    <Rule ok={passLowerOk} label="Mindestens 1 Kleinbuchstabe (a–z)" />
-                    <Rule ok={passUpperOk} label="Mindestens 1 Großbuchstabe (A–Z)" />
-                    <Rule ok={passDigitOk} label="Mindestens 1 Zahl (0–9)" />
-                  </label>
-                  <div className="Actions" style={{ flexDirection: 'column' as const }}>
-                    <button type="submit" className="CTAButton" disabled={loading}>
-                      {loading ? 'Bitte warten…' : 'Registrieren'}
-                    </button>
-                  </div>
                 </>
               )}
-              {registrationSuccess && <div className="CTAHint" style={{ color: '#4abd66' }}>{registrationSuccess}</div>}
-              {error && <div className="CTAHint" style={{ color: '#ff8a8a' }}>{error}</div>}
+              {registrationSuccess && <div className="archive-message success">{registrationSuccess}</div>}
+              {error && <div className="archive-message error">{error}</div>}
             </form>
-          </>
-        )}
-      </div>
+          ) : (
+            // Normal Login/Register Form
+            <>
+              <div className="edition-switcher">
+                <button 
+                  type="button" 
+                  className={`edition-tab ${mode === 'login' ? 'active' : ''}`}
+                  onClick={() => setMode('login')}
+                >
+                  Täglicher Abonnent
+                </button>
+                <button 
+                  type="button" 
+                  className={`edition-tab ${mode === 'register' ? 'active' : ''}`}
+                  onClick={() => setMode('register')}
+                >
+                  Neuer Leser
+                </button>
+              </div>
+              <form onSubmit={handleSubmit} className="archive-form">
+                {mode === 'login' ? (
+                  <>
+                    <div className="notice-header">
+                      <h2 className="notice-title">Abonnenten-Anmeldung</h2>
+                      <div className="rivet top-left"></div>
+                      <div className="rivet top-right"></div>
+                      <div className="rivet bottom-left"></div>
+                      <div className="rivet bottom-right"></div>
+                    </div>
+                    <label className="Field">
+                      <span>Versandadresse (E-Mail oder Benutzername)</span>
+                      <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="Input"
+                        placeholder="versand@chronicle.news"
+                      />
+                    </label>
+                    <label className="Field">
+                      <span>Büroschlüssel (Passwort)</span>
+                      <div className="PasswordInputWrapper">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className="Input"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          className="PasswordToggle"
+                          onClick={() => setShowPassword(!showPassword)}
+                          aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                          style={{ right: '12px' }}
+                        >
+                          <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="Passwort umschalten" style={{width: '20px', height: '20px'}} />
+                        </button>
+                      </div>
+                    </label>
+                    <button type="submit" className="grant-entry-button" disabled={loading}>
+                      {loading ? 'Verifiziere…' : 'Zugang gewähren'}
+                    </button>
+                    <div className="archive-links">
+                      <button 
+                        type="button" 
+                        className="archive-link"
+                        onClick={() => {
+                          setMode('forgot-password');
+                          setResetStep('request');
+                          setError(null);
+                          setRegistrationSuccess(null);
+                        }}
+                      >
+                        Adresse verloren?
+                      </button>
+                      <span>•</span>
+                      <button 
+                        type="button" 
+                        className="archive-link"
+                        onClick={() => setMode('register')}
+                      >
+                        Der Presse beitreten?
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="notice-header">
+                      <h2 className="notice-title">Neue Leser Anmeldung</h2>
+                      <div className="rivet top-left"></div>
+                      <div className="rivet top-right"></div>
+                      <div className="rivet bottom-left"></div>
+                      <div className="rivet bottom-right"></div>
+                    </div>
+                    <label className="Field">
+                      <span>Lesername (Benutzername)</span>
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                        className="Input"
+                        placeholder="J. Leser"
+                      />
+                    </label>
+                    <label className="Field">
+                      <span>Versandadresse (E-Mail)</span>
+
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="Input"
+                        placeholder="leser@chronicle.news"
+                      />
+                    </label>
+                    <label className="Field">
+                      <span>Büroschlüssel (Passwort)</span>
+                      <div className="PasswordInputWrapper">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          className="Input"
+                          placeholder="••••••••"
+                        />
+                        <button
+                          type="button"
+                          className="PasswordToggle"
+                          onClick={() => setShowPassword(!showPassword)}
+                          aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
+                          style={{ right: '12px' }}
+                        >
+                          <img src={showPassword ? "/eye-open.svg" : "/eye-closed.svg"} alt="Passwort umschalten" style={{width: '20px', height: '20px'}} />
+                        </button>
+                      </div>
+                      <Rule ok={passLenOk} label="Mindestens 8 Zeichen" />
+                      <Rule ok={passLowerOk} label="Mindestens 1 Kleinbuchstabe (a–z)" />
+                      <Rule ok={passUpperOk} label="Mindestens 1 Großbuchstabe (A–Z)" />
+                      <Rule ok={passDigitOk} label="Mindestens 1 Zahl (0–9)" />
+                    </label>
+                    <button type="submit" className="press-copy-button" disabled={loading}>
+                      {loading ? 'Registriere…' : 'Ausgabe drucken'}
+                    </button>
+                  </>
+                )}
+                {registrationSuccess && <div className="archive-message success">{registrationSuccess}</div>}
+                {error && <div className="archive-message error">{error}</div>}
+              </form>
+            </>
+          )}
+        </div>
     </div>
   );
 }

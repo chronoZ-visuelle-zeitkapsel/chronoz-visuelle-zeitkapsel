@@ -1,3 +1,261 @@
+/* ==============================================
+   VINTAGE NEWSPAPER FOOTER
+   ============================================== */
+
+.vintage-newspaper-footer {
+    position: relative;
+    width: 100%;
+    min-height: 90px;
+    background: linear-gradient(180deg, #2b1810 0%, #1a0f08 100%);
+    color: #c7b9a8;
+    padding: 20px 0 16px;
+    margin-top: 0;
+}
+
+/* Halftone texture overlay */
+.vintage-newspaper-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/* Ruled line at top */
+.footer-ruled-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1400px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, #8b7355 20%, #8b7355 80%, transparent 100%);
+    box-shadow: 0 1px 0 rgba(199, 185, 168, 0.3);
+}
+
+/* Main broadsheet container */
+.footer-broadsheet {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 50px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Left Section: Copyright & Publisher */
+.footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.footer-copyright {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #c7b9a8;
+    line-height: 1.4;
+}
+
+.footer-publisher {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 10px;
+    font-style: italic;
+    color: #8b7355;
+    letter-spacing: 0.03em;
+}
+
+.footer-tagline {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 9px;
+    font-style: italic;
+    color: #6a5a4a;
+    margin-top: 6px;
+    letter-spacing: 0.05em;
+}
+
+/* Center Section: Quick Links */
+.footer-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+}
+
+.footer-nav-label {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 2px;
+}
+
+.footer-links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.footer-link {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 11px;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    color: #ffffff;
+    background: none;
+    border: none;
+    padding: 2px 6px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.footer-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #ffffff;
+    transform: scaleX(0);
+    transition: transform 0.25s ease;
+}
+
+.footer-link:hover {
+    color: #f9f6f0;
+}
+
+.footer-link:hover::after {
+    transform: scaleX(1);
+}
+
+/* Archive Press Credit */
+.footer-archive-press {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 9px;
+    font-style: italic;
+    color: #6a5a4a;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.spinning-rack-icon {
+    display: inline-block;
+    font-size: 10px;
+    animation: spin-rack 4s linear infinite;
+    color: #8b7355;
+}
+
+@keyframes spin-rack {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Right Section: Social & Date */
+.footer-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+}
+
+.footer-social-label {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-bottom: 2px;
+}
+
+.footer-social-icons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Brass Badge Social Icons */
+.brass-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: radial-gradient(circle at 30% 30%, #d4af37, #8b7428);
+    border-radius: 50%;
+    border: 2px solid #5a4a2a;
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+        0 2px 6px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.brass-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.1) 100%);
+    pointer-events: none;
+}
+
+.brass-badge:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 12px rgba(212, 175, 55, 0.4);
+}
+
+.footer-htl-logo {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-edition-stamp {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8b7355;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border: 1px solid #5a4a3a;
+    background: rgba(43, 24, 16, 0.3);
+}
+
+/* ==============================================
+   ORIGINAL FOOTER STYLES (PRESERVED)
+   ============================================== */
+
 .Footer {
     /* footer is part of normal document flow (not fixed) */
     position: relative;
@@ -55,6 +313,92 @@
     color: #ffffff;
     text-decoration: underline;
 }
+
+/* ==============================================
+   RESPONSIVE VINTAGE NEWSPAPER FOOTER
+   ============================================== */
+
+@media (max-width: 1024px) {
+    .footer-broadsheet {
+        padding: 0 30px;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .vintage-newspaper-footer {
+        min-height: auto;
+        padding: 20px 0;
+    }
+
+    .footer-broadsheet {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 20px;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .footer-left {
+        align-items: center;
+        text-align: center;
+        order: 2;
+    }
+
+    .footer-center {
+        order: 1;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .footer-right {
+        align-items: center;
+        order: 3;
+    }
+
+    .footer-edition-stamp {
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-broadsheet {
+        padding: 0 16px;
+    }
+
+    .footer-copyright,
+    .footer-link {
+        font-size: 10px;
+    }
+
+    .footer-publisher,
+    .footer-tagline,
+    .footer-archive-press {
+        font-size: 9px;
+    }
+
+    .brass-badge {
+        width: 32px;
+        height: 32px;
+    }
+
+    .footer-htl-logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    .footer-edition-stamp {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+}
+
+/* ==============================================
+   ORIGINAL RESPONSIVE STYLES (PRESERVED)
+   ============================================== */
 
 /* Responsive Footer */
 @media (max-width: 768px) {

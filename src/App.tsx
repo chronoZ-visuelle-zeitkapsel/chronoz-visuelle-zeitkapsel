@@ -62,7 +62,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                     <div className="SidebarSection">
                         <h3 className="SidebarTitle">In Kürze</h3>
                         <ul className="SidebarList">
-                            <li>• Private Archive</li>
+                            <li>• Privates Archiv</li>
                             <li>• Individuelle Kapseln</li>
                             <li>• E-Mail-Benachrichtigung</li>
                             <li>• Sicherheit</li>
@@ -91,8 +91,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                             Eine neue Ausgabe für Erinnerungen – klassisch gesetzt, digital bewahrt
                         </p>
                         
-                        <div className="FauxFold"></div>
-                        
                         <div className="VintagePhoto">
                             <ThreeDStage />
                             <p className="PhotoCaption">
@@ -102,8 +100,8 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                         
                         <div className="ArticleText DropCap BroadsheetMainColumned">
                             <p>
-                                Zeitkapsel bewahren Momente, die zu Geschichten werden. 
-                                In einer Welt der flüchtigen Feeds bietet Chronoz eine ruhige Seite 
+                                Zeitkapseln bewahren Momente, die zu Geschichten werden. 
+                                In einer Welt flüchtiger Nachrichtenströme bietet Chronoz eine ruhige Seite 
                                 für Erinnerungen – gestaltet wie Zeitung, geschrieben für die Zukunft.
                             </p>
                             <p>

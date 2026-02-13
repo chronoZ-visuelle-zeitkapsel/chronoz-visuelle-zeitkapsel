@@ -103,13 +103,13 @@ function FAQ(): ReactElement {
 		<section className="faq-section" id="faq">
 			<div className="faq-container">
 				<header className="faq-masthead">
-					<h2 className="faq-title">Readers' Inquiries</h2>
-					<p className="faq-headline">Have a Question? Drop it into the archive desk.</p>
+					<h2 className="faq-title">Leseranfragen</h2>
+					<p className="faq-headline">Haben Sie eine Frage? Geben Sie sie am Archivschalter ab.</p>
 				</header>
 
 				<div className="faq-toolbar">
 					<label className="faq-search">
-						<span className="faq-search-label">Wire Service Ticker</span>
+						<span className="faq-search-label">Agenturticker</span>
 						<div className="faq-search-field">
 							<input
 								className="faq-search-input"
