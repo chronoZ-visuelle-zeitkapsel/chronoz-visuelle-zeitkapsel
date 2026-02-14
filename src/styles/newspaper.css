@@ -191,7 +191,7 @@ body.newspaper-theme {
 }
 
 /* Buttons subtle */
-.newspaper-theme button:not(.footer-link):not(.edition-link):not(.CTAButton) {
+.newspaper-theme button:not(.footer-link):not(.edition-link):not(.CTAButton):not(.faq-category-pill) {
   background: transparent;
   border: 1px solid var(--rule);
   padding: 8px 12px;

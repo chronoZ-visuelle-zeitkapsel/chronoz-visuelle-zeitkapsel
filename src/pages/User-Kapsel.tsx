@@ -2,9 +2,9 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import TimelineSlider from '../components/TimelineSlider';
 import { apiUrl } from '../config/api';
 import './User-Kapsel.css';
+import './archive-sheet.css';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
 
@@ -25,6 +25,43 @@ function History(): ReactElement {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [showDetailedView, setShowDetailedView] = useState(false);
+
+  const renderNewspaperGrid = (
+    images: string[],
+    title: string,
+    onImageClick: (src: string) => void,
+    size: 'mini' | 'slide'
+  ) => {
+    const count = images.length;
+    if (count === 0) {
+      return size === 'slide' ? (
+        <div className="SlideImgPlaceholder">📸</div>
+      ) : (
+        <div className="ImgPlaceholder">📸</div>
+      );
+    }
+
+    const gridClass = `NewspaperGrid NewspaperGrid${count} ${size === 'mini' ? 'NewspaperGridMini' : 'NewspaperGridSlide'}`;
+
+    return (
+      <div className={gridClass}>
+        <div className="NewspaperGridBody">
+          {images.slice(0, 6).map((src, idx) => (
+            <figure key={src} className={`NewspaperGridCell NewspaperGridCell${idx + 1}`}>
+              <img
+                className="NewspaperGridImg"
+                src={src}
+                alt={`${title} ${idx + 1}`}
+                onClick={() => onImageClick(src)}
+              />
+              <figcaption className="NewspaperGridCaption">PHOTO {idx + 1}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -327,18 +364,8 @@ function History(): ReactElement {
     <div className="UserKapselPage">
       <Header />
       <main className="UserKapselMain">
-        {postcards.length > 0 && postcards.length > 1 && (
-          <TimelineSlider
-            postcards={postcards}
-            currentIndex={currentCardIndex}
-            onIndexChange={setCurrentCardIndex}
-          />
-        )}
-        
-        {/* Vollbild Container */}
         <div className="FullScreenContainer">
           {postcards.length === 0 ? (
-            // Keine Postkarten - zentraler + Button
             <div className="ThreeDStage">
               <div className="StageGlass">
                 <button 
@@ -350,208 +377,246 @@ function History(): ReactElement {
               </div>
             </div>
           ) : (
-            // Postkarten vorhanden - Anzeige mit Navigation
-            <>
-    
-              {/* Navigation Pfeil e */}
-              {postcards.length > 1 && (
-                <>
+            <div className="ArchiveSheet">
+              <header className="ArchiveHeader">
+                <h1 className="ArchiveTitle">EXTRA! SPECIAL EDITION</h1>
+              </header>
+
+              <div className="ArchiveTimeline">
+                {postcards.length > 1 && (
                   <button
-                    className="NavArrow NavArrowLeft"
+                    className="TimelineNavArrow TimelineNavLeft"
                     onClick={goToPreviousCard}
                     disabled={currentCardIndex === 0}
-                    aria-label="Vorherige Postkarte"
+                    aria-label="Previous"
                   >
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                    </svg>
+                    ‹
                   </button>
-
+                )}
+                <div className="TimelineDots">
+                  {postcards.map((postcard, idx) => {
+                    const isActive = idx === currentCardIndex;
+                    const postcardYear = new Date(postcard.date).getFullYear();
+                    const distance = Math.abs(idx - currentCardIndex);
+                    const isVisible = distance <= 2;
+                    
+                    return (
+                      <div 
+                        key={postcard.id} 
+                        className={`TimelineDot ${isActive ? 'TimelineDotActive' : ''} ${!isVisible ? 'TimelineDotHidden' : ''}`}
+                        onClick={() => setCurrentCardIndex(idx)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <span className="DotMarker">●</span>
+                        <span className="DotYear">{postcardYear}</span>
+                        <span className="DotPosition">POS. {idx + 1}/{postcards.length}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                {postcards.length > 1 && (
                   <button
-                    className="NavArrow NavArrowRight"
+                    className="TimelineNavArrow TimelineNavRight"
                     onClick={goToNextCard}
                     disabled={currentCardIndex === postcards.length - 1}
-                    aria-label="Nächste Postkarte"
+                    aria-label="Next"
                   >
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z" />
-                    </svg>
+                    ›
                   </button>
-                </>
-              )}
+                )}
+                <div className="TimelineRack" />
+              </div>
 
-              {/* Aktuelle Postkarte */}
-              {currentPostcard && (
-                <div className="Postcard">
-                  {/* Options Button */}
-                  <div className="PostcardOptions">
-                    <button 
-                      className="OptionsButton"
-                      onClick={() => setShowOptions(!showOptions)}
-                      title="Optionen"
-                    >
-                      ⋯
-                    </button>
-                    {showOptions && (
-                      <div className="OptionsDropdown">
-                        <button 
-                          className="OptionsItem"
-                          onClick={handleEditPostcard}
-                        >
-                          ✏️ Bearbeiten
-                        </button>
-                        <button 
-                          className="OptionsItem OptionsItemDanger"
-                          onClick={handleDeletePostcard}
-                        >
-                          🗑️ Löschen
-                        </button>
-                      </div>
-                    )}
-                  </div>
+              <div className="CarouselRack">
+                {postcards.map((postcard, index) => {
+                  const isCenter = index === currentCardIndex;
+                  const offset = index - currentCardIndex;
+                  const distance = Math.abs(offset);
+                  const isVisible = distance <= 2;
                   
-                  <div className="PostcardImages">
-                    {currentPostcard.images.length === 1 ? (
-                      <div className="Template1">
-                        <div className="TemplateImage">
-                          <img 
-                            src={currentPostcard.images[0]} 
-                            alt={`${currentPostcard.title} - Bild 1`}
-                            onClick={() => setLightboxImage(currentPostcard.images[0])}
-                            style={{ cursor: 'pointer' }}
-                            onError={(e) => {
-                              console.error('Fehler beim Laden des Bildes:', e);
-                              (e.target as HTMLImageElement).src = 'placeholder.png';
+                  if (!isVisible) return null;
+                  
+                  return (
+                    <div 
+                      key={postcard.id}
+                      className={`RackCard ${isCenter ? 'RackCardActive' : ''}`}
+                      style={{
+                        transform: `translateX(${offset * 5}px) scale(${isCenter ? 1 : 0.95})`,
+                        zIndex: isCenter ? 10 : 5 - distance,
+                        opacity: Math.max(0.5, 1 - distance * 0.2)
+                      }}
+                      onClick={() => {
+                        if (isCenter) {
+                          setShowDetailedView(true);
+                        } else {
+                          setCurrentCardIndex(index);
+                        }
+                      }}
+                    >
+                      {isCenter && (
+                        <div className="PostcardOptions">
+                          <button 
+                            className="OptionsButton"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowOptions(!showOptions);
                             }}
-                          />
+                            title="Optionen"
+                          >
+                            ⋯
+                          </button>
+                          {showOptions && (
+                            <div className="OptionsDropdown">
+                              <button 
+                                className="OptionsItem"
+                                onClick={handleEditPostcard}
+                              >
+                                ✏️ Bearbeiten
+                              </button>
+                              <button 
+                                className="OptionsItem OptionsItemDanger"
+                                onClick={handleDeletePostcard}
+                              >
+                                🗑️ Löschen
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ) : currentPostcard.images.length === 2 ? (
-                      // Template 2: Zwei Bilder - Nebeneinander
-                      <div className="Template2">
-                        <div className="TemplateImage">
-                          <img 
-                            src={currentPostcard.images[0]} 
-                            alt={`${currentPostcard.title} - Bild 1`}
-                            onClick={() => setLightboxImage(currentPostcard.images[0])}
-                            style={{ cursor: 'pointer' }}
-                          />
-                        </div>
-                        <div className="TemplateImage">
-                          <img 
-                            src={currentPostcard.images[1]} 
-                            alt={`${currentPostcard.title} - Bild 2`}
-                            onClick={() => setLightboxImage(currentPostcard.images[1])}
-                            style={{ cursor: 'pointer' }}
-                          />
-                        </div>
-                      </div>
-                    ) : currentPostcard.images.length === 3 ? (
-                      // Template 3: Drei Bilder - 1 oben, 2 unten
-                      <div className="Template3">
-                        <div className="TemplateImage TemplateImageTop">
-                          <img 
-                            src={currentPostcard.images[0]} 
-                            alt={`${currentPostcard.title} - Bild 1`}
-                            onClick={() => setLightboxImage(currentPostcard.images[0])}
-                            style={{ cursor: 'pointer' }}
-                          />
-                        </div>
-                        <div className="TemplateImageRow">
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[1]} 
-                              alt={`${currentPostcard.title} - Bild 2`}
-                              onClick={() => setLightboxImage(currentPostcard.images[1])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[2]} 
-                              alt={`${currentPostcard.title} - Bild 3`}
-                              onClick={() => setLightboxImage(currentPostcard.images[2])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ) : currentPostcard.images.length === 4 ? (
-                      // Template 4: Vier Bilder - 2x2 Grid
-                      <div className="Template4">
-                        <div className="TemplateImageRow">
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[0]} 
-                              alt={`${currentPostcard.title} - Bild 1`}
-                              onClick={() => setLightboxImage(currentPostcard.images[0])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[1]} 
-                              alt={`${currentPostcard.title} - Bild 2`}
-                              onClick={() => setLightboxImage(currentPostcard.images[1])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                        </div>
-                        <div className="TemplateImageRow">
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[2]} 
-                              alt={`${currentPostcard.title} - Bild 3`}
-                              onClick={() => setLightboxImage(currentPostcard.images[2])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                          <div className="TemplateImage">
-                            <img 
-                              src={currentPostcard.images[3]} 
-                              alt={`${currentPostcard.title} - Bild 4`}
-                              onClick={() => setLightboxImage(currentPostcard.images[3])}
-                              style={{ cursor: 'pointer' }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      // Kein Bild - Platzhalter
-                      <div className="TemplatePlaceholder">
-                        <div className="PlaceholderIcon">📸</div>
-                        <div className="PlaceholderText">Kein Bild</div>
-                      </div>
-                    )}
-                  </div>
-                  <div className="PostcardContent">
-                    <h2 className="PostcardTitle">{currentPostcard.title}</h2>
-                    <div className="PostcardDate">
-                      {new Date(currentPostcard.date).toLocaleDateString('de-DE', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
-                    </div>
-                    <p className="PostcardDescription">{currentPostcard.description}</p>
-                  </div>
-                </div>
-              )}
+                      )}
 
-              {/* + Button nach rechts unten */}
+                      <div className="RackCardImages">
+                        {postcard.images.map((src, idx) => (
+                          <div key={src} className="postcard-image-wrapper">
+                            <img
+                              src={src}
+                              alt={`${postcard.title} ${idx + 1}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLightboxImage(src);
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="RackCardInfo">
+                        <h3 className="RackCardTitle">{postcard.title.toUpperCase()}</h3>
+                        <time className="RackCardDate">
+                          {new Date(postcard.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          }).toUpperCase()}
+                        </time>
+                      </div>
+
+                      <div className="RackCardPosition">{index + 1}/{postcards.length}</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <footer className="ArchiveFooter">
+                <div className="ArchiveDateline">
+                  VIENNA DISPATCH • {new Date().toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                  }).toUpperCase()}
+                </div>
+                <p className="ArchiveDescription">
+                  Your complete archive rack—{postcards.length} memories preserved in the eternal newsprint of time.
+                </p>
+              </footer>
+
               <button 
                 className="AddButton AddButtonBottomRight"
                 onClick={() => navigate('/create-postcard')}
               >
                 <span className="Plus">+</span>
+                <span>NEW<br/>EDITION</span>
               </button>
-            </>
+            </div>
           )}
         </div>
       </main>
       <Footer />
       
-      {/* Lightbox für Bildanzeige */}
+      {showDetailedView && postcards[currentCardIndex] && (
+        <div className="ArchiveSlideOverlay" onClick={() => setShowDetailedView(false)}>
+          <div className="ArchiveSlideContainer" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="ArchiveSlideClose"
+              onClick={() => setShowDetailedView(false)}
+            >
+              ✕
+            </button>
+            
+            <div className="ArchiveSlide">
+              <header className="ArchiveSlideHeader">
+                <div className="ArchiveSlideDate">
+                  {new Date(postcards[currentCardIndex].date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                  }).toUpperCase()}
+                </div>
+                <h1 className="ArchiveSlideTitle">{postcards[currentCardIndex].title}</h1>
+                <div className="ArchiveSlideDivider">★ ★ ★</div>
+              </header>
+
+              <div className="ArchiveSlideContent">
+                <div className="ArchiveSlideImages">
+                  {postcards[currentCardIndex].images.map((src, idx) => (
+                    <div key={src} className="postcard-image-wrapper">
+                      <img
+                        className="postcard-image"
+                        src={src}
+                        alt={`${postcards[currentCardIndex].title} ${idx + 1}`}
+                        onClick={() => setLightboxImage(src)}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <div className="ArchiveSlideText">
+                  <p className="ArchiveSlideDescription">{postcards[currentCardIndex].description}</p>
+                  <div className="ArchiveSlideFootnote">
+                    Memory #{currentCardIndex + 1} of {postcards.length} • Preserved in the Vienna Archive
+                  </div>
+                </div>
+              </div>
+
+              <div className="ArchiveSlideNavigation">
+                <button 
+                  className="ArchiveSlideNav ArchiveSlideNavPrev"
+                  onClick={() => {
+                    if (currentCardIndex > 0) {
+                      setCurrentCardIndex(currentCardIndex - 1);
+                    }
+                  }}
+                  disabled={currentCardIndex === 0}
+                >
+                  ‹ PREVIOUS
+                </button>
+                <button 
+                  className="ArchiveSlideNav ArchiveSlideNavNext"
+                  onClick={() => {
+                    if (currentCardIndex < postcards.length - 1) {
+                      setCurrentCardIndex(currentCardIndex + 1);
+                    }
+                  }}
+                  disabled={currentCardIndex === postcards.length - 1}
+                >
+                  NEXT ›
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {lightboxImage && (
         <div 
           className="Lightbox" 

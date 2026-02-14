@@ -1,0 +1,1160 @@
+/* ========================================
+   COMPLETE ARCHIVE POSTCARD SHEET
+   8.5×11" newsprint with 5 postcards on brass rack
+   ======================================== */
+
+.ArchiveSheet {
+  width: 100%;
+  max-width: 1100px;
+  height: 100%;
+  max-height: 1400px;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  border: 12px solid #000000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 
+    0 0 0 2px #000000,
+    0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Paper grain texture overlay */
+.ArchiveSheet::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========================================
+   HEADER: EXTRA! SPECIAL EDITION (8%)
+   ======================================== */
+
+.ArchiveHeader {
+  height: 8%;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 4px solid #000000;
+  position: relative;
+  z-index: 2;
+}
+
+.ArchiveTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: #f5f1e8;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  margin: 0;
+  text-shadow: 2px 2px 0 rgba(245, 241, 232, 0.1);
+}
+
+/* ========================================
+   TIMELINE DOTS (6%)
+   ======================================== */
+
+.ArchiveTimeline {
+  height: 6%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f1e8;
+  border-bottom: 3px solid #000000;
+  z-index: 2;
+  gap: 20px;
+}
+
+.TimelineNavArrow {
+  background: rgba(0, 0, 0, 0.8);
+  color: #f5f1e8;
+  border: 2px solid #8b7355;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  line-height: 1;
+  padding: 0;
+}
+
+.TimelineNavArrow:hover:not(:disabled) {
+  background: #8b7355;
+  color: #000000;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
+}
+
+.TimelineNavArrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.TimelineNavLeft {
+  margin-right: auto;
+  margin-left: 20px;
+}
+
+.TimelineNavRight {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.TimelineDots {
+  display: flex;
+  gap: 80px;
+  position: relative;
+  z-index: 3;
+}
+
+.TimelineDot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: all 0.3s ease;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.TimelineDot:hover {
+  background: rgba(139, 115, 85, 0.1);
+  transform: translateY(-2px);
+}
+
+.TimelineDotActive {
+  background: rgba(139, 115, 85, 0.2);
+  transform: scale(1.1);
+}
+
+.TimelineDotActive .DotMarker {
+  color: #000000;
+  font-size: 28px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.TimelineDotActive .DotYear {
+  color: #8b7355;
+  font-weight: 900;
+}
+
+.TimelineDotActive .DotPosition {
+  color: #000000;
+  font-weight: bold;
+}
+
+.TimelineDotHidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.5);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.DotMarker {
+  font-size: 24px;
+  color: #8b7355;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.DotYear {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000000;
+  letter-spacing: 1px;
+}
+
+.DotPosition {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: #666;
+  letter-spacing: 0.5px;
+}
+
+/* Brass rack line */
+.TimelineRack {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    #8b7355 10%, 
+    #a68a64 50%, 
+    #8b7355 90%, 
+    transparent 100%
+  );
+  border-top: 1px dashed rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+/* ========================================
+   CAROUSEL RACK (50%)
+   ======================================== */
+
+.CarouselRack {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px 60px;
+  perspective: 1000px;
+  position: relative;
+  z-index: 2;
+  background: 
+    radial-gradient(ellipse at center, rgba(0,0,0,0.05) 0%, transparent 70%);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ========================================
+   RACK CARD (Mini Postcard)
+   ======================================== */
+
+.RackCard {
+  width: 180px;
+  height: 260px;
+  background: #ffffff;
+  border: 4px solid #000000;
+  box-shadow: 
+    0 0 0 1px #000000,
+    0 8px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.RackCard:hover {
+  transform: scale(1.05) !important;
+  z-index: 15 !important;
+}
+
+.RackCardActive {
+  border-color: #8b7355;
+  border-width: 5px;
+  box-shadow: 
+    0 0 0 2px #8b7355,
+    0 12px 30px rgba(139, 115, 85, 0.4);
+}
+
+/* ========================================
+   RACK CARD IMAGES
+   ======================================== */
+
+.RackCardImages {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: #f5f5f5;
+  border-bottom: 2px solid #000000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 3px;
+  padding: 3px;
+}
+
+.RackCardImages .postcard-image-wrapper {
+  border: 1px solid #000000;
+  padding: 2px;
+  background: #ffffff;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  filter: grayscale(100%) contrast(1.1) sepia(20%);
+  position: relative;
+  overflow: hidden;
+}
+
+.RackCardImages .postcard-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+}
+
+.RackCardImages img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* ========================================
+   NEWSPAPER IMAGE GRIDS (2–6 IMAGES)
+   ======================================== */
+
+.NewspaperGrid {
+  display: flex;
+  flex-direction: column;
+  width: 501.2px;
+  height: 387px;
+  gap: 6px;
+  padding: 6px;
+}
+
+.NewspaperGridBody {
+  display: grid;
+  gap: 4px;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+}
+
+.NewspaperGridCell {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #000000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+}
+
+.NewspaperGridImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  filter: sepia(0.25) contrast(1.1);
+}
+
+.NewspaperGridCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.12) 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.NewspaperGridCell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.NewspaperGridCaption {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #000000;
+  background: #f5f1e8;
+  border-top: 1px solid #000000;
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.NewspaperGridMini .NewspaperGridCaption {
+  font-size: 7px;
+}
+
+/* 1 Image */
+.NewspaperGrid1 .NewspaperGridBody {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  place-items: center;
+}
+
+.NewspaperGrid1 .NewspaperGridCell {
+  max-width: 350px;
+  max-height: 350px;
+  width: auto;
+  height: auto;
+}
+
+/* 2 Images: Clean Vertical Split */
+.NewspaperGrid2 .NewspaperGridBody {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 2px;
+}
+
+.NewspaperGrid2 .NewspaperGridCell1 {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid2 .NewspaperGridCell2 {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+/* 3 Images: Grid Layout */
+.NewspaperGrid3 .NewspaperGridBody {
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+}
+
+.NewspaperGrid3 .NewspaperGridCell1 {
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid3 .NewspaperGridCell2,
+.NewspaperGrid3 .NewspaperGridCell3 {
+  grid-row: 2 / 3;
+  display: inline-block;
+}
+
+.NewspaperGrid3Bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+/* 4 Images: Perfect 2×2 Matrix */
+.NewspaperGrid4 .NewspaperGridBody {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 2px;
+}
+
+.NewspaperGrid4 .NewspaperGridCell1 {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid4 .NewspaperGridCell2 {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid4 .NewspaperGridCell3 {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.NewspaperGrid4 .NewspaperGridCell4 {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+/* 5 Images: Hero + 2×2 Support */
+.NewspaperGrid5 .NewspaperGridBody {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 240px 80px 80px;
+}
+
+.NewspaperGrid5 .NewspaperGridCell1 {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid5 .NewspaperGridCell2 {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.NewspaperGrid5 .NewspaperGridCell3 {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+.NewspaperGrid5 .NewspaperGridCell4 {
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
+}
+
+.NewspaperGrid5 .NewspaperGridCell5 {
+  grid-column: 2 / 3;
+  grid-row: 3 / 4;
+}
+
+/* 6 Images: 3×2 Brick Wall */
+.NewspaperGrid6 .NewspaperGridBody {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.NewspaperGrid6 .NewspaperGridCell1 {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid6 .NewspaperGridCell2 {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid6 .NewspaperGridCell3 {
+  grid-column: 3 / 4;
+  grid-row: 1 / 2;
+}
+
+.NewspaperGrid6 .NewspaperGridCell4 {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.NewspaperGrid6 .NewspaperGridCell5 {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+.NewspaperGrid6 .NewspaperGridCell6 {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+}
+
+.RackCardImages img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  filter: sepia(0.3) contrast(1.1);
+}
+
+.RackCardImages img:hover {
+  transform: scale(1.05);
+}
+
+/* Image Grid Layouts */
+.ImgGrid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  gap: 2px;
+}
+
+.ImgGrid3 {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  gap: 2px;
+}
+
+.ImgGrid3Bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.ImgGrid4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100%;
+  gap: 2px;
+}
+
+.ImgPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  font-size: 48px;
+  opacity: 0.4;
+}
+
+/* ========================================
+   RACK CARD INFO
+   ======================================== */
+
+.RackCardInfo {
+  padding: 8px 10px;
+  background: #ffffff;
+  border-top: 1px solid #ddd;
+}
+
+.RackCardTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.RackCardDate {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: #666;
+  display: block;
+  letter-spacing: 0.3px;
+}
+
+/* ========================================
+   RACK CARD POSITION BADGE
+   ======================================== */
+
+.RackCardPosition {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #f5f1e8;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   OPTIONS MENU (on active card only)
+   ======================================== */
+
+.PostcardOptions {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+}
+
+.OptionsButton {
+  background: rgba(0, 0, 0, 0.8);
+  color: #f5f1e8;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.OptionsButton:hover {
+  background: #000000;
+  transform: scale(1.1);
+}
+
+.OptionsDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  min-width: 140px;
+  z-index: 101;
+}
+
+.OptionsItem {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: #000000;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.OptionsItem:last-child {
+  border-bottom: none;
+}
+
+.OptionsItem:hover {
+  background: #f5f1e8;
+}
+
+.OptionsItemDanger:hover {
+  background: #ff4444;
+  color: #ffffff;
+}
+
+/* ========================================
+   ARCHIVE FOOTER (21%)
+   ======================================== */
+
+.ArchiveFooter {
+  height: 21%;
+  background: #f5f1e8;
+  border-top: 4px double #000000;
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  z-index: 2;
+}
+
+.ArchiveDateline {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border-top: 2px solid #000000;
+  border-bottom: 2px solid #000000;
+  padding: 8px 0;
+}
+
+.ArchiveDescription {
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333333;
+  text-align: center;
+  max-width: 600px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ========================================
+   ADD BUTTON - "NEW EDITION" STAMP
+   ======================================== */
+
+.AddButtonBottomRight {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: #f5f1e8;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 50;
+  position: relative;
+}
+
+.AddButtonBottomRight::before,
+.AddButtonBottomRight::after {
+  content: '●';
+  position: absolute;
+  font-size: 6px;
+  color: #8b7355;
+  top: 2px;
+}
+
+.AddButtonBottomRight::before {
+  left: 2px;
+}
+
+.AddButtonBottomRight::after {
+  right: 2px;
+}
+
+.AddButtonBottomRight:hover {
+  background: #f5f1e8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.Plus {
+  line-height: 1;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: -2px;
+}
+
+.AddButtonBottomRight span:not(.Plus) {
+  font-size: 7px;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+/* ========================================
+   ARCHIVE SLIDE - DETAILED VIEW
+   ======================================== */
+
+.ArchiveSlideOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ArchiveSlideContainer {
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  position: relative;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.ArchiveSlideClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  background: #f5f1e8;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.ArchiveSlideClose::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 4px 4px;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.ArchiveSlideClose:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-width: 2px;
+}
+
+.ArchiveSlide {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  border: 12px solid #000000;
+  box-shadow: 
+    0 0 0 3px #8b7355,
+    0 30px 80px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Paper grain texture */
+.ArchiveSlide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ArchiveSlideHeader {
+  padding: 15px 60px 5px;
+  background: #f5f1e8;
+  border-bottom: 4px double #000000;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.ArchiveSlideDate {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #666;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.ArchiveSlideTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.ArchiveSlideDivider {
+  font-size: 18px;
+  color: #8b7355;
+  letter-spacing: 12px;
+}
+
+.ArchiveSlideContent {
+  flex: 1;
+  display: flex;
+  gap: 40px;
+  padding: 40px 60px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.ArchiveSlideImages {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  align-content: start;
+}
+
+.ArchiveSlideImages .postcard-image-wrapper {
+  border: 3px solid #000000;
+  padding: 6px;
+  background: #ffffff;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  filter: grayscale(100%) contrast(1.1) sepia(20%);
+  transition: filter 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+.ArchiveSlideImages .postcard-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+}
+
+.ArchiveSlideImages .postcard-image-wrapper:hover {
+  filter: grayscale(0%) contrast(1) sepia(0%);
+}
+
+.ArchiveSlideImages img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.SlideImgGrid2,
+.SlideImgGrid3,
+.SlideImgGrid4 {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  gap: 12px;
+}
+
+.SlideImgGrid2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.SlideImgGrid2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.SlideImgGrid3 {
+  grid-template-rows: 1fr 1fr;
+}
+
+.SlideImgGrid3 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.SlideImgGrid3Bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.SlideImgGrid4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.SlideImgGrid4 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.SlideImgPlaceholder {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border: 6px solid #000000;
+  font-size: 80px;
+  opacity: 0.4;
+}
+
+.ArchiveSlideText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ArchiveSlideDescription {
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #1a1a1a;
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
+  column-count: 1;
+}
+
+.ArchiveSlideFootnote {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid #000000;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.ArchiveSlideNavigation {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 60px;
+  background: #f5f1e8;
+  border-top: 4px double #000000;
+  position: relative;
+  z-index: 2;
+}
+
+.ArchiveSlideNav {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 12px 30px;
+  background: #000000;
+  color: #f5f1e8;
+  border: 3px solid #8b7355;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ArchiveSlideNav:hover:not(:disabled) {
+  background: #8b7355;
+  color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
+}
+
+.ArchiveSlideNav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.ArchiveSlideNavPrev {
+  border-radius: 4px 0 0 4px;
+}
+
+.ArchiveSlideNavNext {
+  border-radius: 0 4px 4px 0;
+}
