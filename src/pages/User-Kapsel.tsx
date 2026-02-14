@@ -433,6 +433,19 @@ function History(): ReactElement {
                   const offset = index - currentCardIndex;
                   const distance = Math.abs(offset);
                   const isVisible = distance <= 2;
+                  const imageCount = postcard.images ? postcard.images.length : 0;
+                  const featureImages = postcard.images ? postcard.images : [];
+                  const isSingleImage = imageCount === 1;
+                  const isCollage = imageCount >= 2 && imageCount <= 4;
+                  const isMontage = imageCount >= 5;
+                  const featureClassName = isSingleImage
+                    ? 'feature-single'
+                    : isCollage
+                      ? 'feature-collage'
+                      : isMontage
+                        ? 'feature-montage'
+                        : '';
+                  const featureSliceCount = isMontage ? 8 : imageCount;
                   
                   if (!isVisible) return null;
                   
@@ -485,18 +498,26 @@ function History(): ReactElement {
                       )}
 
                       <div className="RackCardImages">
-                        {postcard.images.map((src, idx) => (
-                          <div key={src} className="postcard-image-wrapper">
-                            <img
-                              src={src}
-                              alt={`${postcard.title} ${idx + 1}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLightboxImage(src);
-                              }}
-                            />
+                        {featureImages.length > 0 && (
+                          <div
+                            className={`postcard-feature-image halftone-photo ${featureClassName} feature-count-${imageCount}`}
+                          >
+                            <div className="feature-image-grid">
+                              {featureImages.slice(0, featureSliceCount).map((src, imgIndex) => (
+                                <div
+                                  key={`${postcard.id}-feature-${imgIndex}`}
+                                  className={`feature-image feature-image-${imgIndex + 1} ${imgIndex === 0 ? 'feature-lead' : ''} ${isMontage && imgIndex >= 4 ? 'feature-faded' : ''}`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setLightboxImage(src);
+                                  }}
+                                >
+                                  <img src={src} alt={`${postcard.title} ${imgIndex + 1}`} />
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        ))}
+                        )}
                       </div>
 
                       <div className="RackCardInfo">

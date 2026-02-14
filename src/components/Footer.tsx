@@ -53,7 +53,7 @@ function Footer(): React.ReactElement {
 						<button className="footer-link" onClick={() => navigate('/')}>Startseite</button>
 						<button className="footer-link" onClick={() => scrollToSection('archive')}>Archiv</button>
 						<button className="footer-link" onClick={() => scrollToSection('faq')}>FAQ</button>
-						<Link to="/impressum" className="footer-link">Impressum</Link>
+						<Link to="/impressum" className="footer-link">About Us</Link>
 					</div>
 					<div className="footer-archive-press">
 						<span className="spinning-rack-icon">⚙</span> Aus unserer Archivpresse
