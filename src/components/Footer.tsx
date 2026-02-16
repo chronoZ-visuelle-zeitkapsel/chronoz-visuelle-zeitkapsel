@@ -5,7 +5,6 @@ import './footer.css';
 function Footer(): React.ReactElement {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const isImpressumPage = location.pathname === '/impressum';
 
 	// Get current date for edition stamp
 	const getCurrentDate = () => {

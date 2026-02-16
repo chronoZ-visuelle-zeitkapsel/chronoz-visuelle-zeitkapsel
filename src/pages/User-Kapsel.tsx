@@ -27,42 +27,6 @@ function History(): ReactElement {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [showDetailedView, setShowDetailedView] = useState(false);
 
-  const renderNewspaperGrid = (
-    images: string[],
-    title: string,
-    onImageClick: (src: string) => void,
-    size: 'mini' | 'slide'
-  ) => {
-    const count = images.length;
-    if (count === 0) {
-      return size === 'slide' ? (
-        <div className="SlideImgPlaceholder">📸</div>
-      ) : (
-        <div className="ImgPlaceholder">📸</div>
-      );
-    }
-
-    const gridClass = `NewspaperGrid NewspaperGrid${count} ${size === 'mini' ? 'NewspaperGridMini' : 'NewspaperGridSlide'}`;
-
-    return (
-      <div className={gridClass}>
-        <div className="NewspaperGridBody">
-          {images.slice(0, 6).map((src, idx) => (
-            <figure key={src} className={`NewspaperGridCell NewspaperGridCell${idx + 1}`}>
-              <img
-                className="NewspaperGridImg"
-                src={src}
-                alt={`${title} ${idx + 1}`}
-                onClick={() => onImageClick(src)}
-              />
-              <figcaption className="NewspaperGridCaption">PHOTO {idx + 1}</figcaption>
-            </figure>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
