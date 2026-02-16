@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import ReactDOM from 'react-dom';
 import FrameByFrameCanvas from './FrameByFrameCanvas';
 import PhotoMagazine from './PhotoMagazine';
 import './TreasureWithMagazine.css';
@@ -65,11 +66,12 @@ function TreasureWithMagazine() {
       )}
 
       {/* Vollbild-Magazin */}
-      {showFullMagazine && (
+      {showFullMagazine && ReactDOM.createPortal(
         <PhotoMagazine 
           pdfUrl="/magazine.pdf"
           onClose={() => setShowFullMagazine(false)}
-        />
+        />,
+        document.body
       )}
     </div>
   );
