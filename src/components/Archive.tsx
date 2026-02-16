@@ -128,7 +128,7 @@ function Archive(): ReactElement {
     return (
       <section className="archive-section">
         <div className="archive-container">
-          <h2 className="archive-title">DEIN ARCHIVE</h2>
+          <h2 className="archive-title">DEIN ARCHIV</h2>
           <div className="archive-empty">
             <p>Du hast noch keine Postkarten erstellt.</p>
             <button 
@@ -146,7 +146,7 @@ function Archive(): ReactElement {
   return (
     <section className="archive-section">
       <div className="archive-container" id="archive">
-        <h2 className="archive-title">DEIN ARCHIVE</h2>
+        <h2 className="archive-title">DEIN ARCHIV</h2>
         
         <div className="carousel-wrapper">
           <button 
@@ -187,7 +187,7 @@ function Archive(): ReactElement {
                       {/* Extra Edition Masthead Banner */}
                       <div className="extra-edition-banner">
                         <span className="banner-ornament">★</span>
-                        <span className="banner-text">EXTRA EDITION</span>
+                        <span className="banner-text">SONDERAUSGABE</span>
                         <span className="banner-ornament">★</span>
                       </div>
 

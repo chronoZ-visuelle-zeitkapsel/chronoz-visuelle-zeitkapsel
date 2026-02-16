@@ -265,11 +265,13 @@ main { flex: 1 1 auto; }
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .CTAButton:hover {
-  background: var(--color-text);
-  color: var(--color-bg);
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
 }
 
 /* Ensure CTA's internal plus/text span are centered and not affected by other .Plus rules */
@@ -332,5 +334,10 @@ main { flex: 1 1 auto; }
 }
 
 .OverlayContent {
-  width: min(92vw, 520px);
+  width: 520px;
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
 }

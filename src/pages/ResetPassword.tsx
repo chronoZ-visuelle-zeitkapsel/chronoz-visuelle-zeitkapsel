@@ -25,7 +25,7 @@ function ResetPassword(): ReactElement {
     const token = params.get('access_token');
 
     if (!token) {
-      setError('Ungültiger oder abgelaufener Reset-Link');
+      setError('Ungültiger oder abgelaufener Zurücksetz-Link');
     } else {
       setAccessToken(token);
     }
@@ -45,7 +45,7 @@ function ResetPassword(): ReactElement {
     setSuccess(null);
 
     if (!accessToken) {
-      setError('Ungültiger Reset-Link');
+      setError('Ungültiger Zurücksetz-Link');
       return;
     }
 
@@ -71,7 +71,7 @@ function ResetPassword(): ReactElement {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Fehler beim Zurücksetzen des Passworts');
 
-      setSuccess('Passwort erfolgreich zurückgesetzt! Sie werden zum Login weitergeleitet...');
+      setSuccess('Passwort erfolgreich zurückgesetzt! Sie werden zur Anmeldung weitergeleitet...');
       setTimeout(() => {
         navigate('/login');
       }, 2000);
@@ -85,12 +85,12 @@ function ResetPassword(): ReactElement {
   return (
     <div className="LoginPage">
       <div className="LoginCard">
-        <img src="/chronoZLogo.png" alt="chronoZ Logo" className="LoginLogo" />
+        <img src="/chronoZLogo.png" alt="ChronoZ-Logo" className="LoginLogo" />
         <h2 style={{ textAlign: 'center', marginBottom: '16px' }}>Neues Passwort festlegen</h2>
         
         {!accessToken ? (
           <div className="CTAHint" style={{ color: '#ff8a8a', textAlign: 'center' }}>
-            Ungültiger oder abgelaufener Reset-Link. Bitte fordern Sie einen neuen an.
+            Ungültiger oder abgelaufener Zurücksetz-Link. Bitte fordern Sie einen neuen an.
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="LoginForm">
@@ -110,7 +110,7 @@ function ResetPassword(): ReactElement {
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Passwort verbergen" : "Passwort anzeigen"}
                 >
-                  <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="toggle password" style={{width: '20px', height: '20px'}} />
+                  <img src={showPassword ? "/eye-closed.svg" : "/eye-open.svg"} alt="Passwort umschalten" style={{width: '20px', height: '20px'}} />
                 </button>
               </div>
               <Rule ok={passLenOk} label="Mindestens 8 Zeichen" />
@@ -140,7 +140,7 @@ function ResetPassword(): ReactElement {
                 style={{ background: 'rgba(255,255,255,0.1)' }}
                 onClick={() => navigate('/login')}
               >
-                Zurück zum Login
+                Zurück zur Anmeldung
               </button>
             </div>
             

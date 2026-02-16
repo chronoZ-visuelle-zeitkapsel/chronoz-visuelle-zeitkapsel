@@ -1,3 +1,361 @@
+/* ==============================================
+   IMMERSIVE NEWSPAPER SPREAD LOGIN/REGISTER
+   ============================================== */
+
+/* Full Page Newspaper Spread */
+.newspaper-spread-page {
+  min-height: 100vh;
+  background: 
+    radial-gradient(circle, rgba(43, 24, 16, 0.03) 1px, transparent 1px),
+    linear-gradient(180deg, #f9f6f0 0%, #ebe4d4 100%);
+  background-size: 4px 4px, 100% 100%;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+/* Form Notice Panel - Ornate Wanted Ad Style */
+.form-notice-panel {
+  background: #f9f6f0;
+  border: 4px solid #2b1810;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 
+    inset 0 0 0 2px rgba(43, 24, 16, 0.2),
+    8px 8px 0 rgba(43, 24, 16, 0.15),
+    12px 12px 20px rgba(43, 24, 16, 0.2);
+  padding: 32px;
+  position: relative;
+  transform: rotate(-0.5deg);
+  margin: auto;
+}
+
+.form-notice-panel::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(43, 24, 16, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(43, 24, 16, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Notice Header */
+.notice-header {
+  text-align: center;
+  margin-bottom: 0px;
+  position: relative;
+  padding: 12px 0;
+  border-top: 2px double #2b1810;
+  border-bottom: 2px double #2b1810;
+}
+
+.notice-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a0f08;
+  margin: 0;
+  line-height: 1;
+}
+
+/* Rivets */
+.rivet {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #d4af37, #8b7428);
+  border-radius: 50%;
+  box-shadow: 
+    inset 1px 1px 2px rgba(0, 0, 0, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.rivet.top-left { top: -6px; left: -6px; }
+.rivet.top-right { top: -6px; right: -6px; }
+.rivet.bottom-left { bottom: -6px; left: -6px; }
+.rivet.bottom-right { bottom: -6px; right: -6px; }
+
+/* Form Styles */
+.archive-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.archive-form .Field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.archive-form .Field span {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2b1810;
+  display: inline;
+  text-decoration: none;
+}
+
+.dispatch-label {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #5a4a3a;
+  font-style: italic;
+  margin-left: 4px;
+  display: inline;
+  text-transform: none;
+  font-weight: normal;
+  letter-spacing: normal;
+}
+
+.archive-form .Input {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #1a0f08;
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid #2b1810;
+  border-radius: 0;
+  transition: all 0.2s ease;
+}
+
+.archive-form .Input::placeholder {
+  font-family: 'Courier New', monospace;
+  color: #8b7355;
+  font-style: italic;
+}
+
+.archive-form .Input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #1a0f08;
+  box-shadow: 0 0 0 4px rgba(43, 24, 16, 0.1);
+}
+
+/* Grant Entry Button - Red Ink Stamp */
+.grant-entry-button,
+.press-copy-button {
+  width: 100%;
+  padding: 16px 24px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f9f6f0;
+  background: linear-gradient(180deg, #8b2e2e 0%, #6b1e1e 100%);
+  border: 3px solid #5a1818;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(139, 46, 46, 0.3);
+}
+
+.grant-entry-button::before,
+.press-copy-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.grant-entry-button:hover::before,
+.press-copy-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.grant-entry-button:hover,
+.press-copy-button:hover {
+  background: linear-gradient(180deg, #a23838 0%, #8b2e2e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(139, 46, 46, 0.4);
+}
+
+.grant-entry-button:disabled,
+.press-copy-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Links Footer */
+.archive-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(43, 24, 16, 0.2);
+}
+
+.archive-link {
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 12px;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  color: #2b1810;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.archive-link:hover {
+  color: #5a4a3a;
+}
+
+/* Mode Switcher */
+.edition-switcher {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border: 3px solid #2b1810;
+}
+
+.edition-tab {
+  flex: 1;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #2b1810;
+  background: transparent;
+  border: none;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-right: 3px solid #2b1810;
+}
+
+.edition-tab:last-child {
+  border-right: none;
+}
+
+.edition-tab.active {
+  background: #2b1810;
+  color: #f9f6f0;
+  box-sizing: border-box;
+  border: 3px solid #2b1810;
+  margin: -3px;
+}
+
+.edition-tab:first-child.active {
+  margin-right: 3px;
+}
+
+.edition-tab:last-child.active {
+  margin-left: 3px;
+  margin-right: -3px;
+}
+
+.edition-tab:hover:not(.active) {
+  background: rgba(43, 24, 16, 0.1);
+}
+
+/* Messages */
+.archive-message {
+  padding: 12px 16px;
+  margin-top: 16px;
+  border: 2px solid;
+  font-family: 'Times New Roman', Georgia, serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+.archive-message.success {
+  color: #2d5c3a;
+  background: rgba(45, 92, 58, 0.1);
+  border-color: #2d5c3a;
+}
+
+.archive-message.error {
+  color: #8b2e2e;
+  background: rgba(139, 46, 46, 0.1);
+  border-color: #8b2e2e;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .newspaper-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .testimonials-sidebar {
+    position: static;
+    order: 2;
+  }
+  
+  .form-notice-panel {
+    order: 1;
+  }
+  
+  .archive-title {
+    font-size: 40px;
+  }
+  
+  .masthead-ornament {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .notice-title {
+    font-size: 32px;
+  }
+  
+  .form-notice-panel {
+    padding: 24px;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .notice-title {
+    font-size: 24px;
+  }
+  
+  .archive-form .Input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .grant-entry-button,
+  .press-copy-button {
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+}
+
+/* ==============================================
+   ORIGINAL LOGIN STYLES (PRESERVED)
+   ============================================== */
+
 /* Login card styles - glassmorphism inspired by provided mockup */
 
 .LoginPage {
@@ -141,7 +499,7 @@
   text-align:center; 
   font-size:10px; 
   color: rgba(120,120,125,0.9); 
-  margin-top:8px; 
+  margin-top:2px; 
   text-transform: lowercase;
   }
 
@@ -218,11 +576,6 @@
   box-shadow: none;
 }
 .newspaper-theme .SwitchButton {
-  background: transparent;
-  border: 1px solid var(--rule);
-  color: var(--ink);
-}
-.newspaper-theme .CTAButton {
   background: transparent;
   border: 1px solid var(--rule);
   color: var(--ink);

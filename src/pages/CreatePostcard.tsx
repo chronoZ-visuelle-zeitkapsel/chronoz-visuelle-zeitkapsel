@@ -232,7 +232,7 @@ function CreatePostcard(): ReactElement {
                       +
                     </button>
 
-                    <div className="UploadHint">add your memories</div>
+                    <div className="UploadHint">Füge deine Erinnerungen hinzu</div>
 
                     <div className="ImagePreview">
                       {existingImageUrls.map((url, index) => (
@@ -247,7 +247,7 @@ function CreatePostcard(): ReactElement {
                           </button>
                           <img 
                             src={url} 
-                            alt={`Existing ${index + 1}`}
+                            alt={`Bestehend ${index + 1}`}
                             className="PreviewImage"
                           />
                         </div>
@@ -264,7 +264,7 @@ function CreatePostcard(): ReactElement {
                           </button>
                           <img 
                             src={URL.createObjectURL(image)} 
-                            alt={`New ${index + 1}`}
+                            alt={`Neu ${index + 1}`}
                             className="PreviewImage"
                           />
                         </div>

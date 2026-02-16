@@ -119,34 +119,56 @@ function Header(): ReactElement {
 		}
 	}
 
+	// Get current date for masthead
+	const getCurrentDate = () =>
+		new Date().toLocaleDateString('de-DE', {
+			weekday: 'long',
+			year: 'numeric',
+			month: 'short',
+			day: 'numeric'
+		});
+
 	return (
-		<header className="Header">
-			<div className="HeaderContainer">
-				<div className="HeaderLeft">
+		<header className="Header vintage-newspaper-header">
+			<div className="newspaper-masthead">
+				{/* Left: Date */}
+				<div className="masthead-left">
+					<div className="masthead-date">{getCurrentDate()}</div>
+					<div className="masthead-edition">Morgenausgabe</div>
+				</div>
+
+				{/* Center: ChronoZ Logo */}
+				<div className="masthead-center">
+					<div className="newspaper-rivet top-left"></div>
+					<div className="newspaper-rivet top-right"></div>
 					<img
 						src="/chronoZLogo.png"
-						alt="chronoZ Logo"
-						className="LogoLogo"
+						alt="ChronoZ-Logo"
+						className="newspaper-logo"
 						onClick={() => navigate('/')}
 						loading="lazy"
 						role="button"
 					/>
+					<div className="newspaper-tagline">Erinnerungen bewahrt seit 2026</div>
+					<div className="newspaper-rivet bottom-left"></div>
+					<div className="newspaper-rivet bottom-right"></div>
 				</div>
 
-				<div className="HeaderCenter">
-					<button className="NavItem" onClick={() => navigate('/history')}>chronik</button>
-					<button className="NavItem" onClick={() => {
-						if (!currentUser) {
-							navigate('/login');
-						} else {
-							scrollToSection('archive');
-						}
-					}}>archiv</button>
-					<button className="NavItem" onClick={() => navigate('/impressum')}>impressum</button>
-					<button className="NavItem" onClick={() => scrollToSection('faq')}>faq</button>
-				</div>
-
-				<div className="HeaderRight"> 
+				{/* Right: Navigation & User */}
+				<div className="masthead-right">
+					<div className="edition-links-label">Ausgabe-Links</div>
+					<nav className="edition-nav">
+						<button className="edition-link" onClick={() => navigate('/')}>Startseite</button>
+						<button className="edition-link" onClick={() => {
+							if (!currentUser) {
+								navigate('/login');
+							} else {
+								scrollToSection('archive');
+							}
+						}}>Archiv</button>
+						<button className="edition-link" onClick={() => scrollToSection('faq')}>FAQ</button>
+					</nav>
+					
 					{currentUser ? (
 						<div
 							ref={userAreaRef}
@@ -166,11 +188,11 @@ function Header(): ReactElement {
 
 							<div className="LogoutPanel" role="menu" aria-hidden={!menuOpen}>
 								<div className="UserInfo">{currentUser.username}</div>
-								<button className="LogoutButton" onClick={handleLogout}>Logout</button>
+								<button className="LogoutButton" onClick={handleLogout}>Abmelden</button>
 							</div>
 						</div>
 					) : (
-						<button className="NavItem LoginButton" onClick={() => navigate('/login')}>Login</button>
+						<button className="edition-link login-link" onClick={() => navigate('/login')}>Anmelden</button>
 					)}
 				</div>
 			</div>
