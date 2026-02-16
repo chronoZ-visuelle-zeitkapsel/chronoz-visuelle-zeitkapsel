@@ -5,6 +5,8 @@ interface FrameByFrameCanvasProps {
   fps?: number;
   loop?: boolean;
   playOnLoad?: boolean;
+  reverse?: boolean;
+  onAnimationComplete?: () => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -32,6 +34,8 @@ export default function FrameByFrameCanvas({
   fps = 24,
   loop = true,
   playOnLoad = true,
+  reverse = false,
+  onAnimationComplete,
   className,
   style,
 }: FrameByFrameCanvasProps) {
@@ -88,18 +92,20 @@ export default function FrameByFrameCanvas({
     }
 
     console.log("Canvas ready, size:", canvas.width, "x", canvas.height);
+    console.log("Reverse mode:", reverse, "PlayOnLoad:", playOnLoad);
 
-    // Draw first frame immediately
+    // Initialize frame index based on direction
+    let frameIndex = reverse ? frames.length - 1 : 0;
+    let lastTime = performance.now();
+    let acc = 0;
+
+    // Draw initial frame immediately
     if (frames.length > 0) {
       ctx.fillStyle = "transparent";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(frames[0], 0, 0, canvas.width, canvas.height);
-      console.log("Drew first frame");
+      ctx.drawImage(frames[frameIndex], 0, 0, canvas.width, canvas.height);
+      console.log("Drew initial frame:", frameIndex, "Reverse:", reverse);
     }
-
-    let frameIndex = 0;
-    let lastTime = performance.now();
-    let acc = 0;
 
     const tick = (now: number) => {
       if (!stateRef.current.isPlaying) {
@@ -115,13 +121,26 @@ export default function FrameByFrameCanvas({
 
       while (acc >= frameDuration) {
         acc -= frameDuration;
-        frameIndex++;
-
-        if (frameIndex >= frames.length) {
-          if (loop) frameIndex = 0;
-          else {
-            frameIndex = frames.length - 1;
-            stateRef.current.isPlaying = false;
+        
+        if (reverse) {
+          frameIndex--;
+          if (frameIndex < 0) {
+            if (loop) frameIndex = frames.length - 1;
+            else {
+              frameIndex = 0;
+              stateRef.current.isPlaying = false;
+              if (onAnimationComplete) onAnimationComplete();
+            }
+          }
+        } else {
+          frameIndex++;
+          if (frameIndex >= frames.length) {
+            if (loop) frameIndex = 0;
+            else {
+              frameIndex = frames.length - 1;
+              stateRef.current.isPlaying = false;
+              if (onAnimationComplete) onAnimationComplete();
+            }
           }
         }
       }
@@ -136,16 +155,22 @@ export default function FrameByFrameCanvas({
     };
 
     stateRef.current.isPlaying = playOnLoad;
-    stateRef.current.frameIndex = 0;
+    stateRef.current.frameIndex = reverse ? frames.length - 1 : 0;
     stateRef.current.lastTime = performance.now();
     stateRef.current.acc = 0;
+
+    // Draw initial frame
+    if (reverse && frames.length > 0) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(frames[frames.length - 1], 0, 0, canvas.width, canvas.height);
+    }
 
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [frames, frameDuration, loop, playOnLoad]);
+  }, [frames, frameDuration, loop, playOnLoad, reverse, onAnimationComplete]);
 
   return (
     <div className={className} style={{ display: "grid", gap: 8, ...style }}>
