@@ -83,11 +83,6 @@ function Archive(): ReactElement {
     setCurrentIndex((prev) => (prev - 1 + postcards.length) % postcards.length);
   };
 
-  const goToSlide = (index: number) => {
-    setIsAutoPlaying(false);
-    setCurrentIndex(index);
-  };
-
   const getSlidePosition = (index: number): string => {
     if (index === currentIndex) return 'active';
     

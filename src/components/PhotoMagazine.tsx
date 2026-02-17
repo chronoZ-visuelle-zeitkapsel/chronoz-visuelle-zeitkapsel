@@ -85,12 +85,22 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
   }
 
   const goToPrevPage = React.useCallback(() => {
-    setPageNumber(prevPage => Math.max(prevPage - 1, 1));
-  }, []);
+    console.log('⬅️ Previous page clicked, current page:', pageNumber);
+    setPageNumber(prevPage => {
+      const newPage = Math.max(prevPage - 1, 1);
+      console.log('Setting page to:', newPage);
+      return newPage;
+    });
+  }, [pageNumber]);
 
   const goToNextPage = React.useCallback(() => {
-    setPageNumber(prevPage => Math.min(prevPage + 1, numPages));
-  }, [numPages]);
+    console.log('➡️ Next page clicked, current page:', pageNumber, 'total:', numPages);
+    setPageNumber(prevPage => {
+      const newPage = Math.min(prevPage + 1, numPages);
+      console.log('Setting page to:', newPage);
+      return newPage;
+    });
+  }, [pageNumber, numPages]);
 
   useEffect(() => {
     // Keyboard navigation

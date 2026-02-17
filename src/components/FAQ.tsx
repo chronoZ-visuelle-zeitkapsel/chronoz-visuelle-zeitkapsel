@@ -35,7 +35,8 @@ function FAQItem({ question, answer, category }: FAQItemProps): ReactElement {
 function FAQ(): ReactElement {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('Alle');
-	const faqData = [
+	
+	const faqData = useMemo(() => [
 		{
 			question: "Was ist ChronoZ?",
 			answer: "ChronoZ ist eine digitale Zeitkapsel-Plattform, mit der Sie Erinnerungen, Nachrichten und Postkarten erstellen und zu einem späteren Zeitpunkt versenden können. Bewahren Sie besondere Momente für die Zukunft auf!",
@@ -76,7 +77,7 @@ function FAQ(): ReactElement {
 			answer: "Ja, in Ihrem Profil unter 'Meine Zeitkapsel' können Sie alle Ihre erstellten Postkarten sehen und diese bearbeiten oder löschen.",
 			category: "Postkarten"
 		}
-	];
+	], []);
 
 	const categories = useMemo(() => (
 		Array.from(new Set(faqData.map((faq) => faq.category)))

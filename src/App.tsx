@@ -44,13 +44,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
         };
     }, []);
 
-    const currentDate = new Date().toLocaleDateString('de-DE', { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    });
-
     return (
         <div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
