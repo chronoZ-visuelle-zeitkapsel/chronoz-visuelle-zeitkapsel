@@ -4,6 +4,12 @@
   flex-direction: column;
 }
 
+.UserKapselPage .Header,
+.UserKapselPage .vintage-newspaper-header {
+  position: static;
+  top: auto;
+}
+
 .UserKapselMain {
   flex: 1;
   display: flex;

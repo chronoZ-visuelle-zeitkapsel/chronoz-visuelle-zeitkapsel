@@ -343,7 +343,7 @@ function History(): ReactElement {
           ) : (
             <div className="ArchiveSheet">
               <header className="ArchiveHeader">
-                <h1 className="ArchiveTitle">EXTRA! SPECIAL EDITION</h1>
+                <h1 className="ArchiveTitle">Deine Kapsel!</h1>
               </header>
 
               <div className="ArchiveTimeline">
@@ -361,13 +361,11 @@ function History(): ReactElement {
                   {postcards.map((postcard, idx) => {
                     const isActive = idx === currentCardIndex;
                     const postcardYear = new Date(postcard.date).getFullYear();
-                    const distance = Math.abs(idx - currentCardIndex);
-                    const isVisible = distance <= 2;
                     
                     return (
                       <div 
                         key={postcard.id} 
-                        className={`TimelineDot ${isActive ? 'TimelineDotActive' : ''} ${!isVisible ? 'TimelineDotHidden' : ''}`}
+                        className={`TimelineDot ${isActive ? 'TimelineDotActive' : ''}`}
                         onClick={() => setCurrentCardIndex(idx)}
                         style={{ cursor: 'pointer' }}
                       >
@@ -396,7 +394,6 @@ function History(): ReactElement {
                   const isCenter = index === currentCardIndex;
                   const offset = index - currentCardIndex;
                   const distance = Math.abs(offset);
-                  const isVisible = distance <= 2;
                   const imageCount = postcard.images ? postcard.images.length : 0;
                   const featureImages = postcard.images ? postcard.images : [];
                   const isSingleImage = imageCount === 1;
@@ -411,7 +408,7 @@ function History(): ReactElement {
                         : '';
                   const featureSliceCount = isMontage ? 8 : imageCount;
                   
-                  if (!isVisible) return null;
+                  if (!isCenter) return null;
                   
                   return (
                     <div 

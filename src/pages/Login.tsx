@@ -269,7 +269,7 @@ function Login(): ReactElement {
                 />
               </label>
               <button type="submit" className="grant-entry-button" disabled={loading}>
-                {loading ? 'Verifiziere…' : 'Zugang gewähren'}
+                {loading ? 'Verifiziere…' : 'Anmelden'}
               </button>
               <button 
                 type="button" 
@@ -299,7 +299,7 @@ function Login(): ReactElement {
               {resetStep === 'request' ? (
                 <>
                   <label className="Field">
-                    <span>Versandadresse</span>
+                    <span>Email</span>
                     <span className="dispatch-label">(E-Mail oder Benutzername)</span>
                     <input
                       type="text"
@@ -396,28 +396,28 @@ function Login(): ReactElement {
                   className={`edition-tab ${mode === 'login' ? 'active' : ''}`}
                   onClick={() => setMode('login')}
                 >
-                  Täglicher Abonnent
+                  LogIn
                 </button>
                 <button 
                   type="button" 
                   className={`edition-tab ${mode === 'register' ? 'active' : ''}`}
                   onClick={() => setMode('register')}
                 >
-                  Neuer Leser
+                  Signup
                 </button>
               </div>
               <form onSubmit={handleSubmit} className="archive-form">
                 {mode === 'login' ? (
                   <>
                     <div className="notice-header">
-                      <h2 className="notice-title">Abonnenten-Anmeldung</h2>
+                      <h2 className="notice-title">Anmeldung</h2>
                       <div className="rivet top-left"></div>
                       <div className="rivet top-right"></div>
                       <div className="rivet bottom-left"></div>
                       <div className="rivet bottom-right"></div>
                     </div>
                     <label className="Field">
-                      <span>Versandadresse (E-Mail oder Benutzername)</span>
+                      <span>Email oder Benutzername</span>
                       <input
                         type="text"
                         value={email}
@@ -428,7 +428,7 @@ function Login(): ReactElement {
                       />
                     </label>
                     <label className="Field">
-                      <span>Büroschlüssel (Passwort)</span>
+                      <span>Passwort</span>
                       <div className="PasswordInputWrapper">
                         <input
                           type={showPassword ? "text" : "password"}
@@ -436,7 +436,7 @@ function Login(): ReactElement {
                           onChange={(e) => setPassword(e.target.value)}
                           required
                           className="Input"
-                          placeholder="••••••••"
+                          placeholder=""
                         />
                         <button
                           type="button"
@@ -450,7 +450,7 @@ function Login(): ReactElement {
                       </div>
                     </label>
                     <button type="submit" className="grant-entry-button" disabled={loading}>
-                      {loading ? 'Verifiziere…' : 'Zugang gewähren'}
+                      {loading ? 'Verifiziere…' : 'Anmelden'}
                     </button>
                     <div className="archive-links">
                       <button 
@@ -463,7 +463,7 @@ function Login(): ReactElement {
                           setRegistrationSuccess(null);
                         }}
                       >
-                        Adresse verloren?
+                        Passwort vergessen?
                       </button>
                       <span>•</span>
                       <button 
@@ -471,21 +471,21 @@ function Login(): ReactElement {
                         className="archive-link"
                         onClick={() => setMode('register')}
                       >
-                        Der Presse beitreten?
+                        Noch kein Konto?
                       </button>
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="notice-header">
-                      <h2 className="notice-title">Neue Leser Anmeldung</h2>
+                      <h2 className="notice-title">Registrierung</h2>
                       <div className="rivet top-left"></div>
                       <div className="rivet top-right"></div>
                       <div className="rivet bottom-left"></div>
                       <div className="rivet bottom-right"></div>
                     </div>
                     <label className="Field">
-                      <span>Lesername (Benutzername)</span>
+                      <span>Benutzername</span>
                       <input
                         type="text"
                         value={username}
@@ -496,7 +496,7 @@ function Login(): ReactElement {
                       />
                     </label>
                     <label className="Field">
-                      <span>Versandadresse (E-Mail)</span>
+                      <span>Email</span>
 
                       <input
                         type="email"
@@ -508,7 +508,7 @@ function Login(): ReactElement {
                       />
                     </label>
                     <label className="Field">
-                      <span>Büroschlüssel (Passwort)</span>
+                      <span>Passwort</span>
                       <div className="PasswordInputWrapper">
                         <input
                           type={showPassword ? "text" : "password"}
@@ -516,7 +516,7 @@ function Login(): ReactElement {
                           onChange={(e) => setPassword(e.target.value)}
                           required
                           className="Input"
-                          placeholder="••••••••"
+                          placeholder=""
                         />
                         <button
                           type="button"
@@ -534,7 +534,7 @@ function Login(): ReactElement {
                       <Rule ok={passDigitOk} label="Mindestens 1 Zahl (0–9)" />
                     </label>
                     <button type="submit" className="press-copy-button" disabled={loading}>
-                      {loading ? 'Registriere…' : 'Ausgabe drucken'}
+                      {loading ? 'Registriere…' : 'Registrieren'}
                     </button>
                   </>
                 )}
