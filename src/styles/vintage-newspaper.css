@@ -298,9 +298,7 @@
 }
 
 .PageCurl:hover::after {
-  opacity: 1;
-  width: 80px;
-  height: 80px;
+  opacity: 0;
 }
 
 /* Ornate Borders */
