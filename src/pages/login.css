@@ -497,7 +497,24 @@
 .LoginCard .PasswordToggle,
 .form-notice-panel .archive-form .PasswordToggle {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-  width:36px; height:36px; border-radius:18px; border:none; background:transparent; cursor:pointer; color: rgba(20,40,60,0.6);
+  width:36px; height:36px; border-radius:0; border:0; outline:none; background:none; box-shadow:none; cursor:pointer; color: rgba(20,40,60,0.6);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 0;
+  margin: 0;
+}
+.LoginCard .PasswordToggle:focus,
+.form-notice-panel .archive-form .PasswordToggle:focus {
+  outline: none;
+  box-shadow: none;
+  border: 0;
+}
+.LoginCard .PasswordToggle:hover,
+.form-notice-panel .archive-form .PasswordToggle:hover {
+  background: none;
+  border: 0;
+  outline: none;
 }
 
 .Actions { display:flex; gap:12px; }
