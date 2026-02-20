@@ -192,14 +192,41 @@ function CreatePostcard(): ReactElement {
     setExistingImageUrls([]);
   };
 
+  const displayDate = date
+    ? new Date(date).toLocaleDateString('de-AT', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      })
+    : new Date().toLocaleDateString('de-AT', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+
+  const previewTitle = title ? title.toUpperCase() : 'ERINNERUNG';
+  const previewText = description
+    ? description
+    : 'Dein Tagebucheintrag erscheint hier als kleine Sonderausgabe.';
+  const previewImage = existingImageUrls[0]
+    || (images[0] ? URL.createObjectURL(images[0]) : '');
+  const thumbnailUrls = [
+    ...existingImageUrls,
+    ...images.map(image => URL.createObjectURL(image))
+  ];
+
   return (
     <div className="CreatePostcardPage">
       <Header />
       <main className="CreatePostcardMain">
         <div className="CreatePostcardContainer">
+          <header className="CreatePostcardMasthead">
+            <div className="MastheadTitle">ERSTELLE DEINE ZEITKAPSEL</div>
+            <div className="MastheadDate">{displayDate}</div>
+          </header>
           <div className="FormSection">
             <form onSubmit={handleSubmit} className="PostcardForm">
-              <div className="FormColumns">
+              <div className="SubscriberDeskGrid">
                 <div className="LeftColumn">
                   <button 
                     type="button" 
@@ -232,7 +259,7 @@ function CreatePostcard(): ReactElement {
                       +
                     </button>
 
-                    <div className="UploadHint">Füge deine Erinnerungen hinzu</div>
+                    <div className="UploadHint">BILD HOCHLADEN</div>
 
                     <div className="ImagePreview">
                       {existingImageUrls.map((url, index) => (
@@ -272,11 +299,10 @@ function CreatePostcard(): ReactElement {
                     </div>
                   </div>
                 </div>
-
                 <div className="RightColumn">
                   <div className="TopFields">
                     <div className="TitleField">
-                      <label htmlFor="title">Titel:</label>
+                      <label htmlFor="title">Schlagzeile</label>
                       <input
                         type="text"
                         id="title"
@@ -284,12 +310,12 @@ function CreatePostcard(): ReactElement {
                         onChange={(e) => setTitle(e.target.value)}
                         required
                         className="FormInput"
-                        placeholder="your Titel.."
+                        placeholder="Erinnerung"
                       />
                     </div>
 
                     <div className="DateField">
-                      <label htmlFor="date">📅 Date:</label>
+                      <label htmlFor="date">Datum</label>
                       <input
                         type="date"
                         id="date"
@@ -302,14 +328,15 @@ function CreatePostcard(): ReactElement {
                   </div>
 
                   <div className="DescriptionField">
+                    <label htmlFor="description">Tagebuchtext</label>
                     <textarea
                       id="description"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       required
                       className="FormTextarea"
-                      placeholder="write down your day..."
-                      rows={6}
+                      placeholder="Schreib..."
+                      rows={8}
                       style={{ fontSize: `${descFontSize}px` }}
                     />
 
@@ -334,25 +361,26 @@ function CreatePostcard(): ReactElement {
                     </div>
                   </div>
 
-                  {error && <div className="FormError" role="alert">{error}</div>}
-                  <div className="FormActions">
-                    <button 
-                      type="button" 
+                  <div className="ActionBar">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="ActionButton Primary"
+                    >
+                      {loading ? (isEditing ? 'Wird gespeichert...' : 'Wird erstellt...') : 'Speichern'}
+                    </button>
+                    <button
+                      type="button"
                       onClick={handleReset}
-                      className="ResetButton"
+                      className="ActionButton Secondary"
                     >
                       zurücksetzen
-                    </button>
-                    <button 
-                      type="submit" 
-                      disabled={loading}
-                      className="SubmitButton"
-                    >
-                      {loading ? (isEditing ? 'Wird gespeichert...' : 'Wird erstellt...') : (isEditing ? 'Speichern' : 'hinzufügen')}
                     </button>
                   </div>
                 </div>
               </div>
+
+              {error && <div className="FormError" role="alert">{error}</div>}
             </form>
           </div>
         </div>
