@@ -217,6 +217,10 @@
     position: relative;
 }
 
+.masthead-right .UserArea .NavItem::after {
+  display: none;
+}
+
 .masthead-right .UserButton {
     width: 36px;
     height: 36px;
