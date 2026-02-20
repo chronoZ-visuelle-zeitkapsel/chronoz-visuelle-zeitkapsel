@@ -63,7 +63,7 @@
 
 .footer-copyright {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.05em;
     color: #c7b9a8;
@@ -72,7 +72,7 @@
 
 .footer-publisher {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 10px;
+    font-size: 12px;
     font-style: italic;
     color: #8b7355;
     letter-spacing: 0.03em;
@@ -80,7 +80,7 @@
 
 .footer-tagline {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 9px;
+    font-size: 11px;
     font-style: italic;
     color: #6a5a4a;
     margin-top: 6px;
@@ -98,7 +98,7 @@
 
 .footer-nav-label {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 8px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -114,7 +114,7 @@
 
 .footer-link {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 11px;
+    font-size: 13px;
     font-variant: small-caps;
     letter-spacing: 0.06em;
     color: #ffffff;
@@ -150,7 +150,7 @@
 /* Archive Press Credit */
 .footer-archive-press {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 9px;
+    font-size: 11px;
     font-style: italic;
     color: #6a5a4a;
     margin-top: 8px;
@@ -179,16 +179,6 @@
     gap: 6px;
 }
 
-.footer-social-label {
-    font-family: 'Times New Roman', Georgia, serif;
-    font-size: 8px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #8b7355;
-    margin-bottom: 2px;
-}
-
 .footer-social-icons {
     display: flex;
     gap: 12px;
@@ -204,13 +194,18 @@
     height: 36px;
     background: radial-gradient(circle at 30% 30%, #d4af37, #8b7428);
     border-radius: 50%;
-    border: 2px solid #5a4a2a;
+    border: none;
     box-shadow: 
         inset 2px 2px 4px rgba(0, 0, 0, 0.3),
         0 2px 6px rgba(0, 0, 0, 0.4);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+}
+
+.brass-badge.htl-badge {
+    background: transparent;
+    box-shadow: none;
 }
 
 .brass-badge::before {
@@ -241,7 +236,7 @@
 
 .footer-edition-stamp {
     font-family: 'Times New Roman', Georgia, serif;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -372,13 +367,13 @@ body.newspaper-theme .FooterRight img[src*="htlLogo.png"],
 
     .footer-copyright,
     .footer-link {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .footer-publisher,
     .footer-tagline,
     .footer-archive-press {
-        font-size: 9px;
+        font-size: 11px;
     }
 
     .brass-badge {
@@ -392,7 +387,7 @@ body.newspaper-theme .FooterRight img[src*="htlLogo.png"],
     }
 
     .footer-edition-stamp {
-        font-size: 9px;
+        font-size: 11px;
         padding: 3px 6px;
     }
 }

@@ -103,9 +103,8 @@ function Footer(): React.ReactElement {
 
 				{/* Right: Social Icons & Date */}
 				<div className="footer-right">
-					<div className="footer-social-label">Kontakt</div>
 					<div className="footer-social-icons">
-						<a href="https://www.htl-donaustadt.at/home" target="_blank" rel="noopener noreferrer" className="brass-badge" title="HTL Donaustadt">
+						<a href="https://www.htl-donaustadt.at/home" target="_blank" rel="noopener noreferrer" className="brass-badge htl-badge" title="HTL Donaustadt">
 							<img src="/htlLogo.png" alt="HTL" className="footer-htl-logo" />
 						</a>
 					</div>
