@@ -54,10 +54,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 <aside className="BroadsheetSidebar" style={{
                     paddingTop: '0'
                 }}>
-                    <div className="SidebarSection PageCurl" style={{
-                        marginLeft: '-50px',
-                        width: 'calc(100% + 50px)'
-                    }}>
+                    <div className="SidebarSection PageCurl">
                         <h3 className="SidebarTitle">Hinweis</h3>
                         <p className="ArticleText">
                             Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. 
@@ -112,10 +109,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 <aside className="BroadsheetRightSidebar" style={{
                     paddingTop: '0'
                 }}>
-                    <div className="SidebarSection" style={{
-                        marginRight: '-50px',
-                        width: 'calc(100% + 50px)'
-                    }}>
+                    <div className="SidebarSection">
                         <h3 className="SidebarTitle">Ausgabe</h3>
                         <p className="ArticleText" style={{fontSize: '0.95rem'}}>
                             Nächste Edition erscheint automatisch, während Sie scrollen. 
