@@ -126,10 +126,11 @@
 .BroadsheetContainer {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 40px 50px;
+  padding: 50px 50px 50px;
   display: grid;
   grid-template-columns: 260px 1fr 260px;
   gap: 40px;
+  background: #ebe3d5;
 }
 
 .BroadsheetSidebar {
@@ -346,7 +347,7 @@
   }
   
   .BroadsheetContainer {
-    padding: 20px;
+    padding: 50px 20px 50px;
   }
   
   .VintageHeadline {
