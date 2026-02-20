@@ -296,10 +296,11 @@
 .newspaper-theme .FooterRight .Logo { filter: grayscale(100%) contrast(1.05); opacity: 0.95; }
 
 /* Keep the HTL logo colored — do not apply grayscale to this specific image */
+body.newspaper-theme .FooterRight img[src*="htlLogo.png"],
 .newspaper-theme .FooterRight img[src*="htlLogo.png"] {
-    filter: none !important;
-    -webkit-filter: none !important;
-    opacity: 1 !important;
+    filter: none;
+    -webkit-filter: none;
+    opacity: 1;
 }
 
 /* Impressum link light color */

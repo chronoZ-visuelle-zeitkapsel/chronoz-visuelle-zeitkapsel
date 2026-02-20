@@ -200,14 +200,16 @@ body.newspaper-theme {
 }
 
 /* Footer links should stay white */
-.newspaper-theme .footer-link {
-  color: #ffffff !important;
-  background: none !important;
-  border: none !important;
+body.newspaper-theme .footer-link,
+.newspaper-theme .Footer .footer-link {
+  color: #ffffff;
+  background: none;
+  border: none;
 }
 
-.newspaper-theme .footer-link:hover {
-  color: #f9f6f0 !important;
+body.newspaper-theme .footer-link:hover,
+.newspaper-theme .Footer .footer-link:hover {
+  color: #f9f6f0;
 }
 
 /* Responsive: single column on small screens */
@@ -218,7 +220,7 @@ body.newspaper-theme {
 
 /* Print-friendly rules */
 @media print {
-  body.newspaper-theme { background: #fff !important; }
+  body.newspaper-theme { background: #fff; }
   .newspaper-theme .masthead h1 { font-size: 32px; }
   .newspaper-theme .body { column-count: 2; }
 }

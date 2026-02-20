@@ -424,7 +424,7 @@ function Login(): ReactElement {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         className="Input"
-                        placeholder="versand@chronicle.news"
+                        placeholder="example@example.com"
                       />
                     </label>
                     <label className="Field">
@@ -436,7 +436,7 @@ function Login(): ReactElement {
                           onChange={(e) => setPassword(e.target.value)}
                           required
                           className="Input"
-                          placeholder=""
+                          placeholder="123Abcdef"
                         />
                         <button
                           type="button"
@@ -492,7 +492,7 @@ function Login(): ReactElement {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                         className="Input"
-                        placeholder="J. Leser"
+                        placeholder="example_user123"
                       />
                     </label>
                     <label className="Field">
@@ -504,7 +504,7 @@ function Login(): ReactElement {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         className="Input"
-                        placeholder="leser@chronicle.news"
+                        placeholder="example@example.com"
                       />
                     </label>
                     <label className="Field">
@@ -516,7 +516,7 @@ function Login(): ReactElement {
                           onChange={(e) => setPassword(e.target.value)}
                           required
                           className="Input"
-                          placeholder=""
+                          placeholder="123Abcdef"
                         />
                         <button
                           type="button"

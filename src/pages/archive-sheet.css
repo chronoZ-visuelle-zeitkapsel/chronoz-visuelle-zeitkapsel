@@ -256,8 +256,8 @@
 }
 
 .RackCard:hover {
-  transform: scale(1.05) !important;
-  z-index: 15 !important;
+  transform: scale(1.05);
+  z-index: 15;
 }
 
 .RackCardActive {

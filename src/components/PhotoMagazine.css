@@ -292,7 +292,7 @@
 }
 
 .pdf-viewer .react-pdf__Page {
-  display: flex !important;
+  display: flex;
   justify-content: center;
   align-items: center;
   background: white;
@@ -301,10 +301,10 @@
 }
 
 .pdf-viewer .react-pdf__Page__canvas {
-  display: block !important;
-  max-width: 100% !important;
-  height: auto !important;
-  background: white !important;
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: white;
 }
 
 .pdf-viewer .loading {
