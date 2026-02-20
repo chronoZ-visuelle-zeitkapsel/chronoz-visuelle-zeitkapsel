@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './footer.css';
 
 function Footer(): React.ReactElement {
@@ -65,6 +65,14 @@ function Footer(): React.ReactElement {
 		}
 	};
 
+	const goToImpressum = () => {
+		navigate('/impressum');
+		// Nach Navigation nach oben scrollen
+		setTimeout(() => {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}, 100);
+	};
+
 	return (
 		<footer className="Footer vintage-newspaper-footer">
 			<div className="footer-ruled-line"></div>
@@ -89,7 +97,7 @@ function Footer(): React.ReactElement {
 							}
 						}}>Archiv</button>
 						<button className="footer-link" onClick={() => scrollToSection('faq')}>FAQ</button>
-						<Link to="/impressum" className="footer-link">Impressum</Link>
+						<button className="footer-link" onClick={goToImpressum}>Impressum</button>
 					</div>
 				</nav>
 
