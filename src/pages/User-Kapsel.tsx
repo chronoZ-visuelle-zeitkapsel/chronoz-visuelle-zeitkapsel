@@ -516,7 +516,6 @@ function History(): ReactElement {
                 onClick={() => navigate('/create-postcard')}
               >
                 <span className="Plus">+</span>
-                <span>NEW<br/>EDITION</span>
               </button>
             </div>
           )}

@@ -354,16 +354,13 @@
   transform: scale(1.1);
 }
 
-.Plus {
-  font-size: 24px;
-  font-weight: bold;
-  width: 49.618282318115234px;
-  height: 54.29718017578125px;
-  transform: rotate(-0deg);
-  opacity: 1;
-  top: 484.97px;
-  left: 696.32px;
-  border-radius: 15px;
+.UserKapselPage .AddButtonBottomRight .Plus {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Zentraler + Button für leere Kapsel */
@@ -498,7 +495,7 @@
   }
   
   .AddButtonBottomRight .Plus {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 }
 
