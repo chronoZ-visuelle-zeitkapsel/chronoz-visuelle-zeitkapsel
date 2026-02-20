@@ -470,7 +470,7 @@ function History(): ReactElement {
                                   className={`feature-image feature-image-${imgIndex + 1} ${imgIndex === 0 ? 'feature-lead' : ''} ${isMontage && imgIndex >= 4 ? 'feature-faded' : ''}`}
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setLightboxImage(src);
+                                    setShowDetailedView(true);
                                   }}
                                 >
                                   <img src={src} alt={`${postcard.title} ${imgIndex + 1}`} />
