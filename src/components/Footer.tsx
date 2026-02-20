@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './footer.css';
 
 function Footer(): React.ReactElement {
 	const navigate = useNavigate();
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+	// Check if user is logged in
+	useEffect(() => {
+		const token = localStorage.getItem('token');
+		setIsLoggedIn(!!token);
+
+		// Listen for login/logout events
+		const handleUserLogin = () => setIsLoggedIn(true);
+		const handleUserLogout = () => setIsLoggedIn(false);
+
+		window.addEventListener('userLogin', handleUserLogin);
+		window.addEventListener('userLogout', handleUserLogout);
+
+		return () => {
+			window.removeEventListener('userLogin', handleUserLogin);
+			window.removeEventListener('userLogout', handleUserLogout);
+		};
+	}, []);
 
 	// Get current date for edition stamp
 	const getCurrentDate = () => {
@@ -33,6 +52,19 @@ function Footer(): React.ReactElement {
 		}
 	};
 
+	const goToHome = () => {
+		if (window.location.pathname !== '/') {
+			navigate('/');
+			// Nach Navigation nach oben scrollen
+			setTimeout(() => {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}, 100);
+		} else {
+			// Direkt nach oben scrollen
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	};
+
 	return (
 		<footer className="Footer vintage-newspaper-footer">
 			<div className="footer-ruled-line"></div>
@@ -48,8 +80,14 @@ function Footer(): React.ReactElement {
 				<nav className="footer-center">
 					<div className="footer-nav-label">Schnelllinks</div>
 					<div className="footer-links">
-						<button className="footer-link" onClick={() => navigate('/')}>Startseite</button>
-						<button className="footer-link" onClick={() => scrollToSection('archive')}>Archiv</button>
+						<button className="footer-link" onClick={goToHome}>Startseite</button>
+						<button className="footer-link" onClick={() => {
+							if (!isLoggedIn) {
+								navigate('/login');
+							} else {
+								scrollToSection('archive');
+							}
+						}}>Archiv</button>
 						<button className="footer-link" onClick={() => scrollToSection('faq')}>FAQ</button>
 						<Link to="/impressum" className="footer-link">Impressum</Link>
 					</div>

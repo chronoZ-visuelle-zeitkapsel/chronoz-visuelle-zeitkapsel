@@ -119,6 +119,19 @@ function Header(): ReactElement {
 		}
 	}
 
+	function goToHome() {
+		if (window.location.pathname !== '/') {
+			navigate('/');
+			// Nach Navigation nach oben scrollen
+			setTimeout(() => {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			}, 100);
+		} else {
+			// Direkt nach oben scrollen
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	}
+
 	// Get current date for masthead
 	const getCurrentDate = () =>
 		new Date().toLocaleDateString('de-DE', {
@@ -156,7 +169,7 @@ function Header(): ReactElement {
 				{/* Right: Navigation & User */}
 				<div className="masthead-right">
 					<nav className="edition-nav">
-						<button className="edition-link" onClick={() => navigate('/')}>Startseite</button>
+					<button className="edition-link" onClick={goToHome}>Startseite</button>
 						<button className="edition-link" onClick={() => {
 							if (!currentUser) {
 								navigate('/login');
