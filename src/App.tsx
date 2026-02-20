@@ -51,20 +51,13 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
             {/* Broadsheet Layout */}
             <div className="BroadsheetContainer">
                 {/* Left Sidebar - Table of Contents */}
-                <aside className="BroadsheetSidebar">
-                    <div className="SidebarSection">
-                        <h3 className="SidebarTitle">In Kürze</h3>
-                        <ul className="SidebarList">
-                            <li>• Privates Archiv</li>
-                            <li>• Individuelle Kapseln</li>
-                            <li>• E-Mail-Benachrichtigung</li>
-                            <li>• Sicherheit</li>
-                            <li>• Zeitlinie</li>
-                            <li>• Historische Ansicht</li>
-                        </ul>
-                    </div>
-                    
-                    <div className="SidebarSection PageCurl">
+                <aside className="BroadsheetSidebar" style={{
+                    paddingTop: '0'
+                }}>
+                    <div className="SidebarSection PageCurl" style={{
+                        marginLeft: '-50px',
+                        width: 'calc(100% + 50px)'
+                    }}>
                         <h3 className="SidebarTitle">Hinweis</h3>
                         <p className="ArticleText">
                             Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. 
@@ -87,7 +80,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                         <div className="VintagePhoto">
                             <ThreeDStage />
                             <p className="PhotoCaption">
-                                Die Schatzkiste der Erinnerungen öffnet sich digital
+                                Die Zeitkapsel der Generation Z per Klick öffnen!
                             </p>
                         </div>
                         
@@ -116,8 +109,13 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 </main>
 
                 {/* Right Sidebar - Features */}
-                <aside className="BroadsheetRightSidebar">
-                    <div className="SidebarSection">
+                <aside className="BroadsheetRightSidebar" style={{
+                    paddingTop: '0'
+                }}>
+                    <div className="SidebarSection" style={{
+                        marginRight: '-50px',
+                        width: 'calc(100% + 50px)'
+                    }}>
                         <h3 className="SidebarTitle">Ausgabe</h3>
                         <p className="ArticleText" style={{fontSize: '0.95rem'}}>
                             Nächste Edition erscheint automatisch, während Sie scrollen. 

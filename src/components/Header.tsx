@@ -134,7 +134,6 @@ function Header(): ReactElement {
 				{/* Left: Date */}
 				<div className="masthead-left">
 					<div className="masthead-date">{getCurrentDate()}</div>
-					<div className="masthead-edition">Morgenausgabe</div>
 				</div>
 
 				{/* Center: ChronoZ Logo */}
@@ -156,7 +155,6 @@ function Header(): ReactElement {
 
 				{/* Right: Navigation & User */}
 				<div className="masthead-right">
-					<div className="edition-links-label">Ausgabe-Links</div>
 					<nav className="edition-nav">
 						<button className="edition-link" onClick={() => navigate('/')}>Startseite</button>
 						<button className="edition-link" onClick={() => {

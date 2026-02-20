@@ -124,7 +124,7 @@
 
 /* Multi-Column Broadsheet */
 .BroadsheetContainer {
-  max-width: 1500px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 40px 50px;
   display: grid;
@@ -162,6 +162,10 @@
   border: 2px solid var(--color-border);
   padding: 20px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.SidebarSection:first-child {
+  margin-top: 0;
 }
 
 .SidebarTitle {
@@ -310,7 +314,7 @@
 }
 
 /* Responsive Adjustments */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .BroadsheetContainer {
     grid-template-columns: 1fr;
     gap: 30px;

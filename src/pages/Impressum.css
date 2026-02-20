@@ -400,6 +400,110 @@
   color: #f5f1e8;
 }
 
+/* AGBs Section */
+.AGBSection {
+  width: 100%;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 4px double #000000;
+}
+
+.AGBTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 36px;
+  letter-spacing: 4px;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  font-weight: 700;
+}
+
+.AGBSubtitle {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #000000;
+  letter-spacing: 1px;
+}
+
+.AGBColumns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.AGBColumn {
+  border-left: 1px solid #000000;
+  padding: 0 16px;
+}
+
+.AGBColumn:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.AGBColumn:last-child {
+  padding-right: 0;
+}
+
+.AGBSectionTitle {
+  font-family: 'Times New Roman', serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.5px;
+  color: #000000;
+}
+
+.AGBText {
+  font-family: 'Times New Roman', serif;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: justify;
+  margin: 0 0 16px 0;
+  color: #1a1a1a;
+  hyphens: auto;
+}
+
+.AGBText strong {
+  font-weight: 700;
+}
+
+.AGBSignature {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 2px solid #000000;
+  text-align: center;
+}
+
+.AGBSigLine {
+  width: 60%;
+  height: 2px;
+  background: #000000;
+  margin: 0 auto 8px;
+}
+
+.AGBSigText {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+.AGBSigDate {
+  font-family: 'Times New Roman', serif;
+  font-size: 11px;
+  font-style: italic;
+  color: #333;
+}
+
 @media (max-width: 1024px) {
   .AboutColumns {
     grid-template-columns: 1fr;
@@ -419,6 +523,21 @@
   .StaffGrid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .AGBColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .AGBColumn {
+    border-left: none;
+    border-top: 1px solid #000000;
+    padding: 16px 0;
+  }
+
+  .AGBColumn:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -434,6 +553,15 @@
   .AboutMastheadTitle {
     font-size: 34px;
     letter-spacing: 3px;
+  }
+
+  .AGBTitle {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+
+  .AGBText {
+    font-size: 12px;
   }
 }
 
