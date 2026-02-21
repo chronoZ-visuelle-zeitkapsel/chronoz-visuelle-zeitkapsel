@@ -4,7 +4,7 @@
 .VintageHeadline {
   font-family: 'Georgia', 'Times New Roman', serif;
   font-weight: 900;
-  font-size: 3.5rem;
+  font-size: clamp(1.8rem, 5vw, 3.5rem);  /* Fluid scaling */
   line-height: 1.1;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -82,7 +82,7 @@
 .MastheadTitle {
   font-family: 'Georgia', serif;
   font-weight: 900;
-  font-size: 2.8rem;
+  font-size: clamp(1.5rem, 6vw, 2.8rem);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   text-align: center;
@@ -122,28 +122,30 @@
   color: var(--color-surface);
 }
 
-/* Multi-Column Broadsheet */
+/* Multi-Column Broadsheet - MOBILE FIRST */
 .BroadsheetContainer {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 50px 50px 50px;
+  padding: 20px 16px;  /* MOBILE: Small padding */
   display: grid;
-  grid-template-columns: 260px 1fr 260px;
-  gap: 40px;
+  grid-template-columns: 1fr;  /* Single column base */
+  gap: 24px;  /* Smaller gap */
   background: #ebe3d5;
 }
 
 .BroadsheetSidebar {
-  border-right: 2px solid var(--color-border);
-  padding-right: 30px;
+  border: 2px solid var(--color-border);  /* Full borders on mobile */
+  padding: 20px;
+  order: -1;  /* Sidebars above main on mobile */
 }
 
 .BroadsheetMain {
-  padding: 0 20px;
+  padding: 0;
+  order: 0;
 }
 
 .BroadsheetMainColumned {
-  column-count: 2;
+  column-count: 1;  /* Single column text */
   column-gap: 40px;
   column-rule: 1px solid var(--color-border);
   text-align: justify;
@@ -152,8 +154,9 @@
 }
 
 .BroadsheetRightSidebar {
-  border-left: 2px solid var(--color-border);
-  padding-left: 30px;
+  border: 2px solid var(--color-border);  /* Full borders on mobile */
+  padding: 20px;
+  order: 1;  /* Below main on mobile */
 }
 
 /* Sidebar Sections */
@@ -312,45 +315,109 @@
   align-items: center;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 900px) {
+/* ==============================================
+   RESPONSIVE BROADSHEET LAYOUT - MOBILE FIRST
+   ============================================== */
+
+/* TABLET: 2 columns */
+@media (min-width: 768px) {
   .BroadsheetContainer {
-    grid-template-columns: 1fr;
-    gap: 30px;
+    padding: 40px 24px;
+    gap: 32px;
+    grid-template-columns: 1fr 1fr;  /* Main + sidebars stacked */
   }
   
-  .BroadsheetSidebar,
+  .BroadsheetSidebar {
+    border-right: 2px solid var(--color-border);
+    border-left: none;
+    border-top: none;
+    border-bottom: none;
+    grid-column: 2;
+    padding-right: 24px;
+    order: 0;
+  }
+  
   .BroadsheetRightSidebar {
-    border: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    display: none;  /* Hide right sidebar on tablet */
+    order: 0;
   }
   
   .BroadsheetMainColumned {
-    column-count: 1;
+    column-count: 2;
   }
   
-  .VintageHeadline {
-    font-size: 2.5rem;
+  .NewspaperMasthead,
+  .NewspaperNav {
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
-@media (max-width: 768px) {
-  .NewspaperMasthead {
-    padding: 10px 20px;
-  }
-  
-  .MastheadTitle {
-    font-size: 2rem;
-  }
-  
+/* DESKTOP: Full 3-column */
+@media (min-width: 1024px) {
   .BroadsheetContainer {
-    padding: 50px 20px 50px;
+    padding: 50px 50px 50px;
+    gap: 40px;
+    grid-template-columns: 260px 1fr 260px;  /* Original */
   }
   
-  .VintageHeadline {
-    font-size: 2rem;
+  .BroadsheetSidebar {
+    border-right: 2px solid var(--color-border);
+    border: none;
+    padding-right: 30px;
+    grid-column: 1;
+    order: 0;
+  }
+  
+  .BroadsheetMain {
+    padding: 0 20px;
+    grid-column: 2;
+  }
+  
+  .BroadsheetRightSidebar {
+    border-left: 2px solid var(--color-border);
+    border: none;
+    padding-left: 30px;
+    grid-column: 3;
+    display: block;
+    order: 0;
+  }
+  
+  .BroadsheetMainColumned {
+    column-count: 2;
+  }
+  
+  .NewspaperMasthead,
+  .NewspaperNav {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+  .BroadsheetContainer {
+    padding: 16px 12px;
+    gap: 20px;
+  }
+  
+  .SidebarSection {
+    padding: 16px;
+  }
+  
+  .NewspaperMasthead,
+  .NewspaperNav {
+    padding-left: 16px;
+    padding-right: 16px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .NewspaperNav {
+    gap: 8px;
   }
 }
