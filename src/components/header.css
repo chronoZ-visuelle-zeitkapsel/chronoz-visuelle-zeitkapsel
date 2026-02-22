@@ -7,6 +7,7 @@
     top: 0;
     z-index: 1000;
     width: 100%;
+    min-height: 150px;
     background: linear-gradient(180deg, #f9f6f0 0%, #ebe4d4 100%);
     border-bottom: 3px double #2b1810;
     box-shadow: 0 4px 12px rgba(43, 24, 16, 0.15);
@@ -444,6 +445,10 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
 
 /* MOBILE FIRST: Stack everything vertically */
 @media (max-width: 768px) {
+    :root {
+        --header-height: 150px;
+    }
+    
     .newspaper-masthead {
         grid-template-columns: 1fr;  /* Single column */
         grid-template-rows: auto auto auto;
@@ -452,7 +457,10 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
         text-align: center;
     }
     
-    .masthead-left { order: 2; }  /* Date middle */
+    .masthead-left { 
+        order: 2; 
+        align-items: center;  /* Center horizontally */
+    }
     .masthead-center { order: 1; } /* Logo top */
     .masthead-right { 
         order: 3; 
@@ -483,6 +491,10 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
 
 /* EXTRA SMALL (iPhone SE 320px) */
 @media (max-width: 480px) {
+    :root {
+        --header-height: 130px;
+    }
+    
     .newspaper-masthead {
         padding: 0 12px;
         gap: 6px;
@@ -504,6 +516,10 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
 
 /* TABLET+ */
 @media (min-width: 769px) {
+    :root {
+        --header-height: 160px;
+    }
+    
     .newspaper-masthead {
         padding: 0 24px;
         gap: 32px;
@@ -516,6 +532,10 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
 
 /* DESKTOP */
 @media (min-width: 1025px) {
+    :root {
+        --header-height: 170px;
+    }
+    
     .newspaper-masthead {
         padding: 0 50px;  /* Original desktop padding */
         gap: 40px;

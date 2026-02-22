@@ -7,12 +7,17 @@
   --color-secondary: #000000;
   --color-accent: #000000;
   --footer-height: 75px;
+  --header-height: 160px;       /* Default header height */
 }
 
 * { box-sizing: border-box; }
-html { margin: 0; padding: 0; }
+html { 
+  margin: 0; 
+  padding: 0;
+}
 body {
   margin: 0;
+  padding-top: 150px;
   overflow-x: hidden;
   background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
   background-image: 
@@ -25,7 +30,24 @@ body {
 }
 html, body, #root { height: 100%; overflow-x: hidden; }
 
-/* Root Layout */
+/* Responsive header spacing */
+@media (max-width: 480px) {
+  body {
+    padding-top: 150px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  body {
+    padding-top: 150px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  body {
+    padding-top: 150px;
+  }
+}
 
 .AppRoot {
   min-height: 100vh;

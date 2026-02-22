@@ -19,7 +19,7 @@
 .VintageSubhead {
   font-family: 'Georgia', serif;
   font-variant: small-caps;
-  font-size: 1.3rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   color: var(--color-secondary);
@@ -31,12 +31,10 @@
 
 .DropCap::first-letter {
   font-family: 'Georgia', serif;
-  font-size: 5rem;
-  font-weight: 900;
-  float: left;
-  line-height: 0.85;
-  margin: 5px 12px 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
   color: var(--color-text);
+  margin-right: 2px;
 }
 
 .PullQuote {
@@ -134,9 +132,8 @@
 }
 
 .BroadsheetSidebar {
-  border: 2px solid var(--color-border);  /* Full borders on mobile */
   padding: 20px;
-  order: -1;  /* Sidebars above main on mobile */
+  order: 1;  /* Sidebars below main on mobile */
 }
 
 .BroadsheetMain {
@@ -154,7 +151,6 @@
 }
 
 .BroadsheetRightSidebar {
-  border: 2px solid var(--color-border);  /* Full borders on mobile */
   padding: 20px;
   order: 1;  /* Below main on mobile */
 }
@@ -328,10 +324,6 @@
   }
   
   .BroadsheetSidebar {
-    border-right: 2px solid var(--color-border);
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
     grid-column: 2;
     padding-right: 24px;
     order: 0;
@@ -366,8 +358,6 @@
   }
   
   .BroadsheetSidebar {
-    border-right: 2px solid var(--color-border);
-    border: none;
     padding-right: 30px;
     grid-column: 1;
     order: 0;
@@ -379,8 +369,6 @@
   }
   
   .BroadsheetRightSidebar {
-    border-left: 2px solid var(--color-border);
-    border: none;
     padding-left: 30px;
     grid-column: 3;
     display: block;
@@ -403,12 +391,33 @@
   .BroadsheetContainer {
     padding: 16px 12px;
     gap: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "main main"
+      "sidebar rightsidebar";
   }
-  
+
+  .BroadsheetMain {
+    grid-column: 1 / span 2;
+    grid-row: 1;
+  }
+  .BroadsheetSidebar {
+    grid-column: 1;
+    grid-row: 2;
+    order: 0;
+  }
+  .BroadsheetRightSidebar {
+    grid-column: 2;
+    grid-row: 2;
+    order: 0;
+    display: block;
+  }
+
   .SidebarSection {
     padding: 16px;
   }
-  
+
   .NewspaperMasthead,
   .NewspaperNav {
     padding-left: 16px;
@@ -416,7 +425,7 @@
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .NewspaperNav {
     gap: 8px;
   }
