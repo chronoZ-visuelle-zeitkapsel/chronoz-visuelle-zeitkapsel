@@ -370,3 +370,9 @@ main { flex: 1 1 auto; }
   justify-content: center;
   padding: 15px 0;
 }
+
+.BroadsheetMain {
+  border-left: none;
+  border-right: none;
+  background: none;
+}
