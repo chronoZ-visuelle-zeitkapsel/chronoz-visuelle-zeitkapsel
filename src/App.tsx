@@ -52,15 +52,19 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 <aside className="BroadsheetSidebar" style={{
                     paddingTop: '0'
                 }}>
-                    <div className="SidebarSection PageCurl">
-                        <h3 className="SidebarTitle">Hinweis</h3>
-                        <p className="ArticleText">
-                            Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. 
-                            Ihre Inhalte bleiben privat.
-                        </p>
-                    </div>
-                    <div className="OrnateBorder">
-                        <CTA />
+                    <div className="sidebar-hinweis-stack">
+                        <div className="hinweis-label">INFORMATION</div>
+                        <div className="hinweis-card">
+                            <h3 className="SidebarTitle">HINWEIS</h3>
+                            <p className="ArticleText">
+                                Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. <br/>
+                                Ihre Inhalte bleiben privat.<br/>
+                                <span className="hinweis-cta-hint">Melde dich an, um deine Postkarten in deiner persönlichen Zeitkapsel zu speichern.</span>
+                            </p>
+                        </div>
+                        <button className="sidebar-cta-btn" onClick={() => window.location.href='/history'}>
+                            <span className="cta-plus">+</span> ZEIG DEINE GESCHICHTE
+                        </button>
                     </div>
                 </aside>
 
@@ -104,22 +108,16 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 <aside className="BroadsheetRightSidebar" style={{
                     paddingTop: '0'
                 }}>
-                    <div className="SidebarSection">
-                        <h3 className="SidebarTitle">Ausgabe</h3>
-                        <p className="ArticleText" style={{fontSize: '0.95rem'}}>
-                            Nächste Edition erscheint automatisch, während Sie scrollen. 
-                            Bleiben Sie dran für weitere Geschichten.
-                        </p>
-                    </div>
-                    
-                    {isLoggedIn && (
-                        <div className="SidebarSection">
-                            <h3 className="SidebarTitle">Ihr Archiv</h3>
-                            <p className="ArticleText" style={{fontSize: '0.95rem'}}>
-                                Zugriff auf Ihre persönliche Sammlung gespeicherter Zeitkapseln.
+                    <div className="sidebar-hinweis-stack">
+                        <div className="hinweis-label">TIPP</div>
+                        <div className="hinweis-card">
+                            <h3 className="SidebarTitle">NEUE FUNKTION</h3>
+                            <p className="ArticleText">
+                                Sie können Ihre Postkarten jederzeit bearbeiten oder löschen.<br/>
+                                <span className="hinweis-cta-hint">Nutzen Sie das persönliche Archiv, um Ihre Erinnerungen zu verwalten.</span>
                             </p>
                         </div>
-                    )}
+                    </div>
                 </aside>
             </div>
             
