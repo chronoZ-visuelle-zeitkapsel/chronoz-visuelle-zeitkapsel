@@ -104,7 +104,7 @@ function FAQ(): ReactElement {
 		<section className="faq-section" id="faq">
 			<div className="faq-container">
 				<header className="faq-masthead">
-					<h2 className="faq-title">Leseranfragen</h2>
+					<h2 className="faq-title">FAQ</h2>
 					<p className="faq-headline">Haben Sie eine Frage? Geben Sie sie am Archivschalter ab.</p>
 				</header>
 

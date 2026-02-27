@@ -1,6 +1,5 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import './App.css';
-import './styles/newspaper.css';
 import './styles/vintage-newspaper.css';
 import Header from './components/Header';
 import ThreeDStage from './components/ThreeDStage';
@@ -47,7 +46,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
     return (
         <div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
-            
             {/* Broadsheet Layout */}
             <div className="BroadsheetContainer">
                 {/* Left Sidebar - Table of Contents */}
@@ -61,6 +59,9 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                             Ihre Inhalte bleiben privat.
                         </p>
                     </div>
+                    <div className="OrnateBorder">
+                        <CTA />
+                    </div>
                 </aside>
 
                 {/* Main Content Area */}
@@ -69,10 +70,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                         <h2 className="VintageHeadline">
                             VISUELLE ZEITKAPSELN FÜR IHRE GESCHICHTEN
                         </h2>
-                        
-                        <p className="VintageSubhead">
-                            Eine neue Ausgabe für Erinnerungen – klassisch gesetzt, digital bewahrt
-                        </p>
                         
                         <div className="VintagePhoto">
                             <ThreeDStage />
@@ -99,9 +96,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                             </p>
                         </div>
                         
-                        <div className="OrnateBorder">
-                            <CTA />
-                        </div>
+                        {/* OrnateBorder with CTA moved to sidebar */}
                     </article>
                 </main>
 
