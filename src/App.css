@@ -1,11 +1,11 @@
 :root {
   --color-bg: #f5f1e8;          /* Beige */
   --color-surface: #ffffff;     /* Weiß */
-  --color-border: #000000;      /* Schwarz */
-  --color-text: #000000;        /* Schwarz */
-  --color-primary: #000000;     /* Headlines / Linien Schwarz */
-  --color-secondary: #000000;
-  --color-accent: #000000;
+  --color-border: #1B1212;      /* Schwarz */
+  --color-text: #1B1212;        /* Schwarz */
+  --color-primary: #1B1212;     /* Headlines / Linien Schwarz */
+  --color-secondary: #1B1212;
+  --color-accent: #1B1212;
   --footer-height: 75px;
   --header-height: 160px;       /* Default header height */
 }
@@ -296,9 +296,9 @@ main { flex: 1 1 auto; }
 }
 
 .CTAButton:hover {
-  background: #000000;
+  background: #1B1212;
   color: #ffffff;
-  border-color: #000000;
+  border-color: #1B1212;
 }
 
 /* Ensure CTA's internal plus/text span are centered and not affected by other .Plus rules */

@@ -7,7 +7,7 @@
     top: 0;
     z-index: 1000;
     width: 100%;
-    min-height: 150px;
+    min-height: 100px;
     background: linear-gradient(180deg, #f9f6f0 0%, #ebe4d4 100%);
     border-bottom: 3px double #2b1810;
     box-shadow: 0 4px 12px rgba(43, 24, 16, 0.15);

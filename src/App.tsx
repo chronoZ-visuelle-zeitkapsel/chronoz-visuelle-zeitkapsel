@@ -55,7 +55,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                     <div className="sidebar-hinweis-stack">
                         <div className="hinweis-label">INFORMATION</div>
                         <div className="hinweis-card">
-                            <h3 className="SidebarTitle">HINWEIS</h3>
+                            <h3 className="SidebarTitle">Anmeldung</h3>
                             <p className="ArticleText">
                                 Anmeldung erforderlich zum Erstellen und Speichern von Postkarten. <br/>
                                 Ihre Inhalte bleiben privat.<br/>

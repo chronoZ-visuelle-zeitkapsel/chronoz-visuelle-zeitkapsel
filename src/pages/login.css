@@ -441,7 +441,7 @@
   padding: 10px 26px;
   border-radius: 18px;
   background: transparent;
-  border: 1px solid #000000;
+    border: 1px solid #1B1212;
   color: #000000;
   cursor: pointer;
   font-weight: 150;
@@ -470,7 +470,7 @@
   box-shadow: inset 0 2px 8px rgba(255,255,255,0.6), 0 6px 14px rgba(8,18,30,0.03);
   outline: none;
   font-size: 15px;
-  color: rgba(18,30,40,0.85);
+  color: #1B1212;
 }
 .Input::placeholder { color: rgba(160,170,175,0.6); }
 
@@ -524,7 +524,7 @@
   padding: 10px 22px;
   border-radius: 0;
   background: transparent;
-  border: 1px solid #000000;
+  border: 1px solid #1B1212;
   box-shadow: none;
   cursor: pointer;
   font-weight: 700;
