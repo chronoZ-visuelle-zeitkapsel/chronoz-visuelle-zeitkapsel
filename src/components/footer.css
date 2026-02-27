@@ -5,7 +5,9 @@
 .vintage-newspaper-footer {
     position: relative;
     width: 100%;
-    min-height: 0;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
     background: linear-gradient(180deg, #2b1810 0%, #1a0f08 100%);
     color: #c7b9a8;
     padding: 0;
@@ -51,6 +53,9 @@
     gap: 0px;
     position: relative;
     z-index: 1;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
 }
 
 /* Left Section: Copyright & Publisher */

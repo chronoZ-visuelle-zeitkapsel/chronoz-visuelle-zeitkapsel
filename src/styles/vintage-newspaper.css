@@ -58,42 +58,45 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  max-width: 320px;
-  padding: 13px 0 13px 18px;
-  background: #000 !important;
-  border: 2px solid #222;
-  border-radius: 6px;
-  font-family: var(--serif, 'Georgia', serif);
+  max-width: 340px;
+  padding: 12px 0 12px 22px;
+  background: #f5ede2; /* light sepia fill */
+  border: 2px solid #231a13; /* strong dark border */
+  border-radius: 7px;
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 1.08rem;
   font-weight: 700;
-  color: #fff !important;
-  letter-spacing: 0.04em;
+  color: #231a13;
+  letter-spacing: 0.07em;
   cursor: pointer;
   margin-top: 0;
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
   outline: none;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04) inset;
+  box-shadow: none;
   z-index: 10;
+  position: relative;
 }
 .sidebar-cta-btn .cta-plus {
   font-size: 1.25em;
   font-weight: 900;
-  margin-right: 10px;
+  margin-right: 13px;
   color: #b48a00;
   display: inline-block;
   line-height: 1;
+  letter-spacing: 0;
+  vertical-align: middle;
 }
 .sidebar-cta-btn:focus {
   outline: 2px solid #b48a00;
   outline-offset: 2px;
 }
 .sidebar-cta-btn:hover, .sidebar-cta-btn:active {
-  background: transparent !important;
-  color: #1B1212 !important;
-  border: 2px solid #1B1212;
-  box-shadow: 0 4px 16px rgba(27,18,18,0.12), 0 0 0 2px #1B1212 inset;
-  transform: translateY(-2px) scale(1.03);
-  transition: background 0.18s, color 0.18s, box-shadow 0.18s, transform 0.18s;
+  background: #231a13; /* invert: dark background */
+  color: #f5ede2; /* light text */
+  border: 2px solid #231a13;
+  box-shadow: 0 2px 8px #1a120a inset;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s, box-shadow 0.18s;
+  outline: none;
 }
 .sidebar-cta-btn:hover .cta-plus, .sidebar-cta-btn:active .cta-plus {
   color: #ffe066;
