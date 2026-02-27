@@ -108,7 +108,6 @@ function Footer(): React.ReactElement {
 							<img src="/htlLogo.png" alt="HTL" className="footer-htl-logo" />
 						</a>
 					</div>
-					<div className="footer-edition-stamp">{getCurrentDate()}</div>
 				</div>
 			</div>
 		</footer>
