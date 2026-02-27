@@ -147,7 +147,10 @@ function FAQ(): ReactElement {
 				</div>
 
 				<div className="faq-list" role="list">
-					{filteredFaqs.map((faq, index) => (
+					{(typeof window !== 'undefined' && (window.innerWidth <= 1024)
+						? filteredFaqs.slice(0, 5)
+						: filteredFaqs
+					).map((faq, index) => (
 						<FAQItem
 							key={`${faq.question}-${index}`}
 							question={faq.question}

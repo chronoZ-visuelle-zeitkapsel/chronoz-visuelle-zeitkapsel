@@ -4,8 +4,7 @@
 	background-image:
 		url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3"/></filter><rect width="140" height="140" filter="url(%23noise)" opacity="0.05"/></svg>'),
 		linear-gradient(180deg, #f4ede1 0%, #e8dcc7 100%);
-	border-top: 3px solid #2a241d;
-	border-bottom: 3px solid #2a241d;
+	/* border-top and border-bottom removed to eliminate divider lines */
 }
 
 .faq-container {
