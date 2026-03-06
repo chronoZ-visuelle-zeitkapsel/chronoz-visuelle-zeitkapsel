@@ -178,60 +178,34 @@ function Archive(): ReactElement {
                     data-position={position}
                     onClick={() => position === 'active' && handlePostcardClick(postcard)}
                   >
-                    <div className="postcard-card vintage-newsprint">
-                      {/* Extra Edition Masthead Banner */}
-                      <div className="extra-edition-banner">
-                        <span className="banner-ornament">★</span>
-                        <span className="banner-text">SONDERAUSGABE</span>
-                        <span className="banner-ornament">★</span>
-                      </div>
-
-                      {/* Postcard Masthead with Edition Date */}
-                      <div className="postcard-masthead">
-                        <p className="postcard-edition-date">
-                          Ausgabe vom {formatDate(postcard.createdAt)}
-                        </p>
-                        <h3 className="postcard-title">{postcard.title}</h3>
-                      </div>
-
-                      {/* Main Feature Image with Halftone Effect */}
-                      {featureImages.length > 0 && (
-                        <div
-                          className={`postcard-feature-image halftone-photo ${featureClassName} feature-count-${imageCount}`}
-                        >
-                          <div className="feature-image-grid">
-                            {featureImages.slice(0, featureSliceCount).map((src, imgIndex) => (
-                              <div
-                                key={`${postcard.id}-feature-${imgIndex}`}
-                                className={`feature-image feature-image-${imgIndex + 1} ${imgIndex === 0 ? 'feature-lead' : ''} ${isMontage && imgIndex >= 4 ? 'feature-faded' : ''}`}
-                              >
-                                <img src={src} alt={postcard.title} />
-                              </div>
-                            ))}
-                          </div>
-                          <p className="photo-caption">Historisches Archiv • {formatDate(postcard.date)}</p>
+                    <div className="ArchiveSlide">
+                      <header className="ArchiveSlideHeader">
+                        <div className="ArchiveSlideDate">
+                          {formatDate(postcard.date)}
                         </div>
-                      )}
+                        <h1 className="ArchiveSlideTitle">{postcard.title}</h1>
+                        <div className="ArchiveSlideDivider">★ ★ ★</div>
+                      </header>
 
-                      <div className="postcard-content">
-                        <p className="postcard-description">
-                          {postcard.description}
-                        </p>
+                      <div className="ArchiveSlideContent">
+                        <div className="ArchiveSlideImages">
+                          {featureImages.slice(0, featureSliceCount).map((src, imgIndex) => (
+                            <div key={src} className="postcard-image-wrapper">
+                              <img
+                                className="postcard-image"
+                                src={src}
+                                alt={`${postcard.title} ${imgIndex + 1}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                        <div className="ArchiveSlideText">
+                          <p className="ArchiveSlideDescription">{postcard.description}</p>
+                          <div className="ArchiveSlideFootnote">
+                            Memory #{index + 1} of {postcards.length} • Preserved in the Vienna Archive
+                          </div>
+                        </div>
                       </div>
-
-                      {/* Postage Stamp Style Element */}
-                      <div className="postage-stamp-corner">
-                        <div className="stamp-perforation"></div>
-                        <span className="stamp-text">ARCHIV</span>
-                      </div>
-
-                      {/* Carousel Divider Silhouette */}
-                      <div className="carousel-silhouette-divider">
-                        <svg viewBox="0 0 200 40" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M0,20 Q50,10 100,20 T200,20" stroke="currentColor" fill="none" strokeWidth="2" opacity="0.3"/>
-                        </svg>
-                      </div>
-
                     </div>
                   </div>
                 );

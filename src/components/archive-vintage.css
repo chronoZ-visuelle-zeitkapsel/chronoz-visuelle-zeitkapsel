@@ -1,3 +1,134 @@
+/* ArchiveSlide Styles (imported from archive-sheet.css) */
+.ArchiveSlide {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  border: 12px solid #000000;
+  box-shadow: 0 0 0 3px #8b7355, 0 30px 80px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.ArchiveSlide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,0,0,.02) 2px, rgba(0,0,0,.02) 4px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+.ArchiveSlideHeader {
+  padding: 15px 60px 5px;
+  background: #f5f1e8;
+  border-bottom: 4px double #000000;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.ArchiveSlideDate {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #666;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+.ArchiveSlideTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 56px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.ArchiveSlideDivider {
+  font-size: 18px;
+  color: #8b7355;
+  letter-spacing: 12px;
+}
+.ArchiveSlideContent {
+  flex: 1;
+  display: flex;
+  gap: 40px;
+  padding: 40px 60px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+}
+.ArchiveSlideImages {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  align-content: start;
+}
+.ArchiveSlideImages .postcard-image-wrapper {
+  border: 3px solid #000000;
+  padding: 6px;
+  background: #ffffff;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  filter: grayscale(100%) contrast(1.1) sepia(20%);
+  transition: filter 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+.ArchiveSlideImages .postcard-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.25) 100%);
+  pointer-events: none;
+}
+.ArchiveSlideImages .postcard-image-wrapper:hover {
+  filter: grayscale(0%) contrast(1) sepia(0%);
+}
+.ArchiveSlideImages img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  cursor: pointer;
+}
+.ArchiveSlideText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ArchiveSlideDescription {
+  font-family: 'Georgia', serif;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #1a1a1a;
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
+  column-count: 1;
+}
+.ArchiveSlideFootnote {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid #000000;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #666;
+  letter-spacing: 1px;
+  text-align: center;
+}
 /* ==============================================
    MOBILE-FIRST ARCHIVE CAROUSEL - FIXED
    ============================================== */
@@ -266,6 +397,36 @@
   position: relative;
   cursor: pointer;
   transition: all 0.4s ease;
+  width: 100%;
+  max-width: 1200px;
+  height: 90vh;
+  border-radius: 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18), 0 0 0 2px #e0d6c3 inset;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+/* Stamp corner for postcard */
+.postage-stamp-corner {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  background: #fffbe6;
+  border: 2px dashed #8b7355;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #8b7355;
+  box-shadow: 0 2px 8px rgba(139,115,85,0.12);
+  z-index: 3;
+}
 }
 
 /* Vintage Newsprint Texture */
@@ -974,7 +1135,7 @@
 /* DESKTOP: Original spacing */
 @media (min-width: 1024px) {
   .archive-section {
-    padding: 90px 50px 150px;
+    padding: 40px 50px 250px;
   }
   
   .carousel-wrapper {
