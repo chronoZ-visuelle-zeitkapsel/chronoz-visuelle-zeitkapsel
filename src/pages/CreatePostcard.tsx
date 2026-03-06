@@ -226,7 +226,7 @@ function CreatePostcard(): ReactElement {
                       onChange={(e) => handleFiles(e.target.files)}
                       className="FormInput HiddenFileInput"
                     />
-
+ 
                     <button type="button" className="PlusUploadButton" onClick={() => {
                       // trigger file input
                       const el = document.getElementById('imageUpload') as HTMLInputElement | null;
