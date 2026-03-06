@@ -1,0 +1,294 @@
+/* ============================================
+   ABOUT US SECTION - Vintage Newspaper Style
+   ============================================ */
+
+.AboutUsSection {
+  background-color: #f9f7f1;
+  padding: 4rem 2rem;
+  border-top: 4px double #2c2416;
+  border-bottom: 4px double #2c2416;
+  margin: 3rem 0;
+}
+
+.AboutUsContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.AboutUsHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 2px solid #2c2416;
+}
+
+.AboutUsOrnament {
+  font-size: 1.5rem;
+  color: #8b7355;
+  margin: 0.5rem 0;
+}
+
+.AboutUsTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  color: #2c2416;
+  text-transform: uppercase;
+  margin: 1rem 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.AboutUsSubtitle {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: #5a4a3a;
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   TEAM MEMBERS
+   ============================================ */
+
+.TeamMembers {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.TeamMember {
+  background-color: #ffffff;
+  padding: 2rem;
+  border: 1px solid #d4c5b0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.MemberLayout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* ============================================
+   MEMBER IMAGE COLUMN
+   ============================================ */
+
+.MemberImageColumn {
+  text-align: center;
+}
+
+.MemberPortrait {
+  width: 220px;
+  height: 280px;
+  margin: 0 auto 1rem auto;
+  border: 3px solid #2c2416;
+  overflow: hidden;
+  background-color: #e8e3d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.MemberPortrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.MemberName {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #2c2416;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.MemberRole {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #5a4a3a;
+  padding: 0 1rem;
+  line-height: 1.4;
+}
+
+/* ============================================
+   MEMBER CONTENT COLUMN
+   ============================================ */
+
+.MemberContentColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.MemberDescription {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #2c2416;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.MemberDescription.DropCap::first-letter {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 3.5em;
+  font-weight: bold;
+  float: left;
+  line-height: 0.85;
+  margin: 0.05em 0.1em 0 0;
+  color: #8b7355;
+}
+
+/* ============================================
+   DEVELOPMENT SCREENSHOTS
+   ============================================ */
+
+.DevelopmentScreenshots {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #d4c5b0;
+}
+
+.ScreenshotsLabel {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #8b7355;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.ScreenshotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.ScreenshotItem {
+  margin: 0;
+  text-align: center;
+}
+
+.ScreenshotFrame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 2px solid #2c2416;
+  overflow: hidden;
+  background-color: #e8e3d8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.ScreenshotFrame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ScreenshotCaption {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #5a4a3a;
+  line-height: 1.4;
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.MemberDivider {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #8b7355;
+  margin: 2rem 0;
+  letter-spacing: 1rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.AboutUsFooter {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #2c2416;
+  text-align: center;
+}
+
+.AboutUsFooterLine {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: #5a4a3a;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 968px) {
+  .MemberLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .MemberImageColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .MemberPortrait {
+    width: 200px;
+    height: 260px;
+  }
+
+  .AboutUsTitle {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .AboutUsSection {
+    padding: 2rem 1rem;
+  }
+
+  .TeamMember {
+    padding: 1.5rem;
+  }
+
+  .MemberPortrait {
+    width: 180px;
+    height: 240px;
+  }
+
+  .AboutUsTitle {
+    font-size: 1.6rem;
+  }
+
+  .MemberName {
+    font-size: 1.2rem;
+  }
+
+  .ScreenshotsGrid {
+    grid-template-columns: 1fr;
+  }
+}

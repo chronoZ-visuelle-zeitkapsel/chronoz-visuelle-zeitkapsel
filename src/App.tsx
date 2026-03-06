@@ -5,6 +5,7 @@ import Header from './components/Header';
 import ThreeDStage from './components/ThreeDStage';
 import Archive from './components/Archive';
 import FAQ from './components/FAQ';
+import AboutUs from './components/AboutUs';
 import Footer from './components/Footer';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
@@ -121,6 +122,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
             </div>
             
             {isLoggedIn && <Archive />}
+            <AboutUs />
             <FAQ />
             <Footer />
         </div>
