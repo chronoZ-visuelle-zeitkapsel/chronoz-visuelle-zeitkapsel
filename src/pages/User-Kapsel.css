@@ -363,6 +363,41 @@
   justify-content: center;
 }
 
+/* Download Button (unten links) */
+.UserKapselPage .AddButtonBottomLeft {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserKapselPage .AddButtonBottomLeft:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.UserKapselPage .AddButtonBottomLeft .DownloadIcon {
+  font-size: 28px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Zentraler + Button für leere Kapsel */
 .UserKapselPage .AddMemoryButton {
   width: 80px;
@@ -493,6 +528,17 @@
     bottom: 20px;
     right: 20px;
   }
+
+  .AddButtonBottomLeft {
+    width: 55px;
+    height: 55px;
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .AddButtonBottomLeft .DownloadIcon {
+    font-size: 24px;
+  }
   
   .AddButtonBottomRight .Plus {
     font-size: 2.5rem;
@@ -552,6 +598,17 @@
     height: 50px;
     bottom: 15px;
     right: 15px;
+  }
+
+  .AddButtonBottomLeft {
+    width: 50px;
+    height: 50px;
+    bottom: 15px;
+    left: 15px;
+  }
+
+  .AddButtonBottomLeft .DownloadIcon {
+    font-size: 22px;
   }
 
   /* Options Button - Mobile */
@@ -806,4 +863,84 @@
     max-width: 95vw;
     max-height: 80vh;
   }
+}
+/* ============================================
+   PDF GENERATING OVERLAY
+   ============================================ */
+
+.PDFGeneratingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  backdrop-filter: blur(10px);
+}
+
+.PDFGeneratingContent {
+  background: #ffffff;
+  padding: 50px 60px;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.PDFGeneratingSpinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #2c2416;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 30px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.PDFGeneratingTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c2416;
+  margin-bottom: 15px;
+}
+
+.PDFGeneratingProgress {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 1.1rem;
+  color: #5a4a3a;
+  margin-bottom: 20px;
+}
+
+.PDFProgressBar {
+  width: 100%;
+  height: 8px;
+  background: #e8e3d8;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.PDFProgressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #8b7355, #a89968);
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.PDFGeneratingHint {
+  font-family: 'Crimson Text', Georgia, serif;
+  font-size: 0.95rem;
+  color: #8b7355;
+  font-style: italic;
+  margin-top: 10px;
 }
