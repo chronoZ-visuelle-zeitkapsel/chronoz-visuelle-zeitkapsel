@@ -24,17 +24,6 @@ function Footer(): React.ReactElement {
 		};
 	}, []);
 
-	// Get current date for edition stamp
-	const getCurrentDate = () => {
-		const date = new Date();
-		const formatted = date.toLocaleDateString('de-DE', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric'
-		});
-		return `Ausg. ${formatted}`;
-	};
-
 	const scrollToSection = (sectionId: string) => {
 		if (window.location.pathname !== '/') {
 			navigate('/');

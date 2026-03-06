@@ -192,37 +192,13 @@ function CreatePostcard(): ReactElement {
     setExistingImageUrls([]);
   };
 
-  const displayDate = date
-    ? new Date(date).toLocaleDateString('de-AT', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      })
-    : new Date().toLocaleDateString('de-AT', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-
-  const previewTitle = title ? title.toUpperCase() : 'ERINNERUNG';
-  const previewText = description
-    ? description
-    : 'Dein Tagebucheintrag erscheint hier als kleine Sonderausgabe.';
-  const previewImage = existingImageUrls[0]
-    || (images[0] ? URL.createObjectURL(images[0]) : '');
-  const thumbnailUrls = [
-    ...existingImageUrls,
-    ...images.map(image => URL.createObjectURL(image))
-  ];
-
   return (
     <div className="CreatePostcardPage">
       <Header />
       <main className="CreatePostcardMain">
         <div className="CreatePostcardContainer">
           <header className="CreatePostcardMasthead">
-            <div className="MastheadTitle">ERSTELLE DEINE ZEITKAPSEL</div>
-            <div className="MastheadDate">{displayDate}</div>
+            <div className="MastheadTitle">ERSTELLE EINE NEUE POSTKARTE</div> 
           </header>
           <div className="FormSection">
             <form onSubmit={handleSubmit} className="PostcardForm">
@@ -302,7 +278,7 @@ function CreatePostcard(): ReactElement {
                 <div className="RightColumn">
                   <div className="TopFields">
                     <div className="TitleField">
-                      <label htmlFor="title">Schlagzeile</label>
+                      <label htmlFor="title">Titel</label>
                       <input
                         type="text"
                         id="title"
@@ -328,7 +304,7 @@ function CreatePostcard(): ReactElement {
                   </div>
 
                   <div className="DescriptionField">
-                    <label htmlFor="description">Tagebuchtext</label>
+                    <label htmlFor="description">Beschreibung</label>
                     <textarea
                       id="description"
                       value={description}

@@ -3,7 +3,6 @@ import './App.css';
 import './styles/vintage-newspaper.css';
 import Header from './components/Header';
 import ThreeDStage from './components/ThreeDStage';
-import CTA from './components/CTA';
 import Archive from './components/Archive';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
