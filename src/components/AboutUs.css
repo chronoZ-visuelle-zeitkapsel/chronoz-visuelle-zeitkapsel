@@ -5,7 +5,7 @@
 .AboutUsSection {
   background-color: #f9f7f1;
   padding: 1rem 2rem;
-  margin: 3rem 0;
+  /* margin removed */
 }
 
 .AboutUsContainer {
@@ -267,6 +267,7 @@
 @media (max-width: 640px) {
   .AboutUsSection {
     padding: 2rem 1rem;
+    /* margin removed */
   }
 
   .TeamMember {
