@@ -355,7 +355,8 @@
 .carousel-slide {
   position: absolute;
   width: 100%;
-  max-width: 340px;  /* Mobile card size */
+  max-width: 1250x;
+  height: 90vh;
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: center center;
   opacity: 0;
