@@ -148,7 +148,7 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
               <div className="pdf-viewer" style={{ position: 'relative' }}>
                 <Page
                   pageNumber={pageNumber}
-                  height={window.innerHeight * 0.88}
+                  height={window.innerHeight}
                   onLoadSuccess={onPageLoadSuccess}
                   onLoadError={onPageLoadError}
                   onRenderSuccess={onPageRenderSuccess}
