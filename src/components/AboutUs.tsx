@@ -86,10 +86,6 @@ function AboutUs(): ReactElement {
             </article>
           ))}
         </div>
-
-        <footer className="AboutUsFooter">
-          <div className="AboutUsFooterLine">HTL Donaustadt • Diplomarbeit 2026</div>
-        </footer>
       </div>
     </section>
   );
