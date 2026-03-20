@@ -475,9 +475,9 @@ body.newspaper-theme .footer-link:hover,
 }
 
 /* Multi-Column Broadsheet - MOBILE FIRST */
-.BroadsheetContainer {
+  .BroadsheetContainer {
   max-width: 1600px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   padding: 25px;
   display: grid;
   grid-template-columns: 1fr;  /* Single column base */
@@ -495,14 +495,6 @@ body.newspaper-theme .footer-link:hover,
   order: 0;
 }
 
-.BroadsheetMainColumned {
-  column-count: 1;  /* Single column text */
-  column-gap: 40px;
-  column-rule: 1px solid var(--color-border);
-  text-align: justify;
-  hyphens: auto;
-  padding: 20px 0;
-}
 
 .BroadsheetRightSidebar {
   padding: 20px;
@@ -741,9 +733,6 @@ body.newspaper-theme .footer-link:hover,
     order: 0;
   }
   
-  .BroadsheetMainColumned {
-    column-count: 2;
-  }
   
   .NewspaperMasthead,
   .NewspaperNav {

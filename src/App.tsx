@@ -61,10 +61,18 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                                 Ihre Inhalte bleiben privat.<br/>
                                 <span className="hinweis-cta-hint">Melde dich an, um deine Postkarten in deiner persönlichen Zeitkapsel zu speichern.</span>
                             </p>
+                        </div> 
+                    </div>
+
+                    <div className="sidebar-hinweis-stack">
+                        <div className="hinweis-label">TIPP</div>
+                        <div className="hinweis-card">
+                            <h3 className="SidebarTitle">NEUE FUNKTION</h3>
+                            <p className="ArticleText">
+                                Sie können Ihre Postkarten jederzeit bearbeiten oder löschen.<br/>
+                                <span className="hinweis-cta-hint">Nutzen Sie das persönliche Archiv, um Ihre Erinnerungen zu verwalten.</span>
+                            </p>
                         </div>
-                        <button className="sidebar-cta-btn" onClick={() => window.location.href='/history'}>
-                            <span className="cta-plus">+</span> ZEIG DEINE GESCHICHTE
-                        </button>
                     </div>
                 </aside>
 
@@ -82,23 +90,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                             </p>
                         </div>
                         
-                        <div className="ArticleText DropCap BroadsheetMainColumned">
-                            <p>
-                                Zeitkapseln bewahren Momente, die zu Geschichten werden. 
-                                In einer Welt flüchtiger Nachrichtenströme bietet Chronoz eine ruhige Seite 
-                                für Erinnerungen – gestaltet wie Zeitung, geschrieben für die Zukunft.
-                            </p>
-                            <p>
-                                Von der ersten Aufnahme bis zum letzten Satz sammelt die Postkarte 
-                                Bilder und Gedanken in einem Format, das bleibt. Jede Karte wird zu 
-                                einem Zeitzeugnis, archiviert in Ihrem persönlichen Tresor.
-                            </p>
-                            <p>
-                                Die Plattform verbindet die Nostalgie handgeschriebener Briefe mit 
-                                der Beständigkeit digitaler Speicherung. Ihre Geschichten, Ihre Bilder, 
-                                Ihre Zukunft – alles an einem Ort, geschützt vor dem Vergessen.
-                            </p>
-                        </div>
                         
                         {/* OrnateBorder with CTA moved to sidebar */}
                     </article>
@@ -108,15 +99,12 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                 <aside className="BroadsheetRightSidebar" style={{
                     paddingTop: '0'
                 }}>
-                    <div className="sidebar-hinweis-stack">
-                        <div className="hinweis-label">TIPP</div>
-                        <div className="hinweis-card">
-                            <h3 className="SidebarTitle">NEUE FUNKTION</h3>
-                            <p className="ArticleText">
-                                Sie können Ihre Postkarten jederzeit bearbeiten oder löschen.<br/>
-                                <span className="hinweis-cta-hint">Nutzen Sie das persönliche Archiv, um Ihre Erinnerungen zu verwalten.</span>
+
+                    <div className="hinweis-card">
+                            <h3 className="SidebarTitle">Was ist eine Zeitkapsel?</h3>
+                            <p>
+                                Eine Zeitkapsel bewahrt deine besonderen Momente, Geschichten und Erinnerungen digital auf – sicher und privat. Jede Postkarte, die du erstellst, wird darin gespeichert und bleibt für dich jederzeit zugänglich. So entsteht ein persönliches Archiv deiner Vergangenheit, das du immer wieder entdecken kannst.
                             </p>
-                        </div>
                     </div>
                 </aside>
             </div>
