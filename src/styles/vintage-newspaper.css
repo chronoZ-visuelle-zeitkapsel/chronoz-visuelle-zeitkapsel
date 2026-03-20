@@ -495,6 +495,14 @@ body.newspaper-theme .footer-link:hover,
   order: 0;
 }
 
+.BroadsheetMainColumned {
+  column-count: 1;  /* Single column text */
+  column-gap: 40px;
+  column-rule: 1px solid var(--color-border);
+  text-align: justify;
+  hyphens: auto;
+  padding: 20px 0;
+}
 
 .BroadsheetRightSidebar {
   padding: 20px;
@@ -558,11 +566,10 @@ body.newspaper-theme .footer-link:hover,
 
 /* Vintage Photo Styling */
 .VintagePhoto {
-  border: 3px solid var(--color-border);
-  padding: 8px;
-  background: var(--color-surface);
-  box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
-  /* filter removed to restore original color */
+  border: 1px solid #d4c5b0;
+  padding: 2rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
@@ -733,6 +740,9 @@ body.newspaper-theme .footer-link:hover,
     order: 0;
   }
   
+  .BroadsheetMainColumned {
+    column-count: 2;
+  }
   
   .NewspaperMasthead,
   .NewspaperNav {

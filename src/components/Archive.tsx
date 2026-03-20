@@ -141,7 +141,6 @@ function Archive(): ReactElement {
   return (
     <section className="archive-section">
       <div className="archive-container" id="archive">
-        <h2 className="archive-title">DEIN ARCHIV</h2>
         
         <div className="carousel-wrapper">
           <button 
