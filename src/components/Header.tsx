@@ -177,6 +177,7 @@ function Header(): ReactElement {
 								scrollToSection('archive');
 							}
 						}}>Archiv</button>
+						<button className="edition-link" onClick={() => scrollToSection('aboutus')}>AboutUs</button>
 						<button className="edition-link" onClick={() => scrollToSection('faq')}>FAQ</button>
 					</nav>
 					

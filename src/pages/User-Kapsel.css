@@ -318,6 +318,106 @@
   background: #f8f9fa;
 }
 
+.PDFExportRoot {
+  position: fixed;
+  left: -200vw;
+  top: 0;
+  width: 210mm;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+}
+
+.PDFExportPage {
+  width: 210mm;
+  height: 297mm;
+  padding: 0;
+  margin: 0;
+  background: #f4ede1;
+  overflow: hidden;
+}
+
+.PDFExportPage .ArchiveSheet,
+.PDFExportPage .ArchiveSlide {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  box-shadow: none;
+}
+
+.PDFArchiveSlide .ArchiveSlideContent {
+  overflow: hidden;
+}
+
+.PDFCoverSheet {
+  border-width: 8px;
+}
+
+.PDFCoverContent {
+  flex: 1;
+  position: relative;
+  z-index: 2;
+  padding: 28px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.PDFCoverHeading {
+  margin: 0;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 40px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.PDFCoverSubline {
+  margin: 0 0 10px;
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.PDFCoverList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.PDFCoverItem {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  padding-bottom: 8px;
+}
+
+.PDFCoverItemIndex {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+}
+
+.PDFCoverItemTitle {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.PDFCoverItemDate {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .OptionsItemDanger {
   color: #dc3545;
 }

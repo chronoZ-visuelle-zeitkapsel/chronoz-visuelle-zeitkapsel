@@ -32,7 +32,7 @@ function AboutUs(): ReactElement {
   ];
 
   return (
-    <section className="AboutUsSection">
+    <section id="aboutus" className="AboutUsSection">
       <div className="AboutUsContainer">
         <header className="AboutUsHeader">
           <div className="AboutUsOrnament">❖</div>

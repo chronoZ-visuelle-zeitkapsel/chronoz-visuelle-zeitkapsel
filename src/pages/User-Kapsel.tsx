@@ -1,9 +1,10 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { apiUrl } from '../config/api';
 import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import './User-Kapsel.css';
 import './archive-sheet.css';
 
@@ -29,6 +30,11 @@ function History(): ReactElement {
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfProgress, setPdfProgress] = useState({ current: 0, total: 0 });
+  const pdfExportRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const setPdfExportRef = (index: number) => (element: HTMLDivElement | null) => {
+    pdfExportRefs.current[index] = element;
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -307,226 +313,53 @@ function History(): ReactElement {
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-      const margin = 20;
-      
-      // ==========================================
-      // Seite 1: Inhaltsverzeichnis
-      // ==========================================
-      pdf.setFontSize(28);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('chronoZ', pageWidth / 2, 25, { align: 'center' });
-      
-      pdf.setFontSize(14);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text(`${currentUser?.username} Zeitkapsel`, pageWidth / 2, 35, { align: 'center' });
-      
-      pdf.setFontSize(11);
-      pdf.text(`${postcards.length} ${postcards.length === 1 ? 'Erinnerung' : 'Erinnerungen'} archiviert`, pageWidth / 2, 43, { align: 'center' });
-      
-      // Dekorative Linie
-      pdf.setLineWidth(1);
-      pdf.setDrawColor(44, 36, 22);
-      pdf.line(margin, 50, pageWidth - margin, 50);
-      
-      // Inhaltsverzeichnis
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Inhaltsverzeichnis', margin, 65);
-      
-      let yPos = 80;
-      pdf.setFontSize(11);
-      
-      postcards.forEach((postcard, index) => {
-        const dateStr = new Date(postcard.date).toLocaleDateString('de-DE', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
+      const totalPages = postcards.length + 1;
+
+      // Ensure the hidden export DOM is rendered before capturing.
+      await new Promise(resolve => setTimeout(resolve, 80));
+
+      for (let i = 0; i < totalPages; i++) {
+        const pageElement = pdfExportRefs.current[i];
+
+        if (!pageElement) {
+          throw new Error('Eine Export-Seite konnte nicht gerendert werden.');
+        }
+
+        const canvas = await html2canvas(pageElement, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#f4ede1',
+          logging: false,
+          windowWidth: pageElement.scrollWidth,
+          windowHeight: pageElement.scrollHeight
         });
-        
-        const pageNumber = index + 2;
-        
-        // Postkarten-Nummer und Titel
-        pdf.setFont('helvetica', 'bold');
-        pdf.text(`${index + 1}.`, margin + 5, yPos);
-        
-        const titleText = pdf.splitTextToSize(postcard.title, 120);
-        pdf.text(titleText[0], margin + 12, yPos);
-        
-        // Datum darunter
-        pdf.setFont('helvetica', 'normal');
-        pdf.setFontSize(9);
-        pdf.text(dateStr, margin + 12, yPos + 5);
-        
-        // Seitenzahl als Link (rechts)
-        pdf.setFontSize(10);
-        pdf.setTextColor(0, 0, 255);
-        pdf.textWithLink(`Seite ${pageNumber}`, pageWidth - margin - 20, yPos, { 
-          pageNumber: pageNumber
-        });
-        pdf.setTextColor(0, 0, 0);
-        
-        pdf.setFontSize(11);
-        yPos += 15;
-        
-        // Neue Seite wenn nötig
-        if (yPos > pageHeight - 40) {
+
+        const imageData = canvas.toDataURL('image/jpeg', 0.96);
+        const imageRatio = canvas.width / canvas.height;
+        const pageRatio = pageWidth / pageHeight;
+
+        let renderWidth = pageWidth;
+        let renderHeight = pageHeight;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (imageRatio > pageRatio) {
+          renderHeight = pageWidth / imageRatio;
+          offsetY = (pageHeight - renderHeight) / 2;
+        } else {
+          renderWidth = pageHeight * imageRatio;
+          offsetX = (pageWidth - renderWidth) / 2;
+        }
+
+        if (i > 0) {
           pdf.addPage();
-          yPos = margin + 10;
         }
-      });
-      
-      // Footer
-      pdf.setFontSize(9);
-      pdf.setFont('helvetica', 'italic');
-      pdf.setTextColor(100, 100, 100);
-      const currentDate = new Date().toLocaleDateString('de-DE', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-      });
-      pdf.text(`Erstellt am ${currentDate}`, pageWidth / 2, pageHeight - 15, { align: 'center' });
-      pdf.setTextColor(0, 0, 0);
-      
-      setPdfProgress({ current: 1, total: postcards.length + 1 });
-      
-      // ==========================================
-      // Ab Seite 2: Jede Postkarte
-      // ==========================================
-      for (let i = 0; i < postcards.length; i++) {
-        const postcard = postcards[i];
-        pdf.addPage();
-        
-        let currentY = margin;
-        
-        // Rahmen um Postkarte
-        pdf.setLineWidth(0.5);
-        pdf.setDrawColor(200, 200, 200);
-        pdf.rect(margin - 5, margin - 5, pageWidth - 2 * margin + 10, pageHeight - 2 * margin + 10);
-        
-        // Titel
-        pdf.setFontSize(20);
-        pdf.setFont('helvetica', 'bold');
-        const titleLines = pdf.splitTextToSize(postcard.title.toUpperCase(), pageWidth - 2 * margin - 10);
-        pdf.text(titleLines, margin, currentY);
-        currentY += titleLines.length * 8 + 5;
-        
-        // Datum
-        pdf.setFontSize(11);
-        pdf.setFont('helvetica', 'normal');
-        const dateStr = new Date(postcard.date).toLocaleDateString('de-DE', {
-          weekday: 'long',
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        });
-        pdf.text(dateStr, margin, currentY);
-        currentY += 10;
-        
-        // Trennlinie
-        pdf.setLineWidth(0.3);
-        pdf.setDrawColor(44, 36, 22);
-        pdf.line(margin, currentY, pageWidth - margin, currentY);
-        currentY += 10;
-        
-        // Bilder (falls vorhanden)
-        if (postcard.images && postcard.images.length > 0) {
-          const imageCount = Math.min(postcard.images.length, 4);
-          
-          if (imageCount === 1) {
-            // Einzelbild: Maximale Breite, Höhe entsprechend Seitenverhältnis
-            const maxImageWidth = 120; // Maximale Breite in mm
-            
-            // Berechne Höhe basierend auf 4:3 Verhältnis
-            const imageWidth = maxImageWidth;
-            const imageHeight = imageWidth * 0.75; // 4:3 Verhältnis
-            
-            // Zentriere das Bild horizontal
-            const imageX = (pageWidth - imageWidth) / 2;
-            
-            try {
-              pdf.addImage(
-                postcard.images[0], 
-                'JPEG', 
-                imageX, 
-                currentY, 
-                imageWidth, 
-                imageHeight
-              );
-              currentY += imageHeight + 10;
-            } catch (error) {
-              console.warn(`Bild konnte nicht geladen werden:`, error);
-            }
-          } else {
-            // Mehrere Bilder: Grid-Layout wie bisher
-            const imagesPerRow = 2;
-            const imageWidth = (pageWidth - 2 * margin - 10) / imagesPerRow;
-            const imageHeight = imageWidth * 0.75; // 4:3 Verhältnis
-            
-            let imageX = margin;
-            let imageY = currentY;
-            
-            for (let imgIdx = 0; imgIdx < imageCount; imgIdx++) {
-              try {
-                // Bild hinzufügen
-                pdf.addImage(
-                  postcard.images[imgIdx], 
-                  'JPEG', 
-                  imageX, 
-                  imageY, 
-                  imageWidth - 5, 
-                  imageHeight
-              );
-              
-              // Position für nächstes Bild
-              if ((imgIdx + 1) % imagesPerRow === 0) {
-                imageX = margin;
-                imageY += imageHeight + 5;
-              } else {
-                imageX += imageWidth;
-              }
-            } catch (error) {
-              console.warn(`Bild ${imgIdx} konnte nicht geladen werden:`, error);
-            }
-          }
-          
-          currentY = imageY + (imageCount % imagesPerRow === 0 ? 0 : imageHeight) + 10;
-          }
-        }
-        
-        // Beschreibung
-        if (currentY < pageHeight - 80) {
-          pdf.setFontSize(11);
-          pdf.setFont('helvetica', 'normal');
-          const descLines = pdf.splitTextToSize(postcard.description, pageWidth - 2 * margin - 10);
-          
-          // Maximal verfügbarer Platz
-          const maxDescHeight = pageHeight - currentY - margin - 10;
-          const lineHeight = 6;
-          const maxLines = Math.floor(maxDescHeight / lineHeight);
-          
-          const displayLines = descLines.slice(0, maxLines);
-          pdf.text(displayLines, margin, currentY);
-          
-          if (descLines.length > maxLines) {
-            const continueText = '... (Text gekürzt)';
-            pdf.setFont('helvetica', 'italic');
-            pdf.setFontSize(9);
-            pdf.text(continueText, margin, currentY + maxLines * lineHeight + 3);
-          }
-        }
-        
-        // Footer mit Postkarten-Nummer
-        pdf.setFontSize(9);
-        pdf.setFont('helvetica', 'italic');
-        pdf.setTextColor(100, 100, 100);
-        pdf.text(`Postkarte ${i + 1} von ${postcards.length}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-        pdf.setTextColor(0, 0, 0);
-        
-        // Progress Update
-        setPdfProgress({ current: i + 2, total: postcards.length + 1 });
-        
-        // Kurze Pause für UI-Update
-        await new Promise(resolve => setTimeout(resolve, 50));
+
+        pdf.addImage(imageData, 'JPEG', offsetX, offsetY, renderWidth, renderHeight, undefined, 'FAST');
+
+        setPdfProgress({ current: i + 1, total: totalPages });
+        await new Promise(resolve => setTimeout(resolve, 40));
       }
       
       // PDF speichern
@@ -825,6 +658,92 @@ function History(): ReactElement {
 
                 <div className="ArchiveSlideText">
                   <p className="ArchiveSlideDescription">{postcards[currentCardIndex].description}</p>
+
+            <div className="PDFExportRoot" aria-hidden="true">
+              <div className="PDFExportPage" ref={setPdfExportRef(0)}>
+                <div className="ArchiveSheet PDFCoverSheet">
+                  <header className="ArchiveHeader">
+                    <h1 className="ArchiveTitle">{currentUser?.username || 'Benutzer'}'S ZEITKAPSEL</h1>
+                  </header>
+
+                  <section className="PDFCoverContent">
+                    <h2 className="PDFCoverHeading">Inhaltsverzeichnis</h2>
+                    <p className="PDFCoverSubline">
+                      {postcards.length} {postcards.length === 1 ? 'Erinnerung' : 'Erinnerungen'} archiviert
+                    </p>
+
+                    <ol className="PDFCoverList">
+                      {postcards.map((postcard, index) => (
+                        <li key={`pdf-cover-${postcard.id}`} className="PDFCoverItem">
+                          <span className="PDFCoverItemIndex">{index + 1}.</span>
+                          <span className="PDFCoverItemTitle">{postcard.title}</span>
+                          <span className="PDFCoverItemDate">
+                            {new Date(postcard.date).toLocaleDateString('de-DE', {
+                              day: '2-digit',
+                              month: 'long',
+                              year: 'numeric'
+                            })}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  </section>
+
+                  <footer className="ArchiveFooter">
+                    <div className="ArchiveDateline">
+                      VIENNA DISPATCH - {new Date().toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      }).toUpperCase()}
+                    </div>
+                    <p className="ArchiveDescription">
+                      Complete archive export generated from your live chronoZ design.
+                    </p>
+                  </footer>
+                </div>
+              </div>
+
+              {postcards.map((postcard, index) => (
+                <div className="PDFExportPage" key={`pdf-page-${postcard.id}`} ref={setPdfExportRef(index + 1)}>
+                  <article className="ArchiveSlide PDFArchiveSlide">
+                    <header className="ArchiveSlideHeader">
+                      <div className="ArchiveSlideDate">
+                        {new Date(postcard.date).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric'
+                        }).toUpperCase()}
+                      </div>
+                      <h2 className="ArchiveSlideTitle">{postcard.title}</h2>
+                      <div className="ArchiveSlideDivider">* * *</div>
+                    </header>
+
+                    <div className="ArchiveSlideContent">
+                      <div className="ArchiveSlideImages">
+                        {postcard.images.length > 0 ? (
+                          postcard.images.slice(0, 6).map((src, imgIdx) => (
+                            <div key={`${postcard.id}-pdf-image-${imgIdx}`} className="postcard-image-wrapper">
+                              <img src={src} alt={`${postcard.title} ${imgIdx + 1}`} />
+                            </div>
+                          ))
+                        ) : (
+                          <div className="SlideImgPlaceholder">[]</div>
+                        )}
+                      </div>
+
+                      <div className="ArchiveSlideText">
+                        <p className="ArchiveSlideDescription">{postcard.description}</p>
+                        <div className="ArchiveSlideFootnote">
+                          Memory #{index + 1} of {postcards.length} - Preserved in the Vienna Archive
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              ))}
+            </div>
                   <div className="ArchiveSlideFootnote">
                     Memory #{currentCardIndex + 1} of {postcards.length} • Preserved in the Vienna Archive
                   </div>

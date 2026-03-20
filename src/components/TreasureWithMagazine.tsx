@@ -97,7 +97,7 @@ function TreasureWithMagazine() {
       {/* Vollbild-Magazin */}
       {showFullMagazine && ReactDOM.createPortal(
         <PhotoMagazine 
-          pdfUrl="/magazine.pdf"
+          pdfUrl="/magazine-komprimiert.pdf"
           onClose={handleClose}
         />,
         document.body
