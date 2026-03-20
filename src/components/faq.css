@@ -1,3 +1,10 @@
+/* FAQ Kategorien Reihen mit 5px Abstand */
+.faq-categories-row {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	margin-bottom: 10px;
+}
 .faq-section {
 	padding: 50px 20px 50px;
 	background: linear-gradient(180deg, #f4ede1 0%, #e8dcc7 100%);
@@ -146,20 +153,10 @@
 }
 
 .faq-categories {
-	display: flex;
-	flex-wrap: nowrap;
-	gap: 6px;
-	justify-content: space-between;
-	overflow-x: visible;
-	white-space: nowrap;
+  display: block;
 }
 
-.faq-category-pill {
-	flex: 0 0 auto;
-	font-size: 0.6rem;
-	padding: 4px 8px;
-	letter-spacing: 0.06em;
-}
+
 
 .faq-category-pill {
 	border: 1px solid #2a241d;

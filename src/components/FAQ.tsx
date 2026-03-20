@@ -131,19 +131,50 @@ function FAQ(): ReactElement {
 							</button>
 						</div>
 					</label>
-					<div className="faq-categories" aria-label="FAQ Kategorien">
-						{categoryFilters.map((category) => (
-							<button
-								key={category}
-								type="button"
-								className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
-								onClick={() => setSelectedCategory(category)}
-								aria-pressed={selectedCategory === category}
-							>
-								{category}
-							</button>
-						))}
-					</div>
+						<div className="faq-categories" aria-label="FAQ Kategorien">
+							{categoryFilters.length > 4 ? (
+								<>
+									<div className="faq-categories-row">
+										{categoryFilters.slice(0, 4).map((category) => (
+											<button
+												key={category}
+												type="button"
+												className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
+												onClick={() => setSelectedCategory(category)}
+												aria-pressed={selectedCategory === category}
+											>
+												{category}
+											</button>
+										))}
+									</div>
+									<div className="faq-categories-row">
+										{categoryFilters.slice(4).map((category) => (
+											<button
+												key={category}
+												type="button"
+												className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
+												onClick={() => setSelectedCategory(category)}
+												aria-pressed={selectedCategory === category}
+											>
+												{category}
+											</button>
+										))}
+									</div>
+								</>
+							) : (
+								categoryFilters.map((category) => (
+									<button
+										key={category}
+										type="button"
+										className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
+										onClick={() => setSelectedCategory(category)}
+										aria-pressed={selectedCategory === category}
+									>
+										{category}
+									</button>
+								))
+							)}
+						</div>
 				</div>
 
 				<div className="faq-list" role="list">
