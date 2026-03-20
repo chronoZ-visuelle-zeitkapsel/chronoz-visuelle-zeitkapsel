@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState, useRef } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiUrl } from '../config/api';
 import './archive.css';
@@ -21,42 +21,57 @@ function Archive(): ReactElement {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const loadPostcards = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+  const loadPostcards = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setPostcards([]);
+      setLoading(false);
+      return;
+    }
 
-      try {
-        const response = await fetch(apiUrl('/api/postcards'), {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
+    setLoading(true);
 
-        if (!response.ok) {
-          throw new Error('Fehler beim Laden der Postkarten');
+    try {
+      const response = await fetch(apiUrl('/api/postcards'), {
+        headers: {
+          'Authorization': `Bearer ${token}`
         }
+      });
 
-        const data = await response.json();
-        
-        // Sortiere nach Erstellungsdatum (neueste zuerst)
-        const sortedPostcards = data.sort((a: Postcard, b: Postcard) => {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        });
-        
-        setPostcards(sortedPostcards);
-      } catch (error) {
-        console.error('Fehler beim Laden der Postkarten:', error);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error('Fehler beim Laden der Postkarten');
       }
+
+      const data = await response.json();
+      
+      // Sortiere nach Erstellungsdatum (neueste zuerst)
+      const sortedPostcards = data.sort((a: Postcard, b: Postcard) => {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+      
+      setPostcards(sortedPostcards);
+      setCurrentIndex(0);
+    } catch (error) {
+      console.error('Fehler beim Laden der Postkarten:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadPostcards();
+  }, [loadPostcards]);
+
+  useEffect(() => {
+    const handleUserLogin = () => {
+      loadPostcards();
     };
 
-    loadPostcards();
-  }, []);
+    window.addEventListener('userLogin', handleUserLogin);
+    return () => {
+      window.removeEventListener('userLogin', handleUserLogin);
+    };
+  }, [loadPostcards]);
 
   // Auto-play Karussell
   useEffect(() => {
@@ -192,7 +207,7 @@ function Archive(): ReactElement {
                         <div className="ArchiveSlideText">
                           <p className="ArchiveSlideDescription">{postcard.description}</p>
                           <div className="ArchiveSlideFootnote">
-                            Memory #{index + 1} of {postcards.length} • Preserved in the Vienna Archive
+                            Memory #{index + 1} of {postcards.length} • chronoZ
                           </div>
                         </div>
                       </div>

@@ -17,29 +17,35 @@ import Settings from './pages/Settings';
 import ResetPassword from './pages/ResetPassword';
 
 function Home({ blurred }: { blurred: boolean }): ReactElement {
+    const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+    const syncAuthState = () => {
+        setIsLoggedIn(!!localStorage.getItem('token'));
+    };
+
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        setIsLoggedIn(!!token);
+        syncAuthState();
     }, []);
+
+    useEffect(() => {
+        syncAuthState();
+    }, [location.pathname]);
 
     // Listen for login/logout events to update Archive visibility
     useEffect(() => {
-        const handleUserLogin = () => {
-            setIsLoggedIn(true);
-        };
-
-        const handleUserLogout = () => {
-            setIsLoggedIn(false);
-        };
+        const handleUserLogin = () => syncAuthState();
+        const handleUserLogout = () => syncAuthState();
+        const handleStorage = () => syncAuthState();
 
         window.addEventListener('userLogin', handleUserLogin);
         window.addEventListener('userLogout', handleUserLogout);
+        window.addEventListener('storage', handleStorage);
 
         return () => {
             window.removeEventListener('userLogin', handleUserLogin);
             window.removeEventListener('userLogout', handleUserLogout);
+            window.removeEventListener('storage', handleStorage);
         };
     }, []);
 

@@ -21,16 +21,30 @@ type Postcard = {
 
 function History(): ReactElement {
   const navigate = useNavigate();
+  const getDefaultLockDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    return date.toISOString().split('T')[0];
+  };
+
   const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
   const [loading, setLoading] = useState(true);
   const [postcards, setPostcards] = useState<Postcard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [showOptions, setShowOptions] = useState(false);
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+  const [showLockModal, setShowLockModal] = useState(false);
+  const [lockUntilDate, setLockUntilDate] = useState(getDefaultLockDate());
+  const [reminderMailEnabled, setReminderMailEnabled] = useState(true);
+  const [isSavingLock, setIsSavingLock] = useState(false);
+  const [lockError, setLockError] = useState<string | null>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [showDetailedView, setShowDetailedView] = useState(false);
+  const [authCheckError, setAuthCheckError] = useState<string | null>(null);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfProgress, setPdfProgress] = useState({ current: 0, total: 0 });
   const pdfExportRootRef = useRef<HTMLDivElement | null>(null);
+  const lockMinDate = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -44,21 +58,27 @@ function History(): ReactElement {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => {
-      if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
         localStorage.removeItem('token');
         navigate('/login');
         return null;
       }
+
+      if (!res.ok) {
+        throw new Error(`Auth-Check fehlgeschlagen (${res.status})`);
+      }
+
       return res.json();
     })
     .then(data => {
       if (data) {
         setCurrentUser({ id: data.id, username: data.username, email: data.email });
+        setAuthCheckError(null);
       }
     })
-    .catch(() => {
-      localStorage.removeItem('token');
-      navigate('/login');
+    .catch((error) => {
+      console.error('Fehler bei /api/auth/me:', error);
+      setAuthCheckError('Deine Benutzerdaten konnten nicht geladen werden. Bitte versuche es erneut.');
     })
     .finally(() => {
       setLoading(false);
@@ -296,6 +316,7 @@ function History(): ReactElement {
 
   const handleDownloadPDF = async () => {
     setShowOptions(false);
+    setShowSettingsMenu(false);
     
     if (postcards.length === 0) {
       alert('Keine Postkarten zum Exportieren vorhanden');
@@ -310,6 +331,8 @@ function History(): ReactElement {
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
       const totalPages = postcards.length + 1;
+      type TocLinkArea = { x: number; y: number; w: number; h: number; targetPage: number };
+      const tocLinkAreas: TocLinkArea[] = [];
 
       // Ensure the hidden export DOM is rendered before capturing.
       await new Promise(resolve => setTimeout(resolve, 80));
@@ -323,6 +346,10 @@ function History(): ReactElement {
           `Eine Export-Seite konnte nicht gerendert werden (${pageElements.length}/${totalPages}).`
         );
       }
+
+      const coverPageElement = pageElements[0];
+      const coverRect = coverPageElement.getBoundingClientRect();
+      const tocItems = Array.from(coverPageElement.querySelectorAll<HTMLElement>('.PDFCoverItem'));
 
       for (let i = 0; i < totalPages; i++) {
         const pageElement = pageElements[i];
@@ -360,8 +387,36 @@ function History(): ReactElement {
 
         pdf.addImage(imageData, 'JPEG', offsetX, offsetY, renderWidth, renderHeight, undefined, 'FAST');
 
+        // Create internal links from TOC (page 1) to each memory page.
+        if (i === 0) {
+          tocItems.forEach((item, index) => {
+            const itemRect = item.getBoundingClientRect();
+            const relX = (itemRect.left - coverRect.left) / coverRect.width;
+            const relY = (itemRect.top - coverRect.top) / coverRect.height;
+            const relW = itemRect.width / coverRect.width;
+            const relH = itemRect.height / coverRect.height;
+
+            tocLinkAreas.push({
+              x: offsetX + relX * renderWidth,
+              y: offsetY + relY * renderHeight,
+              w: relW * renderWidth,
+              h: relH * renderHeight,
+              targetPage: index + 2
+            });
+          });
+        }
+
         setPdfProgress({ current: i + 1, total: totalPages });
         await new Promise(resolve => setTimeout(resolve, 40));
+      }
+
+      if (tocLinkAreas.length > 0) {
+        pdf.setPage(1);
+        tocLinkAreas.forEach(link => {
+          if (link.targetPage <= totalPages) {
+            pdf.link(link.x, link.y, link.w, link.h, { pageNumber: link.targetPage });
+          }
+        });
       }
       
       // PDF speichern
@@ -375,6 +430,58 @@ function History(): ReactElement {
       console.error('Fehler beim PDF-Export:', error);
       setIsGeneratingPDF(false);
       alert('Fehler beim Erstellen des PDFs: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
+    }
+  };
+
+  const handleOpenLockModal = () => {
+    setShowSettingsMenu(false);
+    setLockError(null);
+    setShowLockModal(true);
+  };
+
+  const handleSaveLockSettings = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setLockError(null);
+
+    if (!lockUntilDate) {
+      setLockError('Bitte waehle ein Datum aus.');
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setLockError('Bitte melde dich erneut an.');
+      return;
+    }
+
+    setIsSavingLock(true);
+
+    try {
+      const response = await fetch(apiUrl('/api/users/lock'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          locked_until: lockUntilDate,
+          reminder_mail_enabled: reminderMailEnabled
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Lock konnte nicht gespeichert werden.');
+      }
+
+      setShowLockModal(false);
+      alert(
+        `Lock gespeichert bis ${new Date(lockUntilDate).toLocaleDateString('de-DE')} (${reminderMailEnabled ? 'mit' : 'ohne'} Erinnerungsmail).`
+      );
+    } catch (error) {
+      setLockError(error instanceof Error ? error.message : 'Unbekannter Fehler beim Speichern des Locks.');
+    } finally {
+      setIsSavingLock(false);
     }
   };
 
@@ -403,7 +510,9 @@ function History(): ReactElement {
       <div className="UserKapselPage">
         <Header />
         <main className="UserKapselMain">
-          <div className="ErrorMessage">Du musst dich einloggen, um deine Kapsel zu sehen.</div>
+          <div className="ErrorMessage">
+            {authCheckError || 'Du musst dich einloggen, um deine Kapsel zu sehen.'}
+          </div>
           <button className="CTAButton" onClick={() => navigate('/login')}>
             Zum Login
           </button>
@@ -589,7 +698,7 @@ function History(): ReactElement {
 
               <footer className="ArchiveFooter">
                 <div className="ArchiveDateline">
-                  VIENNA DISPATCH • {new Date().toLocaleDateString('en-US', { 
+                  chronoZ - virtuelle Zeitkapsel • {new Date().toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
                     year: 'numeric' 
@@ -607,18 +716,177 @@ function History(): ReactElement {
                 <span className="Plus">+</span>
               </button>
 
-              <button 
-                className="DownloadButton AddButtonBottomLeft"
-                onClick={handleDownloadPDF}
-                title="Als PDF exportieren"
-              >
-                <span className="DownloadIcon">📥</span>
-              </button>
+              <div className={`CapsuleActions ${showSettingsMenu ? 'open' : ''}`}>
+                {showSettingsMenu && (
+                  <>
+                    <button
+                      className="CapsuleActionButton CapsuleActionDownload"
+                      onClick={handleDownloadPDF}
+                      title="Als PDF exportieren"
+                    >
+                      Download
+                    </button>
+                    <button
+                      className="CapsuleActionButton CapsuleActionLock"
+                      onClick={handleOpenLockModal}
+                      title="Kapsel sperren"
+                    >
+                      Lock
+                    </button>
+                  </>
+                )}
+
+                <button
+                  className="SettingsButton AddButtonBottomLeft"
+                  onClick={() => setShowSettingsMenu(prev => !prev)}
+                  title="Kapsel-Einstellungen"
+                >
+                  <span className="SettingsIcon">⚙</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
       </main>
       <Footer />
+
+      {showLockModal && (
+        <div className="LockModalOverlay" onClick={() => setShowLockModal(false)}>
+          <div className="LockModalCard" onClick={(event) => event.stopPropagation()}>
+            <h2 className="LockModalTitle">Kapsel sperren</h2>
+            <p className="LockModalHint">Wähle, bis wann die Zeitkapsel nicht mehr geöffnet werden kann.</p>
+
+            <form onSubmit={handleSaveLockSettings} className="LockModalForm">
+              <label className="LockField">
+                <span>Sperren bis</span>
+                <input
+                  type="date"
+                  min={lockMinDate}
+                  value={lockUntilDate}
+                  onChange={(event) => setLockUntilDate(event.target.value)}
+                  required
+                />
+              </label>
+
+              <label className="LockCheckboxRow">
+                <input
+                  type="checkbox"
+                  checked={reminderMailEnabled}
+                  onChange={(event) => setReminderMailEnabled(event.target.checked)}
+                />
+                <span>Erinnerungsmail erhalten</span>
+              </label>
+
+              {lockError && <div className="LockModalError">{lockError}</div>}
+
+              <div className="LockModalActions">
+                <button type="button" className="LockModalCancel" onClick={() => setShowLockModal(false)} disabled={isSavingLock}>
+                  Abbrechen
+                </button>
+                <button type="submit" className="LockModalSave" disabled={isSavingLock}>
+                  {isSavingLock ? 'Speichert...' : 'Speichern'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <div className="PDFExportRoot" aria-hidden="true" ref={pdfExportRootRef}>
+        <div className="PDFExportPage">
+          <div className="ArchiveSheet PDFCoverSheet">
+            <header className="ArchiveHeader PDFCoverHeader">
+              <div className="PDFCoverKicker">chronoZ archive</div>
+              <h1 className="ArchiveTitle PDFCoverTitle">
+                <span className="PDFCoverTitleLabel">Zeitkapsel von</span>
+                <span className="PDFCoverUserName">{currentUser?.username || 'Benutzer'}</span>
+              </h1>
+            </header>
+
+            <section className="PDFCoverContent">
+              <h2 className="PDFCoverHeading">Inhaltsverzeichnis</h2>
+              <p className="PDFCoverSubline">
+                {postcards.length} {postcards.length === 1 ? 'Erinnerung' : 'Erinnerungen'} archiviert
+              </p>
+
+              <ol className="PDFCoverList">
+                {postcards.map((postcard, index) => (
+                  <li key={`pdf-cover-${postcard.id}`} className="PDFCoverItem">
+                    <span className="PDFCoverItemIndex">{index + 1}.</span>
+                    <span className="PDFCoverItemTitle">{postcard.title}</span>
+                    <span className="PDFCoverItemDate">
+                      {new Date(postcard.date).toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                      })}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <footer className="ArchiveFooter">
+              <div className="ArchiveDateline">
+                chronoZ - virtuelle Zeitkapsel - {new Date().toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric'
+                }).toUpperCase()}
+              </div>
+              <p className="ArchiveDescription">
+                Complete archive export generated from your live chronoZ design.
+              </p>
+            </footer>
+          </div>
+        </div>
+
+        {postcards.map((postcard, index) => (
+          <div className="PDFExportPage" key={`pdf-page-${postcard.id}`}>
+            <article className="ArchiveSlide PDFArchiveSlide">
+              <header className="ArchiveSlideHeader">
+                <div className="ArchiveSlideDate">
+                  {new Date(postcard.date).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                  }).toUpperCase()}
+                </div>
+                <h2 className="ArchiveSlideTitle">{postcard.title}</h2>
+                <div className="ArchiveSlideDivider">* * *</div>
+              </header>
+
+              <div className="ArchiveSlideContent">
+                <div
+                  className={`ArchiveSlideImages PDFArchiveSlideImages ${postcard.images.length === 1 ? 'PDFArchiveSlideImagesSingle' : ''}`}
+                >
+                  {postcard.images.length > 0 ? (
+                    postcard.images.slice(0, 6).map((src, imgIdx) => (
+                      <div key={`${postcard.id}-pdf-image-${imgIdx}`} className="postcard-image-wrapper PDFImageWrapper">
+                        <img className="PDFExportImage" src={src} alt={`${postcard.title} ${imgIdx + 1}`} />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="SlideImgPlaceholder">[]</div>
+                  )}
+                </div>
+
+                <div className="ArchiveSlideText">
+                  <p className="ArchiveSlideDescription">{postcard.description}</p>
+                  <div className="ArchiveSlideFootnote">
+                    Memory {index + 1}/{postcards.length} - {new Date(postcard.date).toLocaleDateString('de-DE', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        ))}
+      </div>
       
       {showDetailedView && postcards[currentCardIndex] && (
         <div className="ArchiveSlideOverlay" onClick={() => setShowDetailedView(false)}>
@@ -660,94 +928,8 @@ function History(): ReactElement {
 
                 <div className="ArchiveSlideText">
                   <p className="ArchiveSlideDescription">{postcards[currentCardIndex].description}</p>
-
-            <div className="PDFExportRoot" aria-hidden="true" ref={pdfExportRootRef}>
-              <div className="PDFExportPage">
-                <div className="ArchiveSheet PDFCoverSheet">
-                  <header className="ArchiveHeader">
-                    <h1 className="ArchiveTitle">{currentUser?.username || 'Benutzer'}'S ZEITKAPSEL</h1>
-                  </header>
-
-                  <section className="PDFCoverContent">
-                    <h2 className="PDFCoverHeading">Inhaltsverzeichnis</h2>
-                    <p className="PDFCoverSubline">
-                      {postcards.length} {postcards.length === 1 ? 'Erinnerung' : 'Erinnerungen'} archiviert
-                    </p>
-
-                    <ol className="PDFCoverList">
-                      {postcards.map((postcard, index) => (
-                        <li key={`pdf-cover-${postcard.id}`} className="PDFCoverItem">
-                          <span className="PDFCoverItemIndex">{index + 1}.</span>
-                          <span className="PDFCoverItemTitle">{postcard.title}</span>
-                          <span className="PDFCoverItemDate">
-                            {new Date(postcard.date).toLocaleDateString('de-DE', {
-                              day: '2-digit',
-                              month: 'long',
-                              year: 'numeric'
-                            })}
-                          </span>
-                        </li>
-                      ))}
-                    </ol>
-                  </section>
-
-                  <footer className="ArchiveFooter">
-                    <div className="ArchiveDateline">
-                      VIENNA DISPATCH - {new Date().toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      }).toUpperCase()}
-                    </div>
-                    <p className="ArchiveDescription">
-                      Complete archive export generated from your live chronoZ design.
-                    </p>
-                  </footer>
-                </div>
-              </div>
-
-              {postcards.map((postcard, index) => (
-                <div className="PDFExportPage" key={`pdf-page-${postcard.id}`}>
-                  <article className="ArchiveSlide PDFArchiveSlide">
-                    <header className="ArchiveSlideHeader">
-                      <div className="ArchiveSlideDate">
-                        {new Date(postcard.date).toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric'
-                        }).toUpperCase()}
-                      </div>
-                      <h2 className="ArchiveSlideTitle">{postcard.title}</h2>
-                      <div className="ArchiveSlideDivider">* * *</div>
-                    </header>
-
-                    <div className="ArchiveSlideContent">
-                      <div className="ArchiveSlideImages">
-                        {postcard.images.length > 0 ? (
-                          postcard.images.slice(0, 6).map((src, imgIdx) => (
-                            <div key={`${postcard.id}-pdf-image-${imgIdx}`} className="postcard-image-wrapper">
-                              <img src={src} alt={`${postcard.title} ${imgIdx + 1}`} />
-                            </div>
-                          ))
-                        ) : (
-                          <div className="SlideImgPlaceholder">[]</div>
-                        )}
-                      </div>
-
-                      <div className="ArchiveSlideText">
-                        <p className="ArchiveSlideDescription">{postcard.description}</p>
-                        <div className="ArchiveSlideFootnote">
-                          Memory #{index + 1} of {postcards.length} - Preserved in the Vienna Archive
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                </div>
-              ))}
-            </div>
                   <div className="ArchiveSlideFootnote">
-                    Memory #{currentCardIndex + 1} of {postcards.length} • Preserved in the Vienna Archive
+                    Memory #{currentCardIndex + 1} of {postcards.length} • chronoZ
                   </div>
                 </div>
               </div>
@@ -808,7 +990,9 @@ function History(): ReactElement {
             <div className="PDFGeneratingSpinner"></div>
             <h2 className="PDFGeneratingTitle">PDF wird erstellt...</h2>
             <p className="PDFGeneratingProgress">
-              Postkarte {pdfProgress.current} von {pdfProgress.total}
+              {pdfProgress.current <= 1
+                ? 'Titelblatt wird erstellt...'
+                : `Postkarte ${pdfProgress.current - 1} von ${postcards.length}`}
             </p>
             <div className="PDFProgressBar">
               <div 

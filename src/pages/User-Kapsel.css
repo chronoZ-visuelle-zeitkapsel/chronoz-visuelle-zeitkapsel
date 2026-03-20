@@ -350,8 +350,91 @@
   overflow: hidden;
 }
 
+.PDFArchiveSlideImages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+.PDFArchiveSlideImages.PDFArchiveSlideImagesSingle {
+  grid-template-columns: 1fr;
+}
+
+.PDFArchiveSlideImages .PDFImageWrapper {
+  min-height: 0;
+  height: fit-content;
+  width: fit-content;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  align-self: start;
+  padding: 3px;
+  background: #f5f1e8;
+}
+
+.PDFExportPage .PDFArchiveSlideImages .PDFExportImage {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
 .PDFCoverSheet {
   border-width: 8px;
+}
+
+.PDFCoverHeader {
+  height: auto;
+  min-height: 96px;
+  padding: 14px 34px 16px;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 6px;
+}
+
+.PDFCoverKicker {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.85);
+}
+
+.PDFCoverTitle {
+  margin: 0;
+  line-height: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.PDFCoverTitleLabel {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245, 241, 232, 0.9);
+}
+
+.PDFCoverUserName {
+  display: block;
+  max-width: 100%;
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height: 0.98;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #f5f1e8;
 }
 
 .PDFCoverContent {
@@ -498,6 +581,176 @@
   justify-content: center;
 }
 
+.UserKapselPage .CapsuleActions {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.UserKapselPage .SettingsButton {
+  position: static;
+}
+
+.UserKapselPage .SettingsButton .SettingsIcon {
+  font-size: 26px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UserKapselPage .CapsuleActionButton {
+  border: 1px solid #000000;
+  background: #f5f1e8;
+  color: #000000;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 10px 14px;
+  border-radius: 20px;
+  min-width: 112px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  animation: actionReveal 0.18s ease-out;
+}
+
+.UserKapselPage .CapsuleActionButton:hover {
+  background: #000000;
+  color: #f5f1e8;
+}
+
+@keyframes actionReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.LockModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.LockModalCard {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
+  border: 3px solid #000000;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.45);
+  padding: 28px;
+}
+
+.LockModalTitle {
+  margin: 0;
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 34px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.LockModalHint {
+  margin: 10px 0 20px;
+  font-family: 'Georgia', serif;
+  color: #333333;
+  line-height: 1.45;
+}
+
+.LockModalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.LockField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.LockField input[type="date"] {
+  border: 1px solid #000000;
+  background: #fffef9;
+  color: #111;
+  padding: 10px 12px;
+  font-size: 15px;
+}
+
+.LockCheckboxRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+}
+
+.LockCheckboxRow input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}
+
+.LockModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.LockModalError {
+  border: 1px solid #7a1d1d;
+  background: #ffe7e7;
+  color: #7a1d1d;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  padding: 8px 10px;
+}
+
+.LockModalCancel,
+.LockModalSave {
+  border: 1px solid #000000;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.LockModalCancel {
+  background: #ffffff;
+  color: #111;
+}
+
+.LockModalSave {
+  background: #000000;
+  color: #f5f1e8;
+}
+
+.LockModalCancel:disabled,
+.LockModalSave:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Zentraler + Button für leere Kapsel */
 .UserKapselPage .AddMemoryButton {
   width: 80px;
@@ -636,6 +889,17 @@
     left: 20px;
   }
 
+  .UserKapselPage .CapsuleActions {
+    bottom: 20px;
+    left: 20px;
+  }
+
+  .UserKapselPage .CapsuleActionButton {
+    min-width: 96px;
+    font-size: 12px;
+    padding: 9px 12px;
+  }
+
   .AddButtonBottomLeft .DownloadIcon {
     font-size: 24px;
   }
@@ -705,6 +969,17 @@
     height: 50px;
     bottom: 15px;
     left: 15px;
+  }
+
+  .UserKapselPage .CapsuleActions {
+    bottom: 15px;
+    left: 15px;
+  }
+
+  .UserKapselPage .CapsuleActionButton {
+    min-width: 88px;
+    font-size: 11px;
+    padding: 8px 10px;
   }
 
   .AddButtonBottomLeft .DownloadIcon {

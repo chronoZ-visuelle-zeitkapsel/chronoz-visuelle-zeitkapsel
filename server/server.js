@@ -69,6 +69,41 @@ const initDb = async () => {
 
 initDb();
 
+// Setzt abgelaufene Locks automatisch zurueck.
+const syncExpiredUserLock = async (user) => {
+  if (!user) return user;
+
+  if (!user.locked || !user.locked_until) {
+    return user;
+  }
+
+  const today = new Date();
+  const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const lockUntilDate = new Date(`${user.locked_until}T00:00:00`);
+
+  if (Number.isNaN(lockUntilDate.getTime())) {
+    return user;
+  }
+
+  if (lockUntilDate >= todayDateOnly) {
+    return user;
+  }
+
+  const { data: updatedUser, error } = await supabase
+    .from('users')
+    .update({ locked: false })
+    .eq('id', user.id)
+    .select('*')
+    .single();
+
+  if (error) {
+    console.error('[LOCK SYNC ERROR]', error);
+    return user;
+  }
+
+  return updatedUser || user;
+};
+
 // Test endpoint
 app.get('/api/test', (req, res) => {
   res.json({ 
@@ -215,8 +250,11 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ error: "Falsches Passwort" });
     }
 
+    // Lock-Status bei abgelaufenem Datum automatisch zuruecksetzen
+    const syncedUser = await syncExpiredUserLock(user);
+
     // Prüfe ob E-Mail verifiziert ist
-    if (!user.email_verified) {
+    if (!syncedUser.email_verified) {
       return res.status(403).json({ 
         error: "Bitte verifizieren Sie zuerst Ihre E-Mail-Adresse",
         requires_verification: true
@@ -224,7 +262,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     // Prüfe ob 2FA aktiviert ist
-    if (user.two_factor_enabled) {
+    if (syncedUser.two_factor_enabled) {
       // Generiere 2FA Code
       const twoFactorCode = Math.floor(100000 + Math.random() * 900000).toString();
       const codeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 Minuten gültig
@@ -236,20 +274,20 @@ app.post('/api/auth/login', async (req, res) => {
           verification_code: twoFactorCode,
           verification_code_expires: codeExpires.toISOString()
         })
-        .eq('id', user.id);
+        .eq('id', syncedUser.id);
 
       // In Produktion: Sende Code per Email
-      console.log(`2FA Code für ${user.email}: ${twoFactorCode}`);
+      console.log(`2FA Code für ${syncedUser.email}: ${twoFactorCode}`);
 
       return res.json({
         requires_2fa: true,
-        user_id: user.id,
+        user_id: syncedUser.id,
         message: `2FA Code wurde gesendet (Dev: ${twoFactorCode})`
       });
     }
 
     const token = jwt.sign(
-      { id: user.id, username: user.username, email: user.email },
+      { id: syncedUser.id, username: syncedUser.username, email: syncedUser.email },
       SECRET_KEY,
       { expiresIn: "1h" }
     );
@@ -257,11 +295,14 @@ app.post('/api/auth/login', async (req, res) => {
     res.json({
       token,
       user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        email_verified: user.email_verified,
-        two_factor_enabled: user.two_factor_enabled
+        id: syncedUser.id,
+        username: syncedUser.username,
+        email: syncedUser.email,
+        email_verified: syncedUser.email_verified,
+        two_factor_enabled: syncedUser.two_factor_enabled,
+        locked: syncedUser.locked,
+        locked_until: syncedUser.locked_until,
+        reminder_mail_enabled: syncedUser.reminder_mail_enabled
       }
     });
   } catch (err) {
@@ -282,20 +323,60 @@ app.get('/api/auth/me', async (req, res) => {
 
     const decoded = jwt.verify(token, SECRET_KEY);
     
-    // Aktuelle Benutzerdaten aus Supabase holen
-    const { data: user, error } = await supabase
+    // Aktuelle Benutzerdaten aus Supabase holen (mit Fallback fuer alte Schemas).
+    let user = null;
+
+    const fullResult = await supabase
       .from('users')
-      .select('id, username, email, two_factor_enabled, email_verified')
+      .select('id, username, email, two_factor_enabled, email_verified, locked, locked_until, reminder_mail_enabled')
       .eq('id', decoded.id)
       .single();
 
-    if (error || !user) {
-      return res.status(404).json({ error: "Benutzer nicht gefunden" });
+    if (!fullResult.error && fullResult.data) {
+      user = fullResult.data;
+    } else {
+      const basicResult = await supabase
+        .from('users')
+        .select('id, username, email, two_factor_enabled, email_verified')
+        .eq('id', decoded.id)
+        .single();
+
+      if (basicResult.error || !basicResult.data) {
+        // Letzter Fallback: Token-Payload zurueckgeben, damit Session nicht unnoetig abbricht.
+        return res.json({
+          id: decoded.id,
+          username: decoded.username || 'User',
+          email: decoded.email || '',
+          two_factor_enabled: false,
+          email_verified: true,
+          locked: false,
+          locked_until: null,
+          reminder_mail_enabled: true
+        });
+      }
+
+      user = {
+        ...basicResult.data,
+        locked: false,
+        locked_until: null,
+        reminder_mail_enabled: true
+      };
     }
 
-    res.json(user);
+    const syncedUser = await syncExpiredUserLock(user);
+
+    res.json({
+      id: syncedUser.id,
+      username: syncedUser.username,
+      email: syncedUser.email,
+      two_factor_enabled: syncedUser.two_factor_enabled,
+      email_verified: syncedUser.email_verified,
+      locked: syncedUser.locked,
+      locked_until: syncedUser.locked_until,
+      reminder_mail_enabled: syncedUser.reminder_mail_enabled
+    });
   } catch (err) {
-    if (err.name === 'JsonWebTokenError') {
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
       return res.status(401).json({ error: "Ungültiger Token" });
     }
     console.error(err);
@@ -529,6 +610,66 @@ app.get('/api/protected', (req, res) => {
     if (err) return res.sendStatus(403);
     res.json({ message: `Hallo ${user.username}, du bist eingeloggt!` });
   });
+});
+
+// ----------- User Capsule Lock -----------
+app.post('/api/users/lock', async (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      return res.status(401).json({ error: 'Token erforderlich' });
+    }
+
+    const decoded = jwt.verify(token, SECRET_KEY);
+    const { locked_until, reminder_mail_enabled } = req.body;
+
+    if (!locked_until) {
+      return res.status(400).json({ error: 'locked_until ist erforderlich' });
+    }
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(locked_until)) {
+      return res.status(400).json({ error: 'locked_until muss Format YYYY-MM-DD haben' });
+    }
+
+    const lockDate = new Date(`${locked_until}T00:00:00`);
+    if (Number.isNaN(lockDate.getTime())) {
+      return res.status(400).json({ error: 'Ungültiges Datum' });
+    }
+
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    if (lockDate < today) {
+      return res.status(400).json({ error: 'locked_until darf nicht in der Vergangenheit liegen' });
+    }
+
+    const reminderEnabled = reminder_mail_enabled !== false;
+
+    const { data: user, error } = await supabase
+      .from('users')
+      .update({
+        locked: true,
+        locked_until,
+        reminder_mail_enabled: reminderEnabled
+      })
+      .eq('id', decoded.id)
+      .select('id, username, email, locked, locked_until, reminder_mail_enabled')
+      .single();
+
+    if (error) throw error;
+
+    res.json({
+      message: 'Kapsel erfolgreich gesperrt',
+      user
+    });
+  } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'Ungültiger Token' });
+    }
+    console.error('[LOCK ERROR]', err);
+    res.status(500).json({ error: 'Server Fehler beim Sperren der Kapsel' });
+  }
 });
 
 // ----------- Postkarten Endpoints -----------
