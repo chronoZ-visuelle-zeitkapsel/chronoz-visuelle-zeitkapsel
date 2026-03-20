@@ -8,6 +8,7 @@ import FAQ from './components/FAQ';
 import AboutUs from './components/AboutUs';
 import Footer from './components/Footer';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { apiUrl } from './config/api';
 import Login from './pages/Login';
 import History from './pages/User-Kapsel';
 import CreatePostcard from './pages/CreatePostcard';
@@ -20,23 +21,43 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
     const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const syncAuthState = () => {
-        setIsLoggedIn(!!localStorage.getItem('token'));
+    const syncAuthState = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setIsLoggedIn(false);
+            return;
+        }
+
+        try {
+            const response = await fetch(apiUrl('/api/auth/me'), {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (response.status === 401 || response.status === 403) {
+                localStorage.removeItem('token');
+                setIsLoggedIn(false);
+                return;
+            }
+
+            setIsLoggedIn(response.ok);
+        } catch {
+            setIsLoggedIn(false);
+        }
     };
 
     useEffect(() => {
-        syncAuthState();
+        void syncAuthState();
     }, []);
 
     useEffect(() => {
-        syncAuthState();
+        void syncAuthState();
     }, [location.pathname]);
 
     // Listen for login/logout events to update Archive visibility
     useEffect(() => {
-        const handleUserLogin = () => syncAuthState();
-        const handleUserLogout = () => syncAuthState();
-        const handleStorage = () => syncAuthState();
+        const handleUserLogin = () => { void syncAuthState(); };
+        const handleUserLogout = () => { void syncAuthState(); };
+        const handleStorage = () => { void syncAuthState(); };
 
         window.addEventListener('userLogin', handleUserLogin);
         window.addEventListener('userLogout', handleUserLogout);

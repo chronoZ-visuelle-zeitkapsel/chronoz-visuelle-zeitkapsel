@@ -124,6 +124,10 @@ function Archive(): ReactElement {
     });
   };
 
+  if (!localStorage.getItem('token')) {
+    return <></>;
+  }
+
   if (loading) {
     return (
       <section className="archive-section">
