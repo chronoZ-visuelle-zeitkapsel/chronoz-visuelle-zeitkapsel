@@ -387,6 +387,46 @@
   display: none;  /* Hide next on mobile */
 }
 
+/* Floating add button for populated archive view */
+.archive-add-button {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  background: #ffffff;
+  color: #000000;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  z-index: 30;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.archive-add-button:hover {
+  background: #000000;
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .archive-add-button {
+    right: 12px;
+    bottom: 12px;
+    width: 52px;
+    height: 52px;
+    font-size: 32px;
+  }
+}
+
 /* Front Page Card Styling - Mobile optimized */
 .postcard-card {
   background: var(--color-surface);

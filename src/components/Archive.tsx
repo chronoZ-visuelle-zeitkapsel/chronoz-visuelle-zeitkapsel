@@ -228,6 +228,15 @@ function Archive(): ReactElement {
             </svg>
           </button>
         </div>
+
+        <button
+          className="archive-add-button"
+          onClick={() => navigate('/create-postcard')}
+          aria-label="Neue Kapsel erstellen"
+          title="Neue Kapsel erstellen"
+        >
+          +
+        </button>
       </div>
     </section>
   );
