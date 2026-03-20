@@ -130,8 +130,8 @@ function Impressum(): ReactElement {
 
                 <div className="AGBSignature">
                   <div className="AGBSigLine"></div>
-                  <div className="AGBSigText">chronoZ Rechtsabteilung</div>
-                  <div className="AGBSigDate">Gegr. 1926 • Wien, Österreich</div>
+                  <div className="AGBSigText">chronoZ</div>
+                  <div className="AGBSigDate">Gegr. 2025 • Wien, Österreich</div>
                 </div>
               </article>
             </div>
