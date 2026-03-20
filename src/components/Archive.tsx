@@ -159,16 +159,7 @@ function Archive(): ReactElement {
                 const position = getSlidePosition(index);
                 const imageCount = postcard.images ? postcard.images.length : 0;
                 const featureImages = postcard.images ? postcard.images : [];
-                const isSingleImage = imageCount === 1;
-                const isCollage = imageCount >= 2 && imageCount <= 4;
                 const isMontage = imageCount >= 5;
-                const featureClassName = isSingleImage
-                  ? 'feature-single'
-                  : isCollage
-                    ? 'feature-collage'
-                    : isMontage
-                      ? 'feature-montage'
-                      : '';
                 const featureSliceCount = isMontage ? 8 : imageCount;
                 return (
                   <div 

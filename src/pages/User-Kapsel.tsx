@@ -30,11 +30,7 @@ function History(): ReactElement {
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [pdfProgress, setPdfProgress] = useState({ current: 0, total: 0 });
-  const pdfExportRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const setPdfExportRef = (index: number) => (element: HTMLDivElement | null) => {
-    pdfExportRefs.current[index] = element;
-  };
+  const pdfExportRootRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -318,12 +314,18 @@ function History(): ReactElement {
       // Ensure the hidden export DOM is rendered before capturing.
       await new Promise(resolve => setTimeout(resolve, 80));
 
-      for (let i = 0; i < totalPages; i++) {
-        const pageElement = pdfExportRefs.current[i];
+      const pageElements = Array.from(
+        pdfExportRootRef.current?.querySelectorAll<HTMLDivElement>('.PDFExportPage') ?? []
+      );
 
-        if (!pageElement) {
-          throw new Error('Eine Export-Seite konnte nicht gerendert werden.');
-        }
+      if (pageElements.length !== totalPages) {
+        throw new Error(
+          `Eine Export-Seite konnte nicht gerendert werden (${pageElements.length}/${totalPages}).`
+        );
+      }
+
+      for (let i = 0; i < totalPages; i++) {
+        const pageElement = pageElements[i];
 
         const canvas = await html2canvas(pageElement, {
           scale: 2,
@@ -659,8 +661,8 @@ function History(): ReactElement {
                 <div className="ArchiveSlideText">
                   <p className="ArchiveSlideDescription">{postcards[currentCardIndex].description}</p>
 
-            <div className="PDFExportRoot" aria-hidden="true">
-              <div className="PDFExportPage" ref={setPdfExportRef(0)}>
+            <div className="PDFExportRoot" aria-hidden="true" ref={pdfExportRootRef}>
+              <div className="PDFExportPage">
                 <div className="ArchiveSheet PDFCoverSheet">
                   <header className="ArchiveHeader">
                     <h1 className="ArchiveTitle">{currentUser?.username || 'Benutzer'}'S ZEITKAPSEL</h1>
@@ -705,7 +707,7 @@ function History(): ReactElement {
               </div>
 
               {postcards.map((postcard, index) => (
-                <div className="PDFExportPage" key={`pdf-page-${postcard.id}`} ref={setPdfExportRef(index + 1)}>
+                <div className="PDFExportPage" key={`pdf-page-${postcard.id}`}>
                   <article className="ArchiveSlide PDFArchiveSlide">
                     <header className="ArchiveSlideHeader">
                       <div className="ArchiveSlideDate">
