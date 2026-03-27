@@ -338,7 +338,9 @@
 
 /* Overlay Navigation Buttons */
 .nav-button-overlay {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 50px;
   height: 80px;
   background: rgba(255, 255, 255, 0.15);
@@ -346,8 +348,11 @@
   border-radius: 8px;
   color: white;
   font-size: 36px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 700;
+  line-height: 1;
   cursor: pointer;
-  z-index: 10;
+  z-index: 30;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -356,18 +361,40 @@
   flex-shrink: 0;
 }
 
+.nav-left {
+  left: 20px;
+}
+
+.nav-right {
+  right: 20px;
+}
+
 .nav-button-overlay:hover {
   background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
+  transform: translateY(-50%) scale(1.05);
 }
 
 .nav-button-overlay:active {
   background: rgba(255, 255, 255, 0.4);
-  transform: scale(0.95);
+  transform: translateY(-50%) scale(0.95);
 }
 
 .pdf-viewer {
   flex-shrink: 0;
+}
+
+.pdf-page-viewport {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pdf-page-viewport.desktop-double-page {
+  gap: 16px;
+}
+
+.pdf-page-viewport.mobile-single-page {
+  width: min(96vw, 560px);
 }
 
 /* Page Indicator */
@@ -391,11 +418,36 @@
   .pdf-viewer-wrapper {
     gap: 10px;
   }
+
+  .pdf-viewer {
+    min-height: auto;
+  }
+
+  .pdf-page-viewport.desktop-double-page {
+    gap: 0;
+  }
+
+  .pdf-page-viewport.mobile-single-page .react-pdf__Page,
+  .pdf-page-viewport.mobile-single-page .react-pdf__Page__canvas {
+    max-width: 96vw !important;
+    height: auto !important;
+  }
   
   .nav-button-overlay {
-    width: 40px;
-    height: 60px;
-    font-size: 28px;
+    width: 44px;
+    height: 64px;
+    font-size: 30px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .nav-left {
+    left: 8px;
+  }
+
+  .nav-right {
+    right: 8px;
   }
   
   .page-indicator {

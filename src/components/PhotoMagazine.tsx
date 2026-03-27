@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import './PhotoMagazine.css';
 
@@ -14,6 +14,16 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [error, setError] = useState<string>('');
+  const [isMobile, setIsMobile] = useState<boolean>(window.innerWidth <= 768);
+  const prevIsMobileRef = useRef<boolean>(window.innerWidth <= 768);
+
+  const totalDesktopSpreads = numPages > 0 ? 1 + Math.ceil(Math.max(0, numPages - 1) / 2) : 0;
+  const totalDisplayPages = isMobile ? numPages : totalDesktopSpreads;
+  const currentDisplayPage = pageNumber;
+  const desktopLeftPage = !isMobile ? (pageNumber === 1 ? 1 : (pageNumber - 1) * 2) : null;
+  const desktopRightPage = !isMobile && pageNumber > 1 && desktopLeftPage !== null && (desktopLeftPage + 1) <= numPages
+    ? desktopLeftPage + 1
+    : null;
 
   // Memoize options to prevent unnecessary reloads
   const options = useMemo(() => ({
@@ -34,7 +44,7 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
   }
 
   function onPageLoadSuccess(page: any) {
-    console.log('✅ Page', pageNumber, 'loaded successfully');
+    console.log('✅ Page loaded successfully');
     console.log('Page dimensions:', page.width, 'x', page.height);
   }
 
@@ -94,13 +104,50 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
   }, [pageNumber]);
 
   const goToNextPage = React.useCallback(() => {
-    console.log('➡️ Next page clicked, current page:', pageNumber, 'total:', numPages);
+    console.log('➡️ Next page clicked, current page:', pageNumber, 'total:', totalDisplayPages);
     setPageNumber(prevPage => {
-      const newPage = Math.min(prevPage + 1, numPages);
+      const newPage = Math.min(prevPage + 1, totalDisplayPages);
       console.log('Setting page to:', newPage);
       return newPage;
     });
-  }, [pageNumber, numPages]);
+  }, [pageNumber, totalDisplayPages]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const wasMobile = prevIsMobileRef.current;
+    if (wasMobile === isMobile || numPages === 0) {
+      prevIsMobileRef.current = isMobile;
+      return;
+    }
+
+    setPageNumber(prevPage => {
+      const convertedPage = isMobile
+        ? (prevPage === 1 ? 1 : (prevPage - 1) * 2)
+        : (prevPage === 1 ? 1 : 1 + Math.ceil((prevPage - 1) / 2));
+      const maxPage = isMobile ? numPages : totalDesktopSpreads;
+      return Math.max(1, Math.min(convertedPage, maxPage));
+    });
+
+    prevIsMobileRef.current = isMobile;
+  }, [isMobile, numPages, totalDesktopSpreads]);
+
+  useEffect(() => {
+    if (totalDisplayPages === 0) {
+      return;
+    }
+
+    setPageNumber(prevPage => {
+      return Math.max(1, Math.min(prevPage, totalDisplayPages));
+    });
+  }, [totalDisplayPages]);
 
   useEffect(() => {
     // Keyboard navigation
@@ -132,7 +179,7 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
               className="nav-button-overlay nav-left"
               aria-label="Vorherige Seite"
             >
-              ‹
+              &lt;
             </button>
           )}
 
@@ -146,35 +193,51 @@ function PhotoMagazine({ pdfUrl, onClose }: PhotoMagazineProps) {
           >
             {numPages > 0 && (
               <div className="pdf-viewer" style={{ position: 'relative' }}>
-                <Page
-                  pageNumber={pageNumber}
-                  height={window.innerHeight}
-                  onLoadSuccess={onPageLoadSuccess}
-                  onLoadError={onPageLoadError}
-                  onRenderSuccess={onPageRenderSuccess}
-                  onRenderError={onPageRenderError}
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                  loading={<div className="loading">Seite wird gerendert...</div>}
-                  canvasBackground="white"
-                />
+                <div className={`pdf-page-viewport ${isMobile ? 'mobile-single-page' : 'desktop-double-page'}`}>
+                  <Page
+                    pageNumber={isMobile ? pageNumber : (desktopLeftPage || 1)}
+                    height={isMobile ? Math.floor(window.innerHeight * 0.8) : Math.floor(window.innerHeight * 0.84)}
+                    onLoadSuccess={onPageLoadSuccess}
+                    onLoadError={onPageLoadError}
+                    onRenderSuccess={onPageRenderSuccess}
+                    onRenderError={onPageRenderError}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                    loading={<div className="loading">Seite wird gerendert...</div>}
+                    canvasBackground="white"
+                  />
+                  {!isMobile && desktopRightPage && (
+                    <Page
+                      pageNumber={desktopRightPage}
+                      height={Math.floor(window.innerHeight * 0.84)}
+                      onLoadSuccess={onPageLoadSuccess}
+                      onLoadError={onPageLoadError}
+                      onRenderSuccess={onPageRenderSuccess}
+                      onRenderError={onPageRenderError}
+                      renderTextLayer={false}
+                      renderAnnotationLayer={false}
+                      loading={<div className="loading">Seite wird gerendert...</div>}
+                      canvasBackground="white"
+                    />
+                  )}
+                </div>
               </div>
             )}
           </Document>
 
-          {numPages > 0 && pageNumber < numPages && (
+          {numPages > 0 && pageNumber < totalDisplayPages && (
             <button 
               onClick={goToNextPage}
               className="nav-button-overlay nav-right"
               aria-label="Nächste Seite"
             >
-              ›
+              &gt;
             </button>
           )}
 
           {numPages > 0 && (
             <div className="page-indicator">
-              {pageNumber} / {numPages}
+              {currentDisplayPage} / {totalDisplayPages}
             </div>
           )}
         </div>
