@@ -71,7 +71,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
     }, []);
 
     return (
-        <div className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
+        <div id="home-top" className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
             {/* Broadsheet Layout */}
             <div className="BroadsheetContainer">

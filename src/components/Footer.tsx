@@ -1,10 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './footer.css';
 
 function Footer(): React.ReactElement {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const pendingHomeScrollRef = useRef(false);
+
+	const scrollToTop = () => {
+		const topElement = document.getElementById('home-top');
+		if (topElement) {
+			topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+
+		// Fallbacks for browsers/layouts with different scrolling roots.
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+		document.body.scrollTo({ top: 0, behavior: 'smooth' });
+
+		setTimeout(() => {
+			window.scrollTo({ top: 0, behavior: 'auto' });
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+		}, 180);
+	};
 
 	// Check if user is logged in
 	useEffect(() => {
@@ -23,6 +43,16 @@ function Footer(): React.ReactElement {
 			window.removeEventListener('userLogout', handleUserLogout);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (location.pathname === '/' && pendingHomeScrollRef.current) {
+			pendingHomeScrollRef.current = false;
+			requestAnimationFrame(() => {
+				scrollToTop();
+				setTimeout(scrollToTop, 120);
+			});
+		}
+	}, [location.pathname]);
 
 	const scrollToSection = (sectionId: string) => {
 		if (window.location.pathname !== '/') {
@@ -43,14 +73,10 @@ function Footer(): React.ReactElement {
 
 	const goToHome = () => {
 		if (window.location.pathname !== '/') {
+			pendingHomeScrollRef.current = true;
 			navigate('/');
-			// Nach Navigation nach oben scrollen
-			setTimeout(() => {
-				window.scrollTo({ top: 0, behavior: 'smooth' });
-			}, 100);
 		} else {
-			// Direkt nach oben scrollen
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			scrollToTop();
 		}
 	};
 
@@ -77,7 +103,7 @@ function Footer(): React.ReactElement {
 				<nav className="footer-center">
 					<div className="footer-nav-label">Schnelllinks</div>
 					<div className="footer-links">
-						<button className="footer-link" onClick={goToHome}>Startseite</button>
+						<button type="button" className="footer-link" onClick={goToHome}>Startseite</button>
 						<button className="footer-link" onClick={() => {
 							if (!isLoggedIn) {
 								navigate('/login');

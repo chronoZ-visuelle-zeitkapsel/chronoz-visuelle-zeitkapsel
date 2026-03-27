@@ -1,12 +1,13 @@
 import './header.css';
 import React, { ReactElement, useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { apiUrl } from '../config/api';
 
 type CurrentUser = { id: string; username: string; email: string } | null;
 
 function Header(): ReactElement {
 	const navigate = useNavigate();
+	const location = useLocation();
 	const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
 
 	// Neuer State, um Panel offen zu halten beim Hover auf das Panel selbst
@@ -14,6 +15,24 @@ function Header(): ReactElement {
 
 	// Ref für das UserArea-Element, damit wir ggf. Fokus entfernen können
 	const userAreaRef = useRef<HTMLDivElement | null>(null);
+	const pendingHomeScrollRef = useRef(false);
+
+	const scrollToTop = () => {
+		const topElement = document.getElementById('home-top');
+		if (topElement) {
+			topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		}
+
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+		document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+		document.body.scrollTo({ top: 0, behavior: 'smooth' });
+
+		setTimeout(() => {
+			window.scrollTo({ top: 0, behavior: 'auto' });
+			document.documentElement.scrollTop = 0;
+			document.body.scrollTop = 0;
+		}, 180);
+	};
 
 	// Wenn sich currentUser ändert (z.B. Login), sicherstellen, dass das Panel geschlossen bleibt
 	useEffect(() => {
@@ -57,6 +76,16 @@ function Header(): ReactElement {
 			cancelled = true;
 		};
 	}, []);
+
+	useEffect(() => {
+		if (location.pathname === '/' && pendingHomeScrollRef.current) {
+			pendingHomeScrollRef.current = false;
+			requestAnimationFrame(() => {
+				scrollToTop();
+				setTimeout(scrollToTop, 120);
+			});
+		}
+	}, [location.pathname]);
 
 	// Listen for custom login event
 	useEffect(() => {
@@ -121,14 +150,10 @@ function Header(): ReactElement {
 
 	function goToHome() {
 		if (window.location.pathname !== '/') {
+			pendingHomeScrollRef.current = true;
 			navigate('/');
-			// Nach Navigation nach oben scrollen
-			setTimeout(() => {
-				window.scrollTo({ top: 0, behavior: 'smooth' });
-			}, 100);
 		} else {
-			// Direkt nach oben scrollen
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			scrollToTop();
 		}
 	}
 
