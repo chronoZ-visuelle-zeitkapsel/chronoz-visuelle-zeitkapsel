@@ -831,7 +831,7 @@ function History(): ReactElement {
                 >
                   {postcard.images.length > 0 ? (
                     postcard.images.slice(0, 6).map((src, imgIdx) => (
-                      <div key={`${postcard.id}-pdf-image-${imgIdx}`} className="postcard-image-wrapper PDFImageWrapper">
+                      <div key={`${postcard.id}-pdf-image-${imgIdx}`} className="PDFImageWrapper">
                         <img className="PDFExportImage" src={src} alt={`${postcard.title} ${imgIdx + 1}`} />
                       </div>
                     ))
