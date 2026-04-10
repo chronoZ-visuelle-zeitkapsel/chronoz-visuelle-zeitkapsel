@@ -173,21 +173,15 @@ export default function FrameByFrameCanvas({
   }, [frames, frameDuration, loop, playOnLoad, reverse, onAnimationComplete]);
 
   return (
-    <div className={className} style={{ display: "grid", gap: 8, ...style }}>
+    <div className={`fffc-grid${className ? ` ${className}` : ''}`} style={style}>
       {error ? (
-        <div style={{ padding: 12, border: "1px solid red", borderRadius: 8, color: "red" }}>
+        <div className="fffc-error">
           <b>Error:</b> {error}
         </div>
       ) : null}
 
       {!frames && !error ? (
-        <div style={{ 
-          padding: 40, 
-          textAlign: "center", 
-          color: "#666",
-          fontSize: "18px",
-          fontWeight: 500
-        }}>
+        <div className="fffc-loading">
           Loading...
         </div>
       ) : null}
@@ -200,14 +194,8 @@ export default function FrameByFrameCanvas({
           stateRef.current.isPlaying = true;
           console.log("Canvas clicked, animation started");
         }}
-        style={{
-          display: frames ? "block" : "none",
-          background: "transparent",
-          borderRadius: 12,
-          maxWidth: "100%",
-          height: "auto",
-          cursor: "pointer",
-        }}
+        className="fffc-canvas"
+        style={{ display: frames ? "block" : "none" }}
       />
     </div>
   );

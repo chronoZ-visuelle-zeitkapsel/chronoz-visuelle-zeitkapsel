@@ -127,7 +127,7 @@ function FAQ(): ReactElement {
 								aria-label="Suche löschen"
 								disabled={!searchQuery}
 							>
-								x
+								
 							</button>
 						</div>
 					</label>

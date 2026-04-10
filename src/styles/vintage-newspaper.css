@@ -5,7 +5,10 @@
   align-items: flex-start;
   margin: 24px 0 0 0;
   gap: 14px;
-  max-width: 320px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .hinweis-label {
@@ -25,8 +28,10 @@
   border-radius: 6px;
   padding: 18px 18px 14px 18px;
   width: 100%;
-  max-width: 320px;
+  max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 .hinweis-card .SidebarTitle {
   font-family: var(--serif, 'Georgia', serif);
@@ -58,7 +63,10 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  max-width: 340px;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
   padding: 12px 0 12px 22px;
   background: #f5ede2; /* light sepia fill */
   border: 2px solid #231a13; /* strong dark border */
@@ -169,8 +177,13 @@ body.newspaper-theme {
 .newspaper-theme .postcard,
 .newspaper-theme .UserKapsel {
   background: transparent;
-  padding: 18px 16px;
+  padding: 1.125rem 1rem;
   border-bottom: 1px solid var(--rule);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 .newspaper-theme h2,
 .newspaper-theme .headline {
@@ -199,8 +212,13 @@ body.newspaper-theme {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 48px;
-  height: 48px;
+  width: min(12vw, 48px);
+  height: min(12vw, 48px);
+  min-width: 32px;
+  min-height: 32px;
+  box-sizing: border-box;
+  overflow: hidden;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -477,22 +495,31 @@ body.newspaper-theme .footer-link:hover,
 /* Multi-Column Broadsheet - MOBILE FIRST */
   .BroadsheetContainer {
   max-width: 1600px;
+  width: 100%;
   /* margin: 0 auto; */
   padding: 25px;
   display: grid;
   grid-template-columns: 1fr;  /* Single column base */
   gap: 24px;  /* Smaller gap */
   background: #ebe3d5;
+  box-sizing: border-box;
+  overflow-x: clip;
 }
 
 .BroadsheetSidebar {
   padding: 20px;
   order: 1;  /* Sidebars below main on mobile */
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .BroadsheetMain {
   padding: 0;
   order: 0;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .BroadsheetMainColumned {
@@ -507,6 +534,9 @@ body.newspaper-theme .footer-link:hover,
 .BroadsheetRightSidebar {
   padding: 20px;
   order: 1;  /* Below main on mobile */
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Sidebar Sections */
@@ -516,6 +546,11 @@ body.newspaper-theme .footer-link:hover,
   border: 2px solid var(--color-border);
   padding: 20px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
 }
 
 .SidebarSection:first-child {
@@ -757,14 +792,15 @@ body.newspaper-theme .footer-link:hover,
     padding: 16px 12px;
     gap: 20px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-areas:
-      "main main"
-      "sidebar rightsidebar";
+      "main"
+      "sidebar"
+      "rightsidebar";
   }
 
   .BroadsheetMain {
-    grid-column: 1 / span 2;
+    grid-column: 1;
     grid-row: 1;
   }
   .BroadsheetSidebar {
@@ -773,8 +809,8 @@ body.newspaper-theme .footer-link:hover,
     order: 0;
   }
   .BroadsheetRightSidebar {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 1;
+    grid-row: 3;
     order: 0;
     display: block;
   }
