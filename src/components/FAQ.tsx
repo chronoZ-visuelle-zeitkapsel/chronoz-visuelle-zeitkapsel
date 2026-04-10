@@ -1,5 +1,8 @@
-import React, { ReactElement, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useMemo, useState } from 'react';
 import './faq.css';
+
+const TABLET_BREAKPOINT = 980;
+const MAX_FAQS_COMPACT = 5;
 
 interface FAQItemProps {
 	question: string;
@@ -36,6 +39,21 @@ function FAQ(): ReactElement {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('Alle');
 	const [openItemIndex, setOpenItemIndex] = useState<number | null>(null);
+	const [isCompactViewport, setIsCompactViewport] = useState<boolean>(false);
+
+	useEffect(() => {
+		const mediaQuery = window.matchMedia(`(max-width: ${TABLET_BREAKPOINT}px)`);
+		const updateViewportState = (): void => {
+			setIsCompactViewport(mediaQuery.matches);
+		};
+
+		updateViewportState();
+		mediaQuery.addEventListener('change', updateViewportState);
+
+		return () => {
+			mediaQuery.removeEventListener('change', updateViewportState);
+		};
+	}, []);
 	
 	const faqData = useMemo(() => [
 		{
@@ -101,6 +119,18 @@ function FAQ(): ReactElement {
 		});
 	}, [faqData, searchQuery, selectedCategory]);
 
+	const visibleFaqs = useMemo(() => (
+		isCompactViewport
+			? filteredFaqs.slice(0, MAX_FAQS_COMPACT)
+			: filteredFaqs
+	), [filteredFaqs, isCompactViewport]);
+
+	useEffect(() => {
+		if (openItemIndex !== null && openItemIndex >= visibleFaqs.length) {
+			setOpenItemIndex(null);
+		}
+	}, [openItemIndex, visibleFaqs.length]);
+
 	function resetFilters(): void {
 		setSearchQuery('');
 		setSelectedCategory('Alle');
@@ -160,7 +190,7 @@ function FAQ(): ReactElement {
 				</div>
 
 				<div className="faq-list" role="list">
-					{filteredFaqs.map((faq, index) => (
+					{visibleFaqs.map((faq, index) => (
 						<FAQItem
 							key={`${faq.question}-${index}`}
 							question={faq.question}
@@ -170,7 +200,7 @@ function FAQ(): ReactElement {
 							onToggle={() => toggleFaqItem(index)}
 						/>
 					))}
-					{filteredFaqs.length === 0 && (
+					{visibleFaqs.length === 0 && (
 						<div className="faq-empty" role="status" aria-live="polite">
 							<p>Keine passenden Fragen gefunden.</p>
 							<button type="button" className="faq-reset-filters" onClick={resetFilters}>
