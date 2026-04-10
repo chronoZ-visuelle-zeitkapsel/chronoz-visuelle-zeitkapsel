@@ -116,7 +116,6 @@ function FAQ(): ReactElement {
 			<div className="faq-container">
 				<header className="faq-masthead">
 					<h2 className="faq-title">FAQ</h2>
-					<p className="faq-headline">Haben Sie eine Frage? Geben Sie sie am Archivschalter ab.</p>
 				</header>
 
 				<div className="faq-toolbar">
