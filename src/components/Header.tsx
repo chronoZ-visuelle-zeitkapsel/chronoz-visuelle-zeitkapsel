@@ -195,13 +195,7 @@ function Header(): ReactElement {
 				<div className="masthead-right">
 					<nav className="edition-nav">
 					<button className="edition-link" onClick={goToHome}>Startseite</button>
-						<button className="edition-link" onClick={() => {
-							if (!currentUser) {
-								navigate('/login');
-							} else {
-								scrollToSection('archive');
-							}
-						}}>Archiv</button>
+						<button className="edition-link" onClick={() => navigate('/history')}>Archiv</button>
 						<button className="edition-link" onClick={() => scrollToSection('aboutus')}>AboutUs</button>
 						<button className="edition-link" onClick={() => scrollToSection('faq')}>FAQ</button>
 					</nav>

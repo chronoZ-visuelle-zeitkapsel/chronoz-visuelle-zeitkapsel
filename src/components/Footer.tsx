@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './footer.css';
 
 function Footer(): React.ReactElement {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const pendingHomeScrollRef = useRef(false);
 
 	const scrollToTop = () => {
@@ -25,24 +24,6 @@ function Footer(): React.ReactElement {
 			document.body.scrollTop = 0;
 		}, 180);
 	};
-
-	// Check if user is logged in
-	useEffect(() => {
-		const token = localStorage.getItem('token');
-		setIsLoggedIn(!!token);
-
-		// Listen for login/logout events
-		const handleUserLogin = () => setIsLoggedIn(true);
-		const handleUserLogout = () => setIsLoggedIn(false);
-
-		window.addEventListener('userLogin', handleUserLogin);
-		window.addEventListener('userLogout', handleUserLogout);
-
-		return () => {
-			window.removeEventListener('userLogin', handleUserLogin);
-			window.removeEventListener('userLogout', handleUserLogout);
-		};
-	}, []);
 
 	useEffect(() => {
 		if (location.pathname === '/' && pendingHomeScrollRef.current) {
@@ -104,13 +85,7 @@ function Footer(): React.ReactElement {
 					<div className="footer-nav-label">Schnelllinks</div>
 					<div className="footer-links">
 						<button type="button" className="footer-link" onClick={goToHome}>Startseite</button>
-						<button className="footer-link" onClick={() => {
-							if (!isLoggedIn) {
-								navigate('/login');
-							} else {
-								scrollToSection('archive');
-							}
-						}}>Archiv</button>
+						<button className="footer-link" onClick={() => navigate('/history')}>Archiv</button>
 						<button className="footer-link" onClick={() => scrollToSection('faq')}>FAQ</button>
 						<button className="footer-link" onClick={goToImpressum}>Impressum</button>
 					</div>
