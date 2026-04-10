@@ -249,18 +249,6 @@ function History(): ReactElement {
     }
   }, [showOptions]);
 
-  const goToPreviousCard = () => {
-    if (currentCardIndex > 0) {
-      setCurrentCardIndex(currentCardIndex - 1);
-    }
-  };
-
-  const goToNextCard = () => {
-    if (currentCardIndex < postcards.length - 1) {
-      setCurrentCardIndex(currentCardIndex + 1);
-    }
-  };
-
   const handleEditPostcard = () => {
     if (currentPostcard) {
       // Postkarte-Daten an CreatePostcard weitergeben
@@ -545,16 +533,6 @@ function History(): ReactElement {
               </header>
 
               <div className="ArchiveTimeline">
-                {postcards.length > 1 && (
-                  <button
-                    className="TimelineNavArrow TimelineNavLeft"
-                    onClick={goToPreviousCard}
-                    disabled={currentCardIndex === 0}
-                    aria-label="Previous"
-                  >
-                    ‹
-                  </button>
-                )}
                 <div className="TimelineDots">
                   {postcards.map((postcard, idx) => {
                     const isActive = idx === currentCardIndex;
@@ -574,16 +552,6 @@ function History(): ReactElement {
                     );
                   })}
                 </div>
-                {postcards.length > 1 && (
-                  <button
-                    className="TimelineNavArrow TimelineNavRight"
-                    onClick={goToNextCard}
-                    disabled={currentCardIndex === postcards.length - 1}
-                    aria-label="Next"
-                  >
-                    ›
-                  </button>
-                )}
                 <div className="TimelineRack" />
               </div>
 
