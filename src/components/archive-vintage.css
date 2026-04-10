@@ -1415,13 +1415,12 @@
 }
 
 .archive-carousel-panel .RackCard {
-  width: min(100%, 360px);
-  aspect-ratio: 180 / 260;
-  max-height: 78vh;
-  background: var(--color-1);
-  border: 4px solid var(--color-5);
+  width: 180px;
+  height: 260px;
+  background: #ffffff;
+  border: 4px solid #000000;
   box-shadow:
-    0 0 0 1px var(--color-5),
+    0 0 0 1px #000000,
     0 8px 20px rgba(0, 0, 0, 0.3);
   position: relative;
   cursor: pointer;
@@ -1437,10 +1436,10 @@
 }
 
 .archive-carousel-panel .RackCardActive {
-  border-color: var(--color-4);
+  border-color: #8b7355;
   border-width: 5px;
   box-shadow:
-    0 0 0 2px var(--color-4),
+    0 0 0 2px #8b7355,
     0 12px 30px rgba(139, 115, 85, 0.4);
 }
 
@@ -1448,8 +1447,8 @@
   flex: 1;
   overflow: hidden;
   position: relative;
-  background: var(--color-1);
-  border-bottom: 2px solid var(--color-5);
+  background: #f5f5f5;
+  border-bottom: 2px solid #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1460,9 +1459,9 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  border: 2px solid var(--color-5);
+  border: 2px solid #000000;
   padding: 4px;
-  background: var(--color-1);
+  background: #f5f1e8;
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -1500,9 +1499,9 @@
 
 .archive-carousel-panel .RackCardImages .feature-image {
   position: relative;
-  border: 2px solid var(--color-5);
+  border: 2px solid #000000;
   padding: 3px;
-  background: var(--color-1);
+  background: #ffffff;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
@@ -1562,14 +1561,14 @@
     "lead lead"
     "lead thumb";
   min-height: 130px;
-  border-right: 2px solid var(--color-5);
-  border-bottom: 2px solid var(--color-5);
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-2 .feature-image-1 {
   grid-area: lead;
-  border-right: 2px solid var(--color-5);
-  border-bottom: 2px solid var(--color-5);
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-2 .feature-image-2 {
@@ -1587,12 +1586,12 @@
 
 .archive-carousel-panel .RackCardImages .feature-count-3 .feature-image-1 {
   grid-area: lead;
-  border-bottom: 2px solid var(--color-5);
+  border-bottom: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-3 .feature-image-2 {
   grid-area: thumb1;
-  border-right: 2px solid var(--color-5);
+  border-right: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-3 .feature-image-3 {
@@ -1610,18 +1609,18 @@
 
 .archive-carousel-panel .RackCardImages .feature-count-4 .feature-image-1 {
   grid-area: q1;
-  border-right: 2px solid var(--color-5);
-  border-bottom: 2px solid var(--color-5);
+  border-right: 2px solid #000000;
+  border-bottom: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-4 .feature-image-2 {
   grid-area: q2;
-  border-bottom: 2px solid var(--color-5);
+  border-bottom: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-4 .feature-image-3 {
   grid-area: q3;
-  border-right: 2px solid var(--color-5);
+  border-right: 2px solid #000000;
 }
 
 .archive-carousel-panel .RackCardImages .feature-count-4 .feature-image-4 {
@@ -1644,15 +1643,15 @@
 
 .archive-carousel-panel .RackCardInfo {
   padding: 8px 10px;
-  background: var(--color-1);
-  border-top: 1px solid var(--color-2);
+  background: #ffffff;
+  border-top: 1px solid #ddd;
 }
 
 .archive-carousel-panel .RackCardTitle {
   font-family: 'Playfair Display', 'Georgia', serif;
   font-size: 11px;
   font-weight: 700;
-  color: var(--color-5);
+  color: #000000;
   margin: 0 0 4px 0;
   letter-spacing: 0.5px;
   line-height: 1.2;
@@ -1664,7 +1663,7 @@
 .archive-carousel-panel .RackCardDate {
   font-family: 'Courier New', monospace;
   font-size: 9px;
-  color: var(--color-4);
+  color: #666;
   display: block;
   letter-spacing: 0.3px;
 }
@@ -1674,7 +1673,7 @@
   top: 8px;
   right: 8px;
   background: rgba(0, 0, 0, 0.8);
-  color: var(--color-1);
+  color: #f5f1e8;
   font-family: 'Courier New', monospace;
   font-size: 10px;
   font-weight: bold;
@@ -1687,11 +1686,18 @@
 
 @media (max-width: 768px) {
   .archive-carousel-panel .RackCard {
-    width: min(100%, 320px);
+    width: 180px;
   }
 
   .archive-carousel-panel .carousel-slide[data-position="prev"],
   .archive-carousel-panel .carousel-slide[data-position="next"] {
     transform: translateX(0) scale(0.94);
+  }
+}
+
+@media (min-width: 769px) {
+  .archive-carousel-panel .RackCard {
+    width: 300px;
+    height: 380px;
   }
 }
