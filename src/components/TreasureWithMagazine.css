@@ -1,7 +1,9 @@
 .treasure-magazine-container {
   position: relative;
   width: 100%;
-  height: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,6 +12,23 @@
 .treasure-animation {
   position: relative;
   z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.fffc-grid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.fffc-canvas {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
 }
 
 .magazine-preview {
@@ -142,6 +161,14 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .treasure-magazine-container {
+    max-width: 100%;
+  }
+
+  .fffc-canvas {
+    max-width: 420px;
+  }
+
   .magazine-preview.slide-out {
     animation: magazineSlideOutMobile 1.5s ease-out forwards;
   }
@@ -160,5 +187,11 @@
   .magazine-cover {
     width: 200px;
     height: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fffc-canvas {
+    max-width: 320px;
   }
 }

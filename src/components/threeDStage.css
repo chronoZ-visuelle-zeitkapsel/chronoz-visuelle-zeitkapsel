@@ -8,9 +8,9 @@
 }
 
 .StageGlass {
-    width: 100%;
-    max-width: 1600px;
-    height: 684px;
+    width: auto;
+    max-width: 600px;
+    height: 420px;
     background: linear-gradient(134deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0) 100%);
     border-radius: 32px;
     border: 1.80px white solid;
@@ -19,6 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
 }
 
 .StageContainer {

@@ -258,14 +258,16 @@ main { flex: 1 1 auto; }
 }
 
 .ThreeDStage {
-  width: 100%;
-  max-width: none;
+  width: auto;
+  max-width: 600px;
   height: 420px;
   display: flex;
+  margin: 0 auto;
 }
 
 .StageGlass {
-  width: 100%;
+  width: auto;
+  max-width: 600px;
   border-radius: 0;
   display: grid;
   place-items: center;
