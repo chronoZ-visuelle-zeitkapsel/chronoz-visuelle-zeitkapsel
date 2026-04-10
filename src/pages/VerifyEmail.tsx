@@ -104,10 +104,12 @@ function VerifyEmail() {
             }}>
               <div style={{ 
                 fontSize: '48px', 
-                letterSpacing: '12px', 
+                letterSpacing: 'clamp(3px, 2.8vw, 12px)', 
                 fontWeight: 'bold',
                 color: '#7fff9f',
-                fontFamily: 'monospace'
+                fontFamily: 'monospace',
+                wordBreak: 'break-word',
+                lineHeight: '1.2'
               }}>
                 {codeFromEmail}
               </div>

@@ -165,6 +165,7 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
   padding: 32px 36px 40px;
   position: relative;
+  overflow-x: hidden;
 }
 
 .AboutMastheadHeader {
@@ -562,6 +563,41 @@
 
   .AGBText {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ImpressumMain {
+    padding: 20px 8px 40px;
+  }
+
+  .ImpressumContainer {
+    border-width: 4px;
+    padding: 14px 10px 20px;
+  }
+
+  .AboutMastheadTitle {
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+  }
+
+  .AboutMastheadStamp {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  .AGBTitle {
+    font-size: 1.25rem;
+    letter-spacing: 0.08em;
+  }
+
+  .AGBColumn {
+    padding: 12px 0;
+  }
+
+  .AboutTimeline {
+    gap: 6px;
+    flex-wrap: wrap;
   }
 }
 

@@ -57,9 +57,9 @@ body {
   border-radius: 2px;
   position: relative;
   overflow: hidden;
-  width: 1250px;
+  width: min(1250px, 100%);
   margin: 10px auto 10px;
-  aspect-ratio: 7/4;
+  min-height: 640px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -129,13 +129,13 @@ body {
 }
 
 .FormSection {
-  padding: 40px 60px 60px;
+  padding: 120px 16px 24px;
   max-width: 100%;
-  margin: calc(var(--header-height, 80px) + 50px) 0 0;
+  margin: calc(var(--header-height, 80px) + 18px) 0 0;
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 550px;
+  height: auto;
   position: relative;
   z-index: 1;
 }
@@ -146,11 +146,11 @@ body {
 
 .SubscriberDeskGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 1fr;
+  gap: 20px;
   align-items: start;
   position: relative;
-  height: calc(100%);
+  height: auto;
 }
 
 .LeftColumn {
@@ -158,12 +158,10 @@ body {
   z-index: 1;
 }
 
-.BackButton {
-  position: fixed;
-  top: calc(var(--header-height, 64px) + 100px);
-  left: 40px;
-  width: 50px;
-  height: 50px;
+.CreatePostcardPage .BackButton {
+  position: static;
+  width: 44px;
+  height: 44px;
   background: #2D4A4A;
   color: #F8F1E8;
   border: 2px solid #F8F1E8;
@@ -173,10 +171,11 @@ body {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 25px rgba(45, 74, 74, 0.3);
-  z-index: 100;
+  z-index: 2;
+  margin-bottom: 12px;
 }
 
-.BackButton:hover {
+.CreatePostcardPage .BackButton:hover {
   background: #F8F1E8;
   color: #2D4A4A;
   transform: translateY(-3px);
@@ -187,9 +186,9 @@ body {
   background: #f8f1e8;
   border: 2px solid #000000;
   border-radius: 0;
-  padding: 40px 24px;
+  padding: 18px 12px;
   text-align: center;
-  min-height: 420px;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -231,17 +230,17 @@ body {
   font-size: 14px;
   font-weight: 700;
   font-variant: small-caps;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
   letter-spacing: 0.16em;
 }
 
 .ImagePreview {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
-  max-height: 380px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  max-height: 280px;
   overflow-y: auto;
-  padding: 20px;
+  padding: 8px;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -293,13 +292,13 @@ body {
 
 .RightColumn {
   padding-left: 0;
-  height: 522px;
+  height: auto;
 }
 
 .TopFields {
   display: grid;
-  gap: 35px;
-  margin-bottom: 25px;
+  gap: 14px;
+  margin-bottom: 14px;
 }
 
 .TitleField, .DateField {
@@ -344,7 +343,8 @@ label {
 
 .FormTextarea {
   resize: vertical;
-  height: 150px;
+  min-height: 120px;
+  height: 140px;
   font-size: 16px;
   width: 100%;
   font-family: 'Courier New', Courier, monospace;
@@ -407,10 +407,11 @@ label {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: stretch;
 }
 
 .ActionButton {
+  flex: 1 1 100%;
   padding: 12px 18px;
   border: 2px solid #000000;
   background: #ffffff;
@@ -434,15 +435,47 @@ label {
 
 @media (max-width: 768px) {
   .CreatePostcardContainer {
-    width: 95%;
+    width: 100%;
+    border-width: 6px;
+    box-shadow: 0 0 0 2px #8b7355;
   }
 
   .FormSection {
-    padding: 140px 24px 40px;
+    padding: 105px 12px 18px;
   }
 
   .MastheadTitle {
-    font-size: 24px;
+    font-size: clamp(1rem, 5.5vw, 1.4rem);
+    letter-spacing: 0.08em;
+  }
+
+  .CreatePostcardMasthead {
+    width: calc(100% - 30px);
+    top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .CreatePostcardMain {
+    padding: 0 8px;
+  }
+
+  .CreatePostcardContainer {
+    min-height: 0;
+  }
+
+  .FormSection {
+    margin-top: calc(var(--header-height, 70px) + 10px);
+    padding: 95px 8px 12px;
+  }
+
+  .ActionBar {
+    gap: 10px;
+  }
+
+  .ActionButton {
+    font-size: 11px;
+    letter-spacing: 0.09em;
   }
 }
 

@@ -1319,3 +1319,63 @@
   font-style: italic;
   margin-top: 10px;
 }
+
+@media (max-width: 360px) {
+  .UserKapselMain,
+  .FullScreenContainer {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .Postcard {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .PostcardContent {
+    padding: 12px;
+  }
+
+  .PostcardTitle {
+    font-size: 1.25rem;
+  }
+
+  .UserKapselPage .CapsuleActions {
+    left: 10px;
+    bottom: 10px;
+    gap: 6px;
+  }
+
+  .UserKapselPage .CapsuleActionButton {
+    min-width: 78px;
+    font-size: 10px;
+    padding: 7px 8px;
+  }
+
+  .UserKapselPage .AddButtonBottomRight,
+  .UserKapselPage .AddButtonBottomLeft {
+    width: 44px;
+    height: 44px;
+    bottom: 10px;
+  }
+
+  .UserKapselPage .AddButtonBottomRight {
+    right: 10px;
+  }
+
+  .UserKapselPage .AddButtonBottomLeft {
+    left: 10px;
+  }
+
+  .PDFGeneratingContent {
+    width: calc(100vw - 24px);
+    padding: 26px 16px;
+  }
+
+  .PDFGeneratingTitle {
+    font-size: 1.35rem;
+  }
+}

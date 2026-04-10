@@ -591,6 +591,26 @@
     padding: 7px 14px;
     font-size: 13px;
   }
+
+  .newspaper-spread-page {
+    padding: 10px;
+  }
+
+  .form-notice-panel {
+    padding: 14px;
+    border-width: 3px;
+  }
+
+  .notice-title {
+    font-size: 20px;
+  }
+
+  .grant-entry-button,
+  .press-copy-button {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    padding: 12px 10px;
+  }
 }
 
 /* Newspaper theme overrides for login (visual only) */

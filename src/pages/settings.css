@@ -8,14 +8,14 @@
   flex: 1;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 16px;
   background: linear-gradient(135deg, rgba(20,20,40,0.95), rgba(40,20,60,0.95));
 }
 
 .SettingsCard {
   width: 100%;
   max-width: 720px;
-  padding: 32px;
+  padding: clamp(16px, 3vw, 32px);
   border-radius: 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -55,6 +55,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   padding: 12px 16px;
   background: rgba(255,255,255,0.03);
   border-radius: 10px;
@@ -160,7 +162,7 @@
   justify-content: center;
 }
 
-.BackButton {
+.SettingsPage .BackButton {
   padding: 12px 32px;
   border-radius: 10px;
   border: 2px solid rgba(255,255,255,0.2);
@@ -171,8 +173,38 @@
   transition: all 0.3s ease;
 }
 
-.BackButton:hover {
+.SettingsPage .BackButton:hover {
   background: rgba(255,255,255,0.1);
   border-color: rgba(255,255,255,0.3);
   transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .SettingsMain {
+    padding: 12px;
+  }
+
+  .SettingsCard h1 {
+    font-size: 1.5rem;
+  }
+
+  .SettingsSection h2 {
+    font-size: 1.1rem;
+  }
+
+  .OptionRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .ToggleButton {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .SettingsPage .BackButton {
+    width: 100%;
+    padding: 12px 16px;
+  }
 }

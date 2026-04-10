@@ -2,13 +2,13 @@
   min-height: calc(100vh - 140px);
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: 12px;
 }
 
 .VerifyCard {
   width: 100%;
   max-width: 420px;
-  padding: 24px;
+  padding: clamp(14px, 4vw, 24px);
   border-radius: 20px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -45,4 +45,14 @@
   color: #ff8a8a;
   text-align: center;
   font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .VerifyCard h1 {
+    font-size: 1.35rem;
+  }
+
+  .VerifyForm {
+    gap: 10px;
+  }
 }

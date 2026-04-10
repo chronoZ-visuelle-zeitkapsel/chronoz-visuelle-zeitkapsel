@@ -17,7 +17,7 @@ html {
 }
 body {
   margin: 0;
-  padding-top: 150px;
+  padding-top: var(--header-height, 150px);
   overflow-x: hidden;
   background: linear-gradient(180deg, #f4ede1 0%, #ebe3d5 100%);
   background-image: 
@@ -28,24 +28,31 @@ body {
   line-height: 1.75;
   text-rendering: optimizeLegibility;
 }
-html, body, #root { height: 100%; overflow-x: hidden; }
+html, body, #root { height: 100%; overflow-x: hidden; width: 100%; }
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
 
 /* Responsive header spacing */
 @media (max-width: 480px) {
   body {
-    padding-top: 150px;
+    padding-top: var(--header-height, 120px);
   }
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
   body {
-    padding-top: 150px;
+    padding-top: var(--header-height, 130px);
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   body {
-    padding-top: 150px;
+    padding-top: var(--header-height, 150px);
   }
 }
 

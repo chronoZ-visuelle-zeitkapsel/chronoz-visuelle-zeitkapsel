@@ -1312,3 +1312,122 @@
 .ArchiveSlideNavNext {
   border-radius: 0 4px 4px 0;
 }
+
+@media (max-width: 1024px) {
+  .ArchiveSheet {
+    border-width: 8px;
+  }
+
+  .CarouselRack {
+    padding: 20px 14px;
+    gap: 12px;
+  }
+
+  .RackCard {
+    width: 160px;
+    height: 230px;
+    flex: 0 0 auto;
+  }
+
+  .ArchiveFooter {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .ArchiveTitle {
+    font-size: clamp(1.2rem, 6vw, 2rem);
+    letter-spacing: 0.06em;
+  }
+
+  .ArchiveTimeline {
+    gap: 8px;
+    padding: 0 6px;
+  }
+
+  .TimelineDots {
+    gap: 12px;
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 4px;
+  }
+
+  .TimelineNavArrow {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .TimelineNavLeft,
+  .TimelineNavRight {
+    margin: 0;
+  }
+
+  .ArchiveDateline {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+
+  .ArchiveDescription {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .ArchiveSlideOverlay {
+    padding: 10px;
+  }
+
+  .ArchiveSlideContainer {
+    height: calc(100vh - 20px);
+  }
+
+  .ArchiveSlideHeader {
+    padding: 10px 12px;
+  }
+
+  .ArchiveSlideTitle {
+    font-size: clamp(1rem, 6vw, 1.8rem);
+    letter-spacing: 0.06em;
+  }
+
+  .ArchiveSlideContent {
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .ArchiveSlideNavigation {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .ArchiveSlideNav {
+    flex: 1 1 50%;
+    padding: 10px 8px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (max-width: 360px) {
+  .ArchiveSheet {
+    border-width: 5px;
+  }
+
+  .CarouselRack {
+    padding: 12px 8px;
+  }
+
+  .RackCard {
+    width: 134px;
+    height: 198px;
+  }
+
+  .DotYear {
+    font-size: 10px;
+  }
+
+  .DotPosition {
+    font-size: 8px;
+  }
+}

@@ -9,6 +9,7 @@ function Header(): ReactElement {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
+	const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
 	// Neuer State, um Panel offen zu halten beim Hover auf das Panel selbst
 	const [menuOpen, setMenuOpen] = useState(false);
@@ -85,6 +86,7 @@ function Header(): ReactElement {
 				setTimeout(scrollToTop, 120);
 			});
 		}
+		setMobileNavOpen(false);
 	}, [location.pathname]);
 
 	// Listen for custom login event
@@ -192,39 +194,55 @@ function Header(): ReactElement {
 				</div>
 
 				{/* Right: Navigation & User */}
-				<div className="masthead-right">
-					<nav className="edition-nav">
-					<button className="edition-link" onClick={goToHome}>Startseite</button>
-						<button className="edition-link" onClick={() => navigate('/history')}>Archiv</button>
-						<button className="edition-link" onClick={() => scrollToSection('aboutus')}>AboutUs</button>
-						<button className="edition-link" onClick={() => scrollToSection('faq')}>FAQ</button>
-					</nav>
-					
-					{currentUser ? (
-						<div
-							ref={userAreaRef}
-							className={`UserArea ${menuOpen ? 'open' : ''}`}
-							tabIndex={0}
-							aria-haspopup="true"
-							onMouseEnter={() => setMenuOpen(true)}
-							onMouseLeave={() => setMenuOpen(false)}
-							onFocus={() => setMenuOpen(true)}
-							onBlur={() => setMenuOpen(false)}
-						>
-							<button className="NavItem UserButton" title={currentUser.email}>
-								<svg viewBox="0 0 24 24" className="UserIcon">
-									<path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-								</svg>
-							</button>
+				<div className={`masthead-right ${mobileNavOpen ? 'mobile-open' : ''}`}>
+					<button
+						type="button"
+						className="mobile-menu-toggle"
+						onClick={() => setMobileNavOpen((open) => !open)}
+						aria-expanded={mobileNavOpen}
+						aria-label="Navigation umschalten"
+					>
+						<span></span>
+						<span></span>
+						<span></span>
+					</button>
 
-							<div className="LogoutPanel" role="menu" aria-hidden={!menuOpen}>
-								<div className="UserInfo">{currentUser.username}</div>
-								<button className="LogoutButton" onClick={handleLogout}>Abmelden</button>
+					<div className={`masthead-menu-panel ${mobileNavOpen ? 'open' : ''}`}>
+						<nav className="edition-nav" aria-label="Hauptnavigation">
+							<button className="edition-link" onClick={() => { goToHome(); setMobileNavOpen(false); }}>Startseite</button>
+							<button className="edition-link" onClick={() => { navigate('/history'); setMobileNavOpen(false); }}>Archiv</button>
+							<button className="edition-link" onClick={() => { scrollToSection('aboutus'); setMobileNavOpen(false); }}>AboutUs</button>
+							<button className="edition-link" onClick={() => { scrollToSection('faq'); setMobileNavOpen(false); }}>FAQ</button>
+						</nav>
+					</div>
+
+					<div className="masthead-user-controls">
+						{currentUser ? (
+							<div
+								ref={userAreaRef}
+								className={`UserArea ${menuOpen ? 'open' : ''}`}
+								tabIndex={0}
+								aria-haspopup="true"
+								onMouseEnter={() => setMenuOpen(true)}
+								onMouseLeave={() => setMenuOpen(false)}
+								onFocus={() => setMenuOpen(true)}
+								onBlur={() => setMenuOpen(false)}
+							>
+								<button className="NavItem UserButton" title={currentUser.email}>
+									<svg viewBox="0 0 24 24" className="UserIcon">
+										<path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+									</svg>
+								</button>
+
+								<div className="LogoutPanel" role="menu" aria-hidden={!menuOpen}>
+									<div className="UserInfo">{currentUser.username}</div>
+									<button className="LogoutButton" onClick={handleLogout}>Abmelden</button>
+								</div>
 							</div>
-						</div>
-					) : (
-						<button className="edition-link login-link" onClick={() => navigate('/login')}>Anmelden</button>
-					)}
+						) : (
+							<button className="edition-link login-link" onClick={() => { navigate('/login'); setMobileNavOpen(false); }}>Anmelden</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</header>
