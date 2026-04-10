@@ -5,23 +5,23 @@ interface FAQItemProps {
 	question: string;
 	answer: string;
 	category: string;
+	isOpen: boolean;
+	onToggle: () => void;
 }
 
-function FAQItem({ question, answer, category }: FAQItemProps): ReactElement {
-	const [isOpen, setIsOpen] = useState(false);
-
+function FAQItem({ question, answer, category, isOpen, onToggle }: FAQItemProps): ReactElement {
 	return (
 		<div className={`faq-item ${isOpen ? 'open' : ''}`}>
 			<button 
 				className="faq-question" 
-				onClick={() => setIsOpen(!isOpen)}
+				onClick={onToggle}
 				aria-expanded={isOpen}
 			>
 				<span className="faq-question-text">
 					<span className="faq-question-title">{question}</span>
 				</span>
 				<span className="faq-category" aria-label={`Kategorie ${category}`}>{category}</span>
-				<span className="faq-icon">{isOpen ? '−' : '+'}</span>
+				<span className="faq-icon">{isOpen ? '-' : '+'}</span>
 			</button>
 			{isOpen && (
 				<div className="faq-answer">
@@ -35,6 +35,7 @@ function FAQItem({ question, answer, category }: FAQItemProps): ReactElement {
 function FAQ(): ReactElement {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState('Alle');
+	const [openItemIndex, setOpenItemIndex] = useState<number | null>(null);
 	
 	const faqData = useMemo(() => [
 		{
@@ -100,6 +101,16 @@ function FAQ(): ReactElement {
 		});
 	}, [faqData, searchQuery, selectedCategory]);
 
+	function resetFilters(): void {
+		setSearchQuery('');
+		setSelectedCategory('Alle');
+		setOpenItemIndex(null);
+	}
+
+	function toggleFaqItem(index: number): void {
+		setOpenItemIndex((currentOpenIndex) => (currentOpenIndex === index ? null : index));
+	}
+
 	return (
 		<section className="faq-section" id="faq">
 			<div className="faq-container">
@@ -127,68 +138,47 @@ function FAQ(): ReactElement {
 								aria-label="Suche löschen"
 								disabled={!searchQuery}
 							>
-								
+								x
 							</button>
 						</div>
 					</label>
 						<div className="faq-categories" aria-label="FAQ Kategorien">
-							{categoryFilters.length > 4 ? (
-								<>
-									<div className="faq-categories-row">
-										{categoryFilters.slice(0, 4).map((category) => (
-											<button
-												key={category}
-												type="button"
-												className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
-												onClick={() => setSelectedCategory(category)}
-												aria-pressed={selectedCategory === category}
-											>
-												{category}
-											</button>
-										))}
-									</div>
-									<div className="faq-categories-row">
-										{categoryFilters.slice(4).map((category) => (
-											<button
-												key={category}
-												type="button"
-												className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
-												onClick={() => setSelectedCategory(category)}
-												aria-pressed={selectedCategory === category}
-											>
-												{category}
-											</button>
-										))}
-									</div>
-								</>
-							) : (
-								categoryFilters.map((category) => (
-									<button
-										key={category}
-										type="button"
-										className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
-										onClick={() => setSelectedCategory(category)}
-										aria-pressed={selectedCategory === category}
-									>
-										{category}
-									</button>
-								))
-							)}
+							{categoryFilters.map((category) => (
+								<button
+									key={category}
+									type="button"
+									className={`faq-category-pill ${selectedCategory === category ? 'active' : ''}`}
+									onClick={() => {
+										setSelectedCategory(category);
+										setOpenItemIndex(null);
+									}}
+									aria-pressed={selectedCategory === category}
+								>
+									{category}
+								</button>
+							))}
 						</div>
 				</div>
 
 				<div className="faq-list" role="list">
-					{(typeof window !== 'undefined' && (window.innerWidth <= 1024)
-						? filteredFaqs.slice(0, 5)
-						: filteredFaqs
-					).map((faq, index) => (
+					{filteredFaqs.map((faq, index) => (
 						<FAQItem
 							key={`${faq.question}-${index}`}
 							question={faq.question}
 							answer={faq.answer}
 							category={faq.category}
+							isOpen={openItemIndex === index}
+							onToggle={() => toggleFaqItem(index)}
 						/>
 					))}
+					{filteredFaqs.length === 0 && (
+						<div className="faq-empty" role="status" aria-live="polite">
+							<p>Keine passenden Fragen gefunden.</p>
+							<button type="button" className="faq-reset-filters" onClick={resetFilters}>
+								Alle Fragen anzeigen
+							</button>
+						</div>
+					)}
 				</div>
 
 			</div>
