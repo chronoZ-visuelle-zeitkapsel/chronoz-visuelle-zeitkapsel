@@ -601,6 +601,12 @@ body.newspaper-theme .NavItem.LoginButton:focus-visible {
   }
 }
 
+@media (max-width: 768px) {
+    .vintage-newspaper-header {
+        top: 0;
+    }
+}
+
 @media (max-width: 600px) {
   .HeaderContainer {
     height: 45px;
