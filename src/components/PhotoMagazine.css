@@ -306,9 +306,9 @@
 
 .pdf-viewer .react-pdf__Page__canvas {
   display: block;
-  max-width: none !important;
-  width: auto !important;
-  height: auto !important;
+  max-width: none;
+  width: auto;
+  height: auto;
   background: white;
 }
 
@@ -429,8 +429,8 @@
 
   .pdf-page-viewport.mobile-single-page .react-pdf__Page,
   .pdf-page-viewport.mobile-single-page .react-pdf__Page__canvas {
-    max-width: 96vw !important;
-    height: auto !important;
+    max-width: 96vw;
+    height: auto;
   }
   
   .nav-button-overlay {
