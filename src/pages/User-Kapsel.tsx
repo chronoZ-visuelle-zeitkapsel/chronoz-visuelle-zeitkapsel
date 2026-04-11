@@ -586,7 +586,6 @@ function History(): ReactElement {
                             >
                               <span className="DotMarkerSmall">◆</span>
                               <span className="DotMonthDay">{monthDay}</span>
-                              <span className="DotPosition">#{originalIdx + 1}</span>
                             </div>
                           );
                         })}
