@@ -1627,22 +1627,6 @@
   letter-spacing: 0.3px;
 }
 
-.archive-carousel-panel .RackCardPosition {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #f5f1e8;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 3px;
-  letter-spacing: 1px;
-  z-index: 10;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
 @media (max-width: 768px) {
   .archive-carousel-panel .RackCard {
     width: 180px;

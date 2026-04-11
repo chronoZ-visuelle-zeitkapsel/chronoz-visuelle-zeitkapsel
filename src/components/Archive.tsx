@@ -208,8 +208,6 @@ function Archive(): ReactElement {
                               {formatDate(postcard.date).toUpperCase()}
                             </time>
                           </div>
-
-                          <div className="RackCardPosition">{index + 1}/{postcards.length}</div>
                         </div>
                       </div>
                     );
