@@ -31,6 +31,7 @@ function History(): ReactElement {
   const [loading, setLoading] = useState(true);
   const [postcards, setPostcards] = useState<Postcard[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [showOptions, setShowOptions] = useState(false);
   const [showSettingsMenu, setShowSettingsMenu] = useState(false);
   const [showLockModal, setShowLockModal] = useState(false);
@@ -533,26 +534,87 @@ function History(): ReactElement {
               </header>
 
               <div className="ArchiveTimeline">
-                <div className="TimelineDots">
-                  {postcards.map((postcard, idx) => {
-                    const isActive = idx === currentCardIndex;
-                    const postcardYear = new Date(postcard.date).getFullYear();
-                    
-                    return (
-                      <div 
-                        key={postcard.id} 
-                        className={`TimelineDot ${isActive ? 'TimelineDotActive' : ''}`}
-                        onClick={() => setCurrentCardIndex(idx)}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <span className="DotMarker">●</span>
-                        <span className="DotYear">{postcardYear}</span>
-                        <span className="DotPosition">POS. {idx + 1}/{postcards.length}</span>
-                      </div>
-                    );
-                  })}
+                {/* Year Timeline - Top */}
+                <div className="TimelineSection YearTimeline">
+                  <div className="TimelineDots">
+                    {Array.from(new Set(postcards.map(p => new Date(p.date).getFullYear())))
+                      .sort((a, b) => a - b)
+                      .map((year) => {
+                        const yearPostcards = postcards.filter(p => new Date(p.date).getFullYear() === year);
+                        const isSelected = selectedYear === year;
+                        
+                        return (
+                          <div 
+                            key={`year-${year}`}
+                            className={`TimelineDot YearDot ${isSelected ? 'TimelineDotActive' : ''}`}
+                            onClick={() => {
+                              setSelectedYear(year);
+                              setCurrentCardIndex(postcards.indexOf(yearPostcards[0]));
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <span className="DotMarker">●</span>
+                            <span className="DotYear">{year}</span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  <div className="TimelineRack YearRack" />
                 </div>
-                <div className="TimelineRack" />
+
+                {/* Month + Day Timeline - Bottom */}
+                <div className="TimelineSection MonthDayTimeline">
+                  <div className="TimelineDots">
+                    {selectedYear !== null 
+                      ? postcards
+                          .filter(p => new Date(p.date).getFullYear() === selectedYear)
+                          .map((postcard, idx) => {
+                            const isActive = postcards.indexOf(postcard) === currentCardIndex;
+                            const date = new Date(postcard.date);
+                            const monthDay = date.toLocaleDateString('de-DE', {
+                              month: 'short',
+                              day: '2-digit'
+                            }).toUpperCase();
+                            const originalIdx = postcards.indexOf(postcard);
+                            
+                            return (
+                              <div 
+                                key={`monthday-${postcard.id}`}
+                                className={`TimelineDot MonthDayDot ${isActive ? 'TimelineDotActive' : ''}`}
+                                onClick={() => setCurrentCardIndex(originalIdx)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <span className="DotMarkerSmall">◆</span>
+                                <span className="DotMonthDay">{monthDay}</span>
+                                <span className="DotPosition">#{originalIdx + 1}</span>
+                              </div>
+                            );
+                          })
+                      : postcards.map((postcard, idx) => {
+                          const isActive = idx === currentCardIndex;
+                          const date = new Date(postcard.date);
+                          const monthDay = date.toLocaleDateString('de-DE', {
+                            month: 'short',
+                            day: '2-digit'
+                          }).toUpperCase();
+                          
+                          return (
+                            <div 
+                              key={`monthday-${postcard.id}`}
+                              className={`TimelineDot MonthDayDot ${isActive ? 'TimelineDotActive' : ''}`}
+                              onClick={() => setCurrentCardIndex(idx)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <span className="DotMarkerSmall">◆</span>
+                              <span className="DotMonthDay">{monthDay}</span>
+                              <span className="DotPosition">#{idx + 1}</span>
+                            </div>
+                          );
+                        })
+                    }
+                  </div>
+                  <div className="TimelineRack MonthDayRack" />
+                </div>
               </div>
 
               <div className="CarouselRack">
