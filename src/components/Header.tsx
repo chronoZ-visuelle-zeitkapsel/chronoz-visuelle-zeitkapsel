@@ -211,7 +211,7 @@ function Header(): ReactElement {
 						<nav className="edition-nav" aria-label="Hauptnavigation">
 							<button className="edition-link" onClick={() => { goToHome(); setMobileNavOpen(false); }}>Startseite</button>
 							<button className="edition-link" onClick={() => { navigate('/history'); setMobileNavOpen(false); }}>Archiv</button>
-							<button className="edition-link" onClick={() => { scrollToSection('aboutus'); setMobileNavOpen(false); }}>AboutUs</button>
+							<button className="edition-link" onClick={() => { scrollToSection('aboutus'); setMobileNavOpen(false); }}>Team</button>
 							<button className="edition-link" onClick={() => { scrollToSection('faq'); setMobileNavOpen(false); }}>FAQ</button>
 						</nav>
 					</div>

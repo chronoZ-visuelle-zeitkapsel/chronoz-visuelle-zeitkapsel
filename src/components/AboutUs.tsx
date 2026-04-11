@@ -36,8 +36,7 @@ function AboutUs(): ReactElement {
       <div className="AboutUsContainer">
         <header className="AboutUsHeader">
           <div className="AboutUsOrnament">❖</div>
-          <h2 className="AboutUsTitle">UNSER TEAM & ENTWICKLUNG</h2>
-          <div className="AboutUsSubtitle">Die Köpfe hinter chronoZ</div>
+          <h2 className="AboutUsTitle">Die Köpfe hinter chronoZ</h2>
           <div className="AboutUsOrnament">❖</div>
         </header>
 
