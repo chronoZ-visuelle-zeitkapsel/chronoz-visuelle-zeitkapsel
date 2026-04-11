@@ -563,58 +563,37 @@ function History(): ReactElement {
                 </div>
 
                 {/* Month + Day Timeline - Bottom */}
-                <div className="TimelineSection MonthDayTimeline">
-                  <div className="TimelineDots">
-                    {selectedYear !== null 
-                      ? postcards
-                          .filter(p => new Date(p.date).getFullYear() === selectedYear)
-                          .map((postcard, idx) => {
-                            const isActive = postcards.indexOf(postcard) === currentCardIndex;
-                            const date = new Date(postcard.date);
-                            const monthDay = date.toLocaleDateString('de-DE', {
-                              month: 'short',
-                              day: '2-digit'
-                            }).toUpperCase();
-                            const originalIdx = postcards.indexOf(postcard);
-                            
-                            return (
-                              <div 
-                                key={`monthday-${postcard.id}`}
-                                className={`TimelineDot MonthDayDot ${isActive ? 'TimelineDotActive' : ''}`}
-                                onClick={() => setCurrentCardIndex(originalIdx)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <span className="DotMarkerSmall">◆</span>
-                                <span className="DotMonthDay">{monthDay}</span>
-                                <span className="DotPosition">#{originalIdx + 1}</span>
-                              </div>
-                            );
-                          })
-                      : postcards.map((postcard, idx) => {
-                          const isActive = idx === currentCardIndex;
+                {selectedYear !== null && (
+                  <div className="TimelineSection MonthDayTimeline">
+                    <div className="TimelineDots">
+                      {postcards
+                        .filter(p => new Date(p.date).getFullYear() === selectedYear)
+                        .map((postcard) => {
+                          const originalIdx = postcards.indexOf(postcard);
+                          const isActive = originalIdx === currentCardIndex;
                           const date = new Date(postcard.date);
                           const monthDay = date.toLocaleDateString('de-DE', {
                             month: 'short',
                             day: '2-digit'
                           }).toUpperCase();
-                          
+
                           return (
-                            <div 
+                            <div
                               key={`monthday-${postcard.id}`}
                               className={`TimelineDot MonthDayDot ${isActive ? 'TimelineDotActive' : ''}`}
-                              onClick={() => setCurrentCardIndex(idx)}
+                              onClick={() => setCurrentCardIndex(originalIdx)}
                               style={{ cursor: 'pointer' }}
                             >
                               <span className="DotMarkerSmall">◆</span>
                               <span className="DotMonthDay">{monthDay}</span>
-                              <span className="DotPosition">#{idx + 1}</span>
+                              <span className="DotPosition">#{originalIdx + 1}</span>
                             </div>
                           );
-                        })
-                    }
+                        })}
+                    </div>
+                    <div className="TimelineRack MonthDayRack" />
                   </div>
-                  <div className="TimelineRack MonthDayRack" />
-                </div>
+                )}
               </div>
 
               <div className="CarouselRack">
@@ -754,7 +733,7 @@ function History(): ReactElement {
                       onClick={handleDownloadPDF}
                       title="Als PDF exportieren"
                     >
-                      Download
+                      PDF
                     </button>
                     <button
                       className="CapsuleActionButton CapsuleActionLock"
