@@ -150,7 +150,7 @@ function FAQ(): ReactElement {
 
 				<div className="faq-toolbar">
 					<label className="faq-search">
-						<span className="faq-search-label">Agenturticker</span>
+						<span className="faq-search-label">Suchmaschine</span>
 						<div className="faq-search-field">
 							<input
 								className="faq-search-input"
