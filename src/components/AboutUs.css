@@ -127,7 +127,6 @@
 .MemberContentColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 .MemberDescription {
@@ -137,6 +136,7 @@
   color: #2c2416;
   text-align: justify;
   hyphens: auto;
+  white-space: pre-line;
 }
 
 .MemberDescription.DropCap::first-letter {
