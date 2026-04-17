@@ -86,6 +86,7 @@ function Footer(): React.ReactElement {
 					<div className="footer-links">
 						<button type="button" className="footer-link" onClick={goToHome}>Startseite</button>
 						<button className="footer-link" onClick={() => navigate('/history')}>Chronik</button>
+						<button type="button" className="footer-link" onClick={() => scrollToSection('aboutus')}>Team</button>
 						<button className="footer-link" onClick={() => scrollToSection('faq')}>FAQ</button>
 						<button className="footer-link" onClick={goToImpressum}>Impressum</button>
 					</div>
