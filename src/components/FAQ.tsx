@@ -58,42 +58,42 @@ function FAQ(): ReactElement {
 	const faqData = useMemo(() => [
 		{
 			question: "Was ist ChronoZ?",
-			answer: "ChronoZ ist eine digitale Zeitkapsel-Plattform, mit der Sie Erinnerungen, Nachrichten und Postkarten erstellen und zu einem späteren Zeitpunkt versenden können. Bewahren Sie besondere Momente für die Zukunft auf!",
+			answer: "ChronoZ ist eine digitale Zeitkapsel-Plattform, mit der Sie Erinnerungen und Postkarten digital erstellen, speichern, bearbeiten, löschen und als PDF exportieren können. So bewahren Sie besondere Momente sicher in Ihrer Chronik auf.",
 			category: "Grundlagen"
 		},
 		{
 			question: "Wie erstelle ich eine Postkarte?",
-			answer: "Klicken Sie auf den Button mit dem '+', wählen Sie ein Design, füllen Sie alle Felder aus und klicken Sie auf 'Erstellen'. Es ist ganz einfach!",
+			answer: "Öffnen Sie die Chronik und klicken Sie unten rechts auf den '+'-Button. Danach können Sie Titel, Datum, Beschreibung und Bilder eintragen und die Postkarte mit 'Speichern' anlegen.",
 			category: "Postkarten"
 		},
 		{
 			question: "Wird meine Postkarte versendet?",
-			answer: "Nein, Ihre Postkarte wird sicher in Ihrem Archiv gespeichert und nur Sie können diese sehen. Sie haben später die Möglichkeit, sie zu versenden.",
+			answer: "Nein. ChronoZ versendet aktuell keine Postkarten automatisch. Ihre Postkarte wird in der Chronik gespeichert und kann dort bearbeitet, gelöscht oder als PDF exportiert werden.",
 			category: "Archiv"
 		},
 		{
 			question: "Muss ich mich registrieren?",
-			answer: "Ja, um eigene Postkarten zu erstellen und zu versenden, benötigen Sie ein kostenloses Konto. Die Registrierung dauert nur wenige Sekunden und ermöglicht es Ihnen, alle Ihre Zeitkapseln zu verwalten. Die Zeitkapsel der Generation Z ist bald ohne Registrierung auf der Startseite sichtbar.",
+			answer: "Ja. Für das Erstellen und Verwalten eigener Postkarten benötigen Sie ein kostenloses Konto. Die Registrierung dauert nur wenige Sekunden und schaltet die Chronik-Funktionen frei.",
 			category: "Konto"
 		},
 		{
 			question: "Ist ChronoZ kostenlos?",
-			answer: "Ja, ChronoZ ist komplett kostenlos! Sie können beliebig viele Postkarten erstellen und versenden, ohne dafür bezahlen zu müssen.",
+			answer: "Ja, ChronoZ ist komplett kostenlos. Sie können Postkarten erstellen, speichern, bearbeiten und als PDF exportieren, ohne dafür bezahlen zu müssen.",
 			category: "Abonnement"
 		},
 		{
 			question: "Kann ich eine Postkarte an mehrere Personen senden?",
-			answer: "Aktuell noch nicht. Diese Funktion wird in näherer Zukunft verfügbar sein.",
+			answer: "Eine direkte Versandfunktion gibt es aktuell nicht. Wenn Sie eine Postkarte weitergeben möchten, können Sie sie als PDF exportieren und anschließend selbst teilen.",
 			category: "Versand"
 		},
 		{
 			question: "Was passiert, wenn ich mein Passwort vergesse?",
-			answer: "Kein Problem! Klicken Sie auf der Login-Seite auf 'Passwort vergessen?' und folgen Sie den Anweisungen. Sie erhalten eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.",
+			answer: "Kein Problem. Klicken Sie auf der Login-Seite auf 'Passwort vergessen?' und folgen Sie den Anweisungen. Sie erhalten anschließend eine E-Mail mit einem Link zum Zurücksetzen Ihres Passworts.",
 			category: "Konto"
 		},
 		{
 			question: "Kann ich eine bereits erstellte Postkarte bearbeiten oder löschen?",
-			answer: "Ja, in Ihrem Profil unter 'Meine Zeitkapsel' können Sie alle Ihre erstellten Postkarten sehen und diese bearbeiten oder löschen.",
+			answer: "Ja. In der Chronik können Sie die aktuelle Postkarte über das Menü mit den drei Punkten bearbeiten oder löschen. Im Bearbeitungsmodus werden Titel, Datum, Text und Bilder übernommen.",
 			category: "Postkarten"
 		}
 	], []);
