@@ -7,7 +7,7 @@ function AboutUs(): ReactElement {
       name: 'Stefan FRIEDL',
       role: 'Platform Engineer & Backend Development',
       image: '/friedl.jpg',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Entwickelte die Backend-Infrastruktur und Datenbankarchitektur für die sichere Speicherung persönlicher Erinnerungen.',
+      description: 'Verantwortlich für die technische Umsetzung des Backends sowie die Anbindung der Datenbank- und API-Struktur. Der Fokus lag auf der Entwicklung stabiler Server-Endpunkte für Registrierung, Login, E-Mail-Verifizierung und die Verwaltung von Postkarteninhalten. Dabei wurden Authentifizierungslogiken, Token-Verarbeitung und die sichere Kommunikation zwischen Frontend und Datenbank implementiert, damit Nutzerdaten zuverlässig verarbeitet und geschützt gespeichert werden können.\n\nZusätzlich erfolgte die Konzeption der Backend-Architektur inklusive Fehlerbehandlung, Umgebungs-Konfiguration und Deployment-Vorbereitung. Ziel war es, eine robuste Grundlage zu schaffen, auf der alle Kernfunktionen der Plattform konsistent funktionieren und sowohl im lokalen Entwicklungsbetrieb als auch im produktiven Einsatz verlässlich laufen.',
       screenshots: []
     },
     {
