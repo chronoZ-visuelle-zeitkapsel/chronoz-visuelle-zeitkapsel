@@ -52,77 +52,74 @@
 
 .ArchiveTitle {
   font-family: 'Playfair Display', 'Georgia', serif;
-  font-size: 48px;
+  font-size: clamp(28px, 6vw, 56px);
   font-weight: 900;
   color: #f5f1e8;
-  letter-spacing: 8px;
+  letter-spacing: clamp(2px, 1vw, 10px);
   text-transform: uppercase;
   margin: 0;
   text-shadow: 2px 2px 0 rgba(245, 241, 232, 0.1);
 }
 
 /* ========================================
-   TIMELINE DOTS (6%)
+   TIMELINE DOTS (6%) - DUAL TIMELINE DESIGN
    ======================================== */
 
 .ArchiveTimeline {
   height: 6%;
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f5f1e8;
+  flex-direction: column;
+  background: linear-gradient(180deg, #f5f1e8 0%, #faf7f2 100%);
   border-bottom: 3px solid #000000;
   z-index: 2;
+}
+
+/* Shared Timeline Section */
+.TimelineSection {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 
-.TimelineNavArrow {
-  background: rgba(0, 0, 0, 0.8);
-  color: #f5f1e8;
-  border: 2px solid #8b7355;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 10;
-  line-height: 1;
-  padding: 0;
+/* Year Timeline - Top section */
+.YearTimeline {
+  border-bottom: 2px solid rgba(139, 115, 85, 0.3);
+  background: #f5f1e8;
 }
 
-.TimelineNavArrow:hover:not(:disabled) {
-  background: #8b7355;
-  color: #000000;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(139, 115, 85, 0.4);
+/* Month+Day Timeline - Bottom section */
+.MonthDayTimeline {
+  background: #faf7f2;
 }
 
-.TimelineNavArrow:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.TimelineNavLeft {
-  margin-right: auto;
-  margin-left: 20px;
-}
-
-.TimelineNavRight {
-  margin-left: auto;
-  margin-right: 20px;
-}
-
+/* Timeline Dots Container */
 .TimelineDots {
-  display: flex;
-  gap: 80px;
   position: relative;
   z-index: 3;
+}
+
+/* Year Timeline - Wider spaced dots */
+.YearTimeline .TimelineDots {
+  display: flex;
+  gap: clamp(40px, 8vw, 120px);
+  flex-wrap: wrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 8px;
+}
+
+/* Month+Day Timeline - Tighter spaced dots */
+.MonthDayTimeline .TimelineDots {
+  display: flex;
+  gap: clamp(25px, 5vw, 60px);
+  flex-wrap: wrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 8px;
 }
 
 .TimelineDot {
@@ -131,27 +128,28 @@
   align-items: center;
   gap: 2px;
   transition: all 0.3s ease;
-  padding: 8px;
-  border-radius: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
 }
 
 .TimelineDot:hover {
-  background: rgba(139, 115, 85, 0.1);
-  transform: translateY(-2px);
+  background: rgba(139, 115, 85, 0.08);
+  transform: translateY(-1px);
 }
 
 .TimelineDotActive {
-  background: rgba(139, 115, 85, 0.2);
-  transform: scale(1.1);
+  background: rgba(139, 115, 85, 0.15);
+  transform: scale(1.08);
 }
 
-.TimelineDotActive .DotMarker {
+.TimelineDotActive .DotMarker,
+.TimelineDotActive .DotMarkerSmall {
   color: #000000;
-  font-size: 28px;
   animation: pulse 2s ease-in-out infinite;
 }
 
-.TimelineDotActive .DotYear {
+.TimelineDotActive .DotYear,
+.TimelineDotActive .DotMonthDay {
   color: #8b7355;
   font-weight: 900;
 }
@@ -172,47 +170,67 @@
     transform: scale(1);
   }
   50% {
-    transform: scale(1.15);
+    transform: scale(1.2);
   }
 }
 
+/* Year Dot Styles */
 .DotMarker {
-  font-size: 24px;
-  color: #8b7355;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  font-size: clamp(16px, 3vw, 24px);
+  color: #a68a64;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }
 
 .DotYear {
   font-family: 'Courier New', monospace;
-  font-size: 13px;
+  font-size: clamp(10px, 2vw, 16px);
   font-weight: bold;
   color: #000000;
   letter-spacing: 1px;
 }
 
-.DotPosition {
+/* Month+Day Dot Styles */
+.DotMarkerSmall {
+  font-size: clamp(8px, 1.5vw, 14px);
+  color: #8b7355;
+  filter: drop-shadow(0 0.5px 1px rgba(0, 0, 0, 0.15));
+}
+
+.DotMonthDay {
   font-family: 'Courier New', monospace;
-  font-size: 9px;
-  color: #666;
+  font-size: clamp(8px, 1.5vw, 12px);
+  font-weight: 700;
+  color: #333;
   letter-spacing: 0.5px;
 }
 
-/* Brass rack line */
+.DotPosition {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(6px, 1vw, 9px);
+  color: #999;
+  letter-spacing: 0.3px;
+}
+
+/* Brass Rack Lines */
 .TimelineRack {
   position: absolute;
   top: 50%;
-  left: 10%;
-  right: 10%;
-  height: 3px;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.YearRack {
   background: linear-gradient(90deg, 
     transparent 0%, 
-    #8b7355 10%, 
-    #a68a64 50%, 
-    #8b7355 90%, 
+    #a68a64 15%, 
+    #c9b896 50%, 
+    #a68a64 85%, 
     transparent 100%
   );
-  border-top: 1px dashed rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  border-top: 1px dashed rgba(0, 0, 0, 0.15);
 }
 
 /* ========================================
@@ -914,7 +932,7 @@
 
 .AddButtonBottomRight {
   position: absolute;
-  bottom: 20px;
+  bottom: calc(21% + 20px);
   right: 20px;
   width: 44px;
   height: 44px;
@@ -935,7 +953,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   z-index: 50;
-  position: relative;
 }
 
 .AddButtonBottomRight::before,
@@ -1318,6 +1335,10 @@
     border-width: 8px;
   }
 
+  .ArchiveTimeline {
+    height: 7%;
+  }
+
   .CarouselRack {
     padding: 20px 14px;
     gap: 12px;
@@ -1332,49 +1353,256 @@
   .ArchiveFooter {
     padding: 16px;
   }
+
+  .TimelineDot {
+    padding: 5px 7px;
+  }
+
+  .AddButtonBottomRight {
+    width: 42px;
+    height: 42px;
+    bottom: calc(21% + 18px);
+    right: 18px;
+    font-size: 11px;
+  }
+
+  .Plus {
+    font-size: 15px;
+  }
 }
 
+/* Tablet - 768px */
 @media (max-width: 768px) {
-  .ArchiveTitle {
-    font-size: clamp(1.2rem, 6vw, 2rem);
-    letter-spacing: 0.06em;
+  .ArchiveSheet {
+    border-width: 6px;
   }
 
   .ArchiveTimeline {
-    gap: 8px;
-    padding: 0 6px;
+    height: 9%;
   }
 
-  .TimelineDots {
+  .TimelineSection {
     gap: 12px;
-    overflow-x: auto;
-    max-width: 100%;
-    padding-bottom: 4px;
   }
 
-  .TimelineNavArrow {
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
+  .TimelineDot {
+    padding: 4px 6px;
+    gap: 1px;
   }
 
-  .TimelineNavLeft,
-  .TimelineNavRight {
-    margin: 0;
+  .TimelineDot:hover {
+    transform: translateY(-0.5px);
+  }
+
+  .CarouselRack {
+    padding: 15px 10px;
+    gap: 8px;
+  }
+
+  .RackCard {
+    width: 140px;
+    height: 200px;
+    flex: 0 0 auto;
   }
 
   .ArchiveDateline {
-    font-size: 12px;
-    letter-spacing: 0.08em;
+    font-size: 11px;
+    letter-spacing: 0.06em;
   }
 
   .ArchiveDescription {
-    font-size: 12px;
-    line-height: 1.4;
+    font-size: 11px;
+    line-height: 1.3;
   }
 
-  .ArchiveSlideOverlay {
-    padding: 10px;
+  .AddButtonBottomRight {
+    width: 40px;
+    height: 40px;
+    bottom: calc(21% + 15px);
+    right: 15px;
+    font-size: 10px;
+  }
+
+  .Plus {
+    font-size: 14px;
+  }
+}
+
+/* Mobile Landscape - 480px to 767px */
+@media (max-width: 767px) and (orientation: landscape) {
+  .ArchiveSheet {
+    max-height: 100vh;
+    border-width: 4px;
+  }
+
+  .ArchiveHeader {
+    height: 12%;
+  }
+
+  .ArchiveTimeline {
+    height: 10%;
+  }
+
+  .CarouselRack {
+    height: 40%;
+    padding: 10px 8px;
+    gap: 6px;
+  }
+
+  .RackCard {
+    width: 100px;
+    height: 150px;
+  }
+
+  .ArchiveFooter {
+    height: 18%;
+    padding: 8px;
+  }
+}
+
+/* Mobile - 480px */
+@media (max-width: 480px) {
+  .ArchiveSheet {
+    border-width: 4px;
+    max-height: none;
+  }
+
+  .ArchiveHeader {
+    height: auto;
+    padding: 12px 8px;
+  }
+
+  .ArchiveTitle {
+    line-height: 1.2;
+    text-align: center;
+    word-break: break-word;
+  }
+
+  .ArchiveTimeline {
+    height: auto;
+    min-height: 110px;
+    flex-wrap: wrap;
+  }
+
+  .TimelineSection {
+    flex: 0 0 50%;
+    min-height: 55px;
+    gap: 8px;
+  }
+
+  .YearTimeline {
+    border-right: 1px solid rgba(139, 115, 85, 0.2);
+    border-bottom: none;
+  }
+
+  .YearTimeline .TimelineDots {
+    gap: clamp(20px, 4vw, 40px);
+  }
+
+  .MonthDayTimeline .TimelineDots {
+    gap: clamp(15px, 3vw, 30px);
+  }
+
+  .TimelineDots {
+    flex-wrap: nowrap;
+    padding: 4px;
+    justify-content: flex-start;
+  }
+
+  .TimelineDot {
+    padding: 3px 5px;
+    gap: 1px;
+  }
+
+  .DotMarker {
+    font-size: clamp(12px, 1.5vw, 16px);
+  }
+
+  .DotMarkerSmall {
+    font-size: clamp(6px, 1vw, 10px);
+  }
+
+  .DotYear {
+    font-size: clamp(8px, 1.2vw, 11px);
+  }
+
+  .DotMonthDay {
+    font-size: clamp(7px, 1vw, 9px);
+  }
+
+  .DotPosition {
+    font-size: clamp(5px, 0.8vw, 7px);
+  }
+
+  .TimelineRack {
+    height: 1px;
+    left: 4%;
+    right: 4%;
+  }
+
+  .CarouselRack {
+    height: auto;
+    min-height: 180px;
+    padding: 10px 8px;
+    gap: 6px;
+  }
+
+  .RackCard {
+    width: 120px;
+    height: 170px;
+    flex: 0 0 auto;
+  }
+
+  .ArchiveFooter {
+    padding: 10px 8px;
+    min-height: auto;
+  }
+
+  .AddButtonBottomRight {
+    width: clamp(36px, 8vw, 44px);
+    height: clamp(36px, 8vw, 44px);
+    top: 50%;
+    right: clamp(5px, 2vw, 10px);
+    bottom: auto;
+    transform: translateY(-50%);
+    font-size: clamp(8px, 1.5vw, 11px);
+    z-index: 15;
+  }
+
+  .Plus {
+    font-size: clamp(12px, 2.5vw, 15px);
+  }
+
+  .ArchiveDateline {
+    font-size: 9px;
+    letter-spacing: 0.04em;
+  }
+
+  .ArchiveDescription {
+    font-size: 9px;
+    line-height: 1.2;
+  }
+}
+
+/* Extra Small - 360px */
+@media (max-width: 360px) {
+  .ArchiveTitle {
+    font-size: clamp(18px, 4vw, 24px);
+  }
+
+  .TimelineSection {
+    flex: 0 0 100%;
+    min-height: 50px;
+  }
+
+  .YearTimeline {
+    border-right: none;
+    border-bottom: 1px solid rgba(139, 115, 85, 0.2);
+  }
+
+  .RackCard {
+    width: 100px;
+    height: 150px;
   }
 
   .ArchiveSlideContainer {
@@ -1429,5 +1657,20 @@
 
   .DotPosition {
     font-size: 8px;
+  }
+
+  .AddButtonBottomRight {
+    width: 34px;
+    height: 34px;
+    top: 50%;
+    right: 5px;
+    bottom: auto;
+    transform: translateY(-50%);
+    font-size: 7px;
+    z-index: 15;
+  }
+
+  .Plus {
+    font-size: 11px;
   }
 }

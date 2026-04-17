@@ -478,15 +478,15 @@ body.newspaper-theme .FooterRight img[src*="htlLogo.png"],
 
 /* Final compact override: keeps footer visually short on all pages/devices. */
 .Footer.vintage-newspaper-footer {
-    height: auto !important;
-    min-height: 42px !important;
-    padding: 6px 14px !important;
+    height: auto;
+    min-height: 42px;
+    padding: 6px 14px;
 }
 
 .Footer.vintage-newspaper-footer .footer-broadsheet {
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: 1fr;
-    min-height: 38px !important;
+    min-height: 38px;
     gap: 16px;
 }
 

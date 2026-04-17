@@ -96,8 +96,8 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                         <div className="hinweis-card">
                             <h3 className="SidebarTitle">NEUE FUNKTION</h3>
                             <p className="ArticleText">
-                                Sie können Ihre Postkarten jederzeit bearbeiten oder löschen.<br/>
-                                <span className="hinweis-cta-hint">Nutzen Sie das persönliche Archiv, um Ihre Erinnerungen zu verwalten.</span>
+                                Sie können Ihre Zeitkapsel jetzt als PDF herunterladen und archivieren.<br/>
+                                <span className="hinweis-cta-hint">Nutzen Sie zusätzlich die Lock-Funktion, um Ihre Kapsel bis zu einem gewählten Datum zu versiegeln.</span>
                             </p>
                         </div>
                     </div>

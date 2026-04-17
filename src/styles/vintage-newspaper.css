@@ -48,7 +48,14 @@
   line-height: 1.7;
   color: #222;
   margin: 0;
-  text-align: left;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.hinweis-card p {
+  margin: 0;
+  text-align: justify;
+  hyphens: auto;
 }
 .hinweis-cta-hint {
   display: block;
@@ -494,14 +501,14 @@ body.newspaper-theme .footer-link:hover,
 
 /* Multi-Column Broadsheet - MOBILE FIRST */
   .BroadsheetContainer {
-  max-width: 1600px;
+  max-width: 1200px;
   width: 100%;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   padding: 25px;
   display: grid;
   grid-template-columns: 1fr;  /* Single column base */
   gap: 24px;  /* Smaller gap */
-  background: #ebe3d5;
+  background: transparent;
   box-sizing: border-box;
   overflow-x: clip;
 }

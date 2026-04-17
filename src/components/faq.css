@@ -6,7 +6,7 @@
 	--faq-line: rgba(30, 26, 22, 0.32);
 	--faq-accent: #2f261b;
 	padding: 56px 20px;
-	background: #ebe3d5;
+	background: transparent;
 }
 
 .faq-container {

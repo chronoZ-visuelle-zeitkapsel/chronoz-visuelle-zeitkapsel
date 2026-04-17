@@ -14,7 +14,7 @@ function AboutUs(): ReactElement {
       name: 'Adin MUTISEVIC',
       role: 'Logo  & Photo Magazine Design',
       image: '/mutisevic.jpg',
-      description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Gestaltete das innovative Magazin-Design und die visuelle Präsentation der Postkarten-Archivierung.',
+      description: 'Verantwortlich für das digitale Fotomagazin. Dabei wurde der Fokus auf die visuelle Umsetzung gelegt, insbesondere auf Bildbearbeitung, Layout und Typografie. Für die Umsetzung wurden Programme wie Adobe Photoshop, Adobe InDesign und Adobe Illustrator verwendet, um Inhalte gezielt zu gestalten und ein einheitliches Designkonzept zu entwickeln.\n\nDas Magazin ist in mehrere Themenbereiche gegliedert, wobei jedes Thema aus vier Seiten besteht: einer Coverseite, einer Informationsseite, einer Bildstreckenseite sowie einer Abschlussseite. Jedes Thema wurde individuell gestaltet, während durch gezielte Farbkonzepte, Typografie und Bildbearbeitung ein einheitlicher Stil beibehalten wird, um zentrale Themen der Generation visuell darzustellen und emotional zu vermitteln.',
       screenshots: [
         { src: '/dev-screenshots/magazine-layout-1.jpg', caption: 'Fotomagazin Entwicklung' },
         { src: '/dev-screenshots/magazine-layout-2.jpg', caption: 'Layout-Design Prozess' }
@@ -24,7 +24,7 @@ function AboutUs(): ReactElement {
       name: 'Riz GARCIA',
       role: 'Frontend Development & 3D-Modellierung',
       image: '/garcia.jpg',
-      description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Implementierte das responsive Frontend und die interaktive Benutzeroberfläche mit moderner React-Architektur.',
+      description: 'Verantwortlich für die Umsetzung des Frontends sowie die Konzeption und Modellierung der 3D-Elemente. Im Bereich Frontend lag der Fokus auf der Entwicklung einer klar strukturierten und benutzerfreundlichen Oberfläche, die sich am Editorial- und Archivdesign orientiert. Dabei wurde besonderer Wert auf eine übersichtliche Darstellung der Inhalte und eine intuitive Navigation gelegt.\n\nZusätzlich erfolgte die Gestaltung und Umsetzung der 3D-Modelle, die das visuelle Konzept der Website unterstützen und den inhaltlichen Aufbau ergänzen. Ziel war es, ein einheitliches und ansprechendes Erscheinungsbild zu schaffen, das Design und Funktion miteinander verbindet.',
       screenshots: [
         { src: '/dev-screenshots/frontend-overlay.jpg', caption: 'Website Overlay Design' }
       ]
@@ -36,8 +36,7 @@ function AboutUs(): ReactElement {
       <div className="AboutUsContainer">
         <header className="AboutUsHeader">
           <div className="AboutUsOrnament">❖</div>
-          <h2 className="AboutUsTitle">UNSER TEAM & ENTWICKLUNG</h2>
-          <div className="AboutUsSubtitle">Die Köpfe hinter chronoZ</div>
+          <h2 className="AboutUsTitle">Die Köpfe hinter chronoZ</h2>
           <div className="AboutUsOrnament">❖</div>
         </header>
 

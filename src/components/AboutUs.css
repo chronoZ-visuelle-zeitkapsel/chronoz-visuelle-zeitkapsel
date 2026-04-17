@@ -3,7 +3,7 @@
    ============================================ */
 
 .AboutUsSection {
-  background-color: #f9f7f1;
+  background-color: transparent;
   padding: 1rem 2rem;
   /* margin removed */
 }
@@ -21,6 +21,7 @@
   text-align: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
+  background-color: #d8c9b1;
   border-bottom: 2px solid #2c2416;
 }
 
@@ -126,7 +127,6 @@
 .MemberContentColumn {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
 .MemberDescription {
@@ -136,6 +136,7 @@
   color: #2c2416;
   text-align: justify;
   hyphens: auto;
+  white-space: pre-line;
 }
 
 .MemberDescription.DropCap::first-letter {
