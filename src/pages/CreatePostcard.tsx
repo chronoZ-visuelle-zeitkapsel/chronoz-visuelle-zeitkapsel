@@ -129,6 +129,13 @@ function CreatePostcard(): ReactElement {
           })
         });
 
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('currentUser');
+          navigate('/login?redirect=history');
+          throw new Error('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
+        }
+
         if (!response.ok) {
           const payload = await response.json().catch(() => ({}));
           throw new Error(payload.error || 'Fehler beim Aktualisieren der Postkarte');
@@ -157,6 +164,13 @@ function CreatePostcard(): ReactElement {
             images: allImageUrls
           })
         });
+
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('currentUser');
+          navigate('/login?redirect=history');
+          throw new Error('Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.');
+        }
 
         if (!response.ok) {
           const payload = await response.json().catch(() => ({}));

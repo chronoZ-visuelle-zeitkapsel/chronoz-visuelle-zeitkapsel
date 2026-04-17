@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const brevo = require('@getbrevo/brevo');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -12,14 +13,26 @@ const SECRET_KEY = process.env.JWT_SECRET;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const APP_URL = process.env.APP_URL || (NODE_ENV === 'production' ? process.env.PROD_APP_URL : process.env.DEV_APP_URL);
 
+const isMissingColumnError = (error, columnName) => {
+  if (!error || !error.message) return false;
+  return error.code === 'PGRST204' && error.message.includes(`'${columnName}'`);
+};
+
 // Brevo API Setup
 const brevoApiInstance = new brevo.TransactionalEmailsApi();
 brevoApiInstance.setApiKey(brevo.TransactionalEmailsApiApiKeys.apiKey, process.env.BREVO_API_KEY || '');
 
 // Supabase Client mit direkter Verbindung initialisieren
+// Fuer dieses Setup wird bewusst nur der ANON key verwendet.
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
+
+if (!supabaseKey) {
+  console.error('Missing Supabase key: set SUPABASE_ANON_KEY');
+}
+
 const supabase = createClient(
   process.env.SUPABASE_URL || 'https://kiwfabsenxerpmgcgkxw.supabase.co',
-  process.env.SUPABASE_ANON_KEY,
+  supabaseKey,
   {
     db: {
       schema: 'public',
@@ -135,13 +148,17 @@ app.post('/api/auth/register', async (req, res) => {
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     const codeExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 Stunden gültig
 
-    // Benutzer in Supabase einfügen
-    const { data: user, error } = await supabase
+    // Benutzer in Supabase einfügen.
+    // Falls optionale Auth-Spalten im alten Schema fehlen, auf Basisfelder zurückfallen.
+    let user = null;
+    let error = null;
+
+    const advancedInsert = await supabase
       .from('users')
       .insert([
-        { 
-          username, 
-          email: normalizedEmail, 
+        {
+          username,
+          email: normalizedEmail,
           password: hashedPassword,
           email_verified: false,
           two_factor_enabled: false,
@@ -151,6 +168,34 @@ app.post('/api/auth/register', async (req, res) => {
       ])
       .select('id, username, email, email_verified, two_factor_enabled')
       .single();
+
+    user = advancedInsert.data;
+    error = advancedInsert.error;
+
+    if (
+      error &&
+      (
+        isMissingColumnError(error, 'email_verified') ||
+        isMissingColumnError(error, 'two_factor_enabled') ||
+        isMissingColumnError(error, 'verification_code') ||
+        isMissingColumnError(error, 'verification_code_expires')
+      )
+    ) {
+      const basicInsert = await supabase
+        .from('users')
+        .insert([
+          {
+            username,
+            email: normalizedEmail,
+            password: hashedPassword
+          }
+        ])
+        .select('id, username, email')
+        .single();
+
+      user = basicInsert.data;
+      error = basicInsert.error;
+    }
 
     if (error) {
       if (error.code === '23505') {
@@ -203,16 +248,22 @@ app.post('/api/auth/register', async (req, res) => {
       console.log('[EMAIL SKIPPED] No BREVO_API_KEY found');
     }
 
-    const token = jwt.sign({ 
+    const emailVerified = user.email_verified ?? true;
+
+    const token = jwt.sign({
       id: user.id, 
       username: user.username, 
       email: user.email,
-      email_verified: user.email_verified
+      email_verified: emailVerified
     }, SECRET_KEY, { expiresIn: "1h" });
     
     res.json({ 
       token, 
-      user,
+      user: {
+        ...user,
+        email_verified: emailVerified,
+        two_factor_enabled: user.two_factor_enabled ?? false
+      },
       message: 'Registrierung erfolgreich! Bitte überprüfen Sie Ihre E-Mail-Adresse für den Verifizierungscode.'
     });
   } catch (err) {
@@ -233,14 +284,36 @@ app.post('/api/auth/login', async (req, res) => {
     // Identifier in Kleinbuchstaben für Email-Vergleich
     const normalizedIdentifier = identifier.toLowerCase();
 
-    // Benutzer in Supabase suchen
-    const { data: user, error } = await supabase
+    // Benutzer in Supabase suchen - zuerst per Email, dann per Username
+    let { data: user, error } = await supabase
       .from('users')
       .select('*')
-      .or(`username.eq.${identifier},email.eq.${normalizedIdentifier}`)
+      .eq('email', normalizedIdentifier)
       .single();
 
-    if (error || !user) {
+    // Falls nicht gefunden per Email, versuche per Username
+    if (error?.code === 'PGRST116' || !user) {
+      const usernameRes = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', identifier)
+        .single();
+      user = usernameRes.data;
+      error = usernameRes.error;
+
+      // Optionaler Fallback: lowercase Username pruefen (falls historisch so gespeichert)
+      if ((error?.code === 'PGRST116' || !user) && identifier !== normalizedIdentifier) {
+        const usernameLowerRes = await supabase
+          .from('users')
+          .select('*')
+          .eq('username', normalizedIdentifier)
+          .single();
+        user = usernameLowerRes.data;
+        error = usernameLowerRes.error;
+      }
+    }
+
+    if (!user) {
       return res.status(400).json({ error: "Benutzer nicht gefunden" });
     }
 
@@ -253,8 +326,11 @@ app.post('/api/auth/login', async (req, res) => {
     // Lock-Status bei abgelaufenem Datum automatisch zuruecksetzen
     const syncedUser = await syncExpiredUserLock(user);
 
-    // Prüfe ob E-Mail verifiziert ist
-    if (!syncedUser.email_verified) {
+    const emailVerified = syncedUser.email_verified ?? true;
+    const twoFactorEnabled = syncedUser.two_factor_enabled ?? false;
+
+    // Prüfe ob E-Mail verifiziert ist (nur wenn das Feld im Schema existiert)
+    if (!emailVerified) {
       return res.status(403).json({ 
         error: "Bitte verifizieren Sie zuerst Ihre E-Mail-Adresse",
         requires_verification: true
@@ -262,7 +338,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     // Prüfe ob 2FA aktiviert ist
-    if (syncedUser.two_factor_enabled) {
+    if (twoFactorEnabled) {
       // Generiere 2FA Code
       const twoFactorCode = Math.floor(100000 + Math.random() * 900000).toString();
       const codeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 Minuten gültig
@@ -298,8 +374,8 @@ app.post('/api/auth/login', async (req, res) => {
         id: syncedUser.id,
         username: syncedUser.username,
         email: syncedUser.email,
-        email_verified: syncedUser.email_verified,
-        two_factor_enabled: syncedUser.two_factor_enabled,
+        email_verified: emailVerified,
+        two_factor_enabled: twoFactorEnabled,
         locked: syncedUser.locked,
         locked_until: syncedUser.locked_until,
         reminder_mail_enabled: syncedUser.reminder_mail_enabled
@@ -696,6 +772,9 @@ app.get('/api/postcards', async (req, res) => {
 
     res.json(postcards || []);
   } catch (err) {
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Ungültiger oder abgelaufener Token' });
+    }
     console.error(err);
     res.status(500).json({ error: "Fehler beim Laden der Postkarten" });
   }
@@ -748,6 +827,9 @@ app.post('/api/postcards', async (req, res) => {
     console.log('[POSTCARD CREATE] Success, postcard created:', postcard.id);
     res.json(postcard);
   } catch (err) {
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Ungültiger oder abgelaufener Token' });
+    }
     console.error('[POSTCARD CREATE] Error:', err);
     console.error('[POSTCARD CREATE] Error details:', {
       message: err.message,
@@ -791,6 +873,9 @@ app.put('/api/postcards/:id', async (req, res) => {
 
     res.json(postcard);
   } catch (err) {
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Ungültiger oder abgelaufener Token' });
+    }
     console.error(err);
     res.status(500).json({ error: "Fehler beim Aktualisieren der Postkarte" });
   }
@@ -819,6 +904,9 @@ app.delete('/api/postcards/:id', async (req, res) => {
 
     res.json({ message: "Postkarte gelöscht" });
   } catch (err) {
+    if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Ungültiger oder abgelaufener Token' });
+    }
     console.error(err);
     res.status(500).json({ error: "Fehler beim Löschen der Postkarte" });
   }

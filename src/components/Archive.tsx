@@ -10,7 +10,8 @@ type Postcard = {
   description: string;
   date: string;
   images: string[];
-  createdAt: string;
+  created_at?: string;
+  createdAt?: string;
 };
 
 function Archive(): ReactElement {
@@ -38,6 +39,15 @@ function Archive(): ReactElement {
         }
       });
 
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('currentUser');
+        setPostcards([]);
+        setLoading(false);
+        navigate('/login?redirect=history');
+        return;
+      }
+
       if (!response.ok) {
         throw new Error('Fehler beim Laden der Postkarten');
       }
@@ -45,7 +55,9 @@ function Archive(): ReactElement {
       const data = await response.json();
 
       const sortedPostcards = data.sort((a: Postcard, b: Postcard) => {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        const bCreatedAt = b.created_at || b.createdAt || b.date;
+        const aCreatedAt = a.created_at || a.createdAt || a.date;
+        return new Date(bCreatedAt).getTime() - new Date(aCreatedAt).getTime();
       });
 
       setPostcards(sortedPostcards);
@@ -55,7 +67,7 @@ function Archive(): ReactElement {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     loadPostcards();
