@@ -91,8 +91,6 @@ function AboutUs(): ReactElement {
                   )}
                 </div>
               </div>
-
-              {index < team.length - 1 && <div className="MemberDivider">◆ ◆ ◆</div>}
             </article>
           ))}
         </div>
