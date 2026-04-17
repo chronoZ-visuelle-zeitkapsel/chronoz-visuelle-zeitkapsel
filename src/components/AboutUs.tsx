@@ -26,7 +26,7 @@ function AboutUs(): ReactElement {
       image: '/garcia.jpg',
       description: 'Verantwortlich für die Umsetzung des Frontends sowie die Konzeption und Modellierung der 3D-Elemente. Im Bereich Frontend lag der Fokus auf der Entwicklung einer klar strukturierten und benutzerfreundlichen Oberfläche, die sich am Editorial- und Archivdesign orientiert. Dabei wurde besonderer Wert auf eine übersichtliche Darstellung der Inhalte und eine intuitive Navigation gelegt.\n\nZusätzlich erfolgte die Gestaltung und Umsetzung der 3D-Modelle, die das visuelle Konzept der Website unterstützen und den inhaltlichen Aufbau ergänzen. Ziel war es, ein einheitliches und ansprechendes Erscheinungsbild zu schaffen, das Design und Funktion miteinander verbindet.',
       screenshots: [
-        { src: '/dev-screenshots/frontend-overlay.jpg', caption: 'Website Overlay Design' }
+        { src: '/3D-Video.mp4', caption: '3D-Modellierung' }
       ]
     }
   ];
@@ -68,7 +68,18 @@ function AboutUs(): ReactElement {
                         {member.screenshots.map((screenshot, idx) => (
                           <figure key={idx} className="ScreenshotItem">
                             <div className="ScreenshotFrame halftone-photo">
-                              <img src={screenshot.src} alt={screenshot.caption} />
+                              {screenshot.src.toLowerCase().endsWith('.mp4') ? (
+                                <video
+                                  src={screenshot.src}
+                                  aria-label={screenshot.caption}
+                                  autoPlay
+                                  loop
+                                  muted
+                                  playsInline
+                                />
+                              ) : (
+                                <img src={screenshot.src} alt={screenshot.caption} />
+                              )}
                             </div>
                             <figcaption className="ScreenshotCaption">
                               {screenshot.caption}
