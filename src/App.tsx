@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect, useCallback } from 'react';
 import './App.css';
 import './styles/vintage-newspaper.css';
 import Header from './components/Header';
@@ -20,6 +20,33 @@ import ResetPassword from './pages/ResetPassword';
 function Home({ blurred }: { blurred: boolean }): ReactElement {
     const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const scrollToHash = useCallback(() => {
+        if (location.pathname !== '/' || !location.hash) {
+            return;
+        }
+
+        const sectionId = location.hash.replace('#', '');
+        if (!sectionId) {
+            return;
+        }
+
+        const attemptScroll = () => {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                return true;
+            }
+            return false;
+        };
+
+        const delays = [0, 160, 420, 760];
+        delays.forEach((delay) => {
+            setTimeout(() => {
+                attemptScroll();
+            }, delay);
+        });
+    }, [location.hash, location.pathname]);
 
     const syncAuthState = async () => {
         const token = localStorage.getItem('token');
@@ -52,6 +79,10 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
     useEffect(() => {
         void syncAuthState();
     }, [location.pathname]);
+
+    useEffect(() => {
+        scrollToHash();
+    }, [scrollToHash, isLoggedIn]);
 
     // Listen for login/logout events to update Archive visibility
     useEffect(() => {

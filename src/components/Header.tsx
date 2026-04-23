@@ -1,5 +1,5 @@
 import './header.css';
-import React, { ReactElement, useEffect, useState, useRef } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { apiUrl } from '../config/api';
 
@@ -34,6 +34,22 @@ function Header(): ReactElement {
 			document.body.scrollTop = 0;
 		}, 180);
 	};
+
+	const scrollToSectionElement = useCallback((sectionId: string) => {
+		const element = document.getElementById(sectionId);
+		if (!element) return false;
+		element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		return true;
+	}, []);
+
+	const scheduleSectionScroll = useCallback((sectionId: string) => {
+		const attemptDelays = [0, 160, 420, 760];
+		attemptDelays.forEach((delay) => {
+			setTimeout(() => {
+				scrollToSectionElement(sectionId);
+			}, delay);
+		});
+	}, [scrollToSectionElement]);
 
 	// Wenn sich currentUser ändert (z.B. Login), sicherstellen, dass das Panel geschlossen bleibt
 	useEffect(() => {
@@ -86,6 +102,7 @@ function Header(): ReactElement {
 				setTimeout(scrollToTop, 120);
 			});
 		}
+
 		setMobileNavOpen(false);
 	}, [location.pathname]);
 
@@ -132,21 +149,11 @@ function Header(): ReactElement {
 
 	function scrollToSection(sectionId: string) {
 		// Wenn wir nicht auf der Hauptseite sind, zuerst dorthin navigieren
-		if (window.location.pathname !== '/') {
-			navigate('/');
-			// Warten bis die Seite geladen ist, dann scrollen
-			setTimeout(() => {
-				const element = document.getElementById(sectionId);
-				if (element) {
-					element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-				}
-			}, 100);
+		if (location.pathname !== '/') {
+			navigate({ pathname: '/', hash: `#${sectionId}` });
 		} else {
 			// Direkt zum Abschnitt scrollen
-			const element = document.getElementById(sectionId);
-			if (element) {
-				element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-			}
+			scheduleSectionScroll(sectionId);
 		}
 	}
 
