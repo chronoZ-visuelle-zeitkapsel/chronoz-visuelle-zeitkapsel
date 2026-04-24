@@ -84,7 +84,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
         scrollToHash();
     }, [scrollToHash, isLoggedIn]);
 
-    // Listen for login/logout events to update Archive visibility
     useEffect(() => {
         const handleUserLogin = () => { void syncAuthState(); };
         const handleUserLogout = () => { void syncAuthState(); };
@@ -104,9 +103,7 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
     return (
         <div id="home-top" className={blurred ? 'AppRoot Blur' : 'AppRoot'}>
             <Header />
-            {/* Broadsheet Layout */}
             <div className="BroadsheetContainer">
-                {/* Left Sidebar - Table of Contents */}
                 <aside className="BroadsheetSidebar" style={{
                     paddingTop: '0'
                 }}>
@@ -134,7 +131,6 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                     </div>
                 </aside>
 
-                {/* Main Content Area */}
                 <main className="BroadsheetMain">
                     <article>
                         <h2 className="VintageHeadline">
@@ -148,12 +144,9 @@ function Home({ blurred }: { blurred: boolean }): ReactElement {
                             </p>
                         </div>
                         
-                        
-                        {/* OrnateBorder with CTA moved to sidebar */}
                     </article>
                 </main>
 
-                {/* Right Sidebar - Features */}
                 <aside className="BroadsheetRightSidebar" style={{
                     paddingTop: '0'
                 }}>

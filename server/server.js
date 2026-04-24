@@ -204,8 +204,6 @@ app.post('/api/auth/register', async (req, res) => {
       throw error;
     }
 
-    console.log(`[REGISTRATION] New user: ${normalizedEmail}`);
-    console.log(`[DEV] Verification Code: ${verificationCode}`);
 
     // Sende Verifizierungs-E-Mail über Brevo
     if (process.env.BREVO_API_KEY) {
@@ -239,13 +237,10 @@ app.post('/api/auth/register', async (req, res) => {
         };
 
         await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log(`[EMAIL SUCCESS] Verification email sent to ${normalizedEmail}`);
       } catch (emailError) {
         console.error('[EMAIL ERROR]', emailError);
         // Registrierung trotzdem erfolgreich, User kann Code in DB finden
       }
-    } else {
-      console.log('[EMAIL SKIPPED] No BREVO_API_KEY found');
     }
 
     const emailVerified = user.email_verified ?? true;
@@ -352,13 +347,10 @@ app.post('/api/auth/login', async (req, res) => {
         })
         .eq('id', syncedUser.id);
 
-      // In Produktion: Sende Code per Email
-      console.log(`2FA Code für ${syncedUser.email}: ${twoFactorCode}`);
-
       return res.json({
         requires_2fa: true,
         user_id: syncedUser.id,
-        message: `2FA Code wurde gesendet (Dev: ${twoFactorCode})`
+        message: '2FA Code wurde gesendet'
       });
     }
 
@@ -508,10 +500,6 @@ app.post('/api/auth/forgot-password', async (req, res) => {
     const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
     const codeExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 Minuten gültig
 
-    console.log(`[PASSWORD RESET] Generating code for: ${user.email}`);
-    console.log(`[PASSWORD RESET] Current server time: ${new Date().toISOString()}`);
-    console.log(`[PASSWORD RESET] Code will expire at: ${codeExpires.toISOString()}`);
-
     // Speichere Code in DB
     const { error: updateError } = await supabase
       .from('users')
@@ -525,9 +513,6 @@ app.post('/api/auth/forgot-password', async (req, res) => {
       console.error('[PASSWORD RESET] Error updating user:', updateError);
       throw updateError;
     }
-
-    console.log(`[PASSWORD RESET] Code saved to database for: ${user.email}`);
-    console.log(`[DEV] Reset Code: ${resetCode}`);
 
     // Sende E-Mail über Brevo
     if (process.env.BREVO_API_KEY) {
@@ -560,13 +545,10 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         };
 
         await brevoApiInstance.sendTransacEmail(sendSmtpEmail);
-        console.log(`[EMAIL SUCCESS] Password reset email sent to ${user.email}`);
       } catch (emailError) {
         console.error('[EMAIL ERROR]', emailError);
         // Trotzdem weitermachen, Code ist in DB gespeichert
       }
-    } else {
-      console.log('[EMAIL SKIPPED] No BREVO_API_KEY found');
     }
 
     res.json({ 
@@ -622,15 +604,8 @@ app.post('/api/auth/reset-password', async (req, res) => {
       return res.status(400).json({ error: "Ungültiger Reset-Code" });
     }
 
-    console.log(`[PASSWORD RESET] User found: ${user.email}`);
-    console.log(`[PASSWORD RESET] Code from DB: ${user.verification_code}`);
-    console.log(`[PASSWORD RESET] Expires from DB: ${user.verification_code_expires}`);
-    console.log(`[PASSWORD RESET] Expires type: ${typeof user.verification_code_expires}`);
-    console.log(`[PASSWORD RESET] Input code: ${code}`);
-
     // Prüfe Code
     if (user.verification_code !== code) {
-      console.log(`[PASSWORD RESET] Code mismatch. Expected: ${user.verification_code}, Got: ${code}`);
       return res.status(400).json({ error: "Ungültiger Reset-Code" });
     }
 
@@ -641,14 +616,6 @@ app.post('/api/auth/reset-password', async (req, res) => {
       ? user.verification_code_expires 
       : user.verification_code_expires + 'Z';
     const expiresAt = new Date(expiresString);
-    
-    console.log(`[PASSWORD RESET] Checking expiration for ${user.email}`);
-    console.log(`[PASSWORD RESET] Current time: ${now.toISOString()}`);
-    console.log(`[PASSWORD RESET] Current time (ms): ${now.getTime()}`);
-    console.log(`[PASSWORD RESET] Code expires at: ${expiresAt.toISOString()}`);
-    console.log(`[PASSWORD RESET] Code expires at (ms): ${expiresAt.getTime()}`);
-    console.log(`[PASSWORD RESET] Is expired: ${now > expiresAt}`);
-    console.log(`[PASSWORD RESET] Difference in minutes: ${(expiresAt.getTime() - now.getTime()) / 1000 / 60}`);
     
     if (now > expiresAt) {
       return res.status(400).json({ error: "Reset-Code ist abgelaufen. Bitte fordern Sie einen neuen an." });
@@ -666,8 +633,6 @@ app.post('/api/auth/reset-password', async (req, res) => {
         verification_code_expires: null
       })
       .eq('id', user.id);
-
-    console.log(`[PASSWORD RESET] Password updated for: ${user.email}`);
 
     res.json({ message: "Passwort erfolgreich zurückgesetzt" });
   } catch (err) {
@@ -783,28 +748,21 @@ app.get('/api/postcards', async (req, res) => {
 // Create a new postcard
 app.post('/api/postcards', async (req, res) => {
   try {
-    console.log('[POSTCARD CREATE] Request received');
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(" ")[1];
     
     if (!token) {
-      console.log('[POSTCARD CREATE] No token provided');
       return res.status(401).json({ error: "Token erforderlich" });
     }
 
-    console.log('[POSTCARD CREATE] Verifying token...');
     const decoded = jwt.verify(token, SECRET_KEY);
-    console.log('[POSTCARD CREATE] Token valid, user_id:', decoded.id);
     
     const { title, description, date, images } = req.body;
-    console.log('[POSTCARD CREATE] Data:', { title, description, date, imageCount: images?.length || 0 });
 
     if (!title || !description || !date) {
-      console.log('[POSTCARD CREATE] Missing required fields');
       return res.status(400).json({ error: "Titel, Beschreibung und Datum sind erforderlich" });
     }
 
-    console.log('[POSTCARD CREATE] Inserting into database...');
     const { data: postcard, error } = await supabase
       .from('postcards')
       .insert([
@@ -820,23 +778,15 @@ app.post('/api/postcards', async (req, res) => {
       .single();
 
     if (error) {
-      console.error('[POSTCARD CREATE] Database error:', error);
       throw error;
     }
 
-    console.log('[POSTCARD CREATE] Success, postcard created:', postcard.id);
     res.json(postcard);
   } catch (err) {
     if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Ungültiger oder abgelaufener Token' });
     }
     console.error('[POSTCARD CREATE] Error:', err);
-    console.error('[POSTCARD CREATE] Error details:', {
-      message: err.message,
-      code: err.code,
-      details: err.details,
-      hint: err.hint
-    });
     res.status(500).json({ error: "Fehler beim Erstellen der Postkarte" });
   }
 });

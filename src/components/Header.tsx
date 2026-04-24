@@ -10,11 +10,7 @@ function Header(): ReactElement {
 	const location = useLocation();
 	const [currentUser, setCurrentUser] = useState<CurrentUser>(null);
 	const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
-	// Neuer State, um Panel offen zu halten beim Hover auf das Panel selbst
 	const [menuOpen, setMenuOpen] = useState(false);
-
-	// Ref für das UserArea-Element, damit wir ggf. Fokus entfernen können
 	const userAreaRef = useRef<HTMLDivElement | null>(null);
 	const pendingHomeScrollRef = useRef(false);
 
@@ -51,17 +47,14 @@ function Header(): ReactElement {
 		});
 	}, [scrollToSectionElement]);
 
-	// Wenn sich currentUser ändert (z.B. Login), sicherstellen, dass das Panel geschlossen bleibt
 	useEffect(() => {
 		if (currentUser) {
 			setMenuOpen(false);
-			// Falls das UserArea gerade den Fokus hat, Fokus entfernen, damit :focus-within nicht greift
 			if (
 				userAreaRef.current &&
 				document.activeElement instanceof Node &&
 				userAreaRef.current.contains(document.activeElement as Node)
 			) {
-				// blur das aktuell fokussierte Element
 				(document.activeElement as HTMLElement).blur();
 			}
 		}
@@ -106,7 +99,6 @@ function Header(): ReactElement {
 		setMobileNavOpen(false);
 	}, [location.pathname]);
 
-	// Listen for custom login event
 	useEffect(() => {
 		const handleUserLogin = (event: CustomEvent) => {
 			const user = event.detail;
@@ -129,30 +121,17 @@ function Header(): ReactElement {
 	}, []);
 
 	function handleLogout() {
-		// User-spezifische Daten löschen
-		if (currentUser) {
-			// Postkarten des Users bleiben in localStorage (für späteren Login)
-			// localStorage.removeItem(`userPostcards_${currentUser.id}`);
-		}
-		
-		// Allgemeine User-Daten löschen
 		localStorage.removeItem('token');
 		localStorage.removeItem('currentUser');
 		setCurrentUser(null);
-		
-		// Dispatch custom event to notify other components of logout
 		window.dispatchEvent(new CustomEvent('userLogout'));
-		
-		// Zur Hauptseite navigieren
 		navigate('/');
 	}
 
 	function scrollToSection(sectionId: string) {
-		// Wenn wir nicht auf der Hauptseite sind, zuerst dorthin navigieren
 		if (location.pathname !== '/') {
 			navigate({ pathname: '/', hash: `#${sectionId}` });
 		} else {
-			// Direkt zum Abschnitt scrollen
 			scheduleSectionScroll(sectionId);
 		}
 	}
@@ -166,7 +145,6 @@ function Header(): ReactElement {
 		}
 	}
 
-	// Get current date for masthead
 	const getCurrentDate = () =>
 		new Date().toLocaleDateString('de-DE', {
 			weekday: 'long',
@@ -178,12 +156,10 @@ function Header(): ReactElement {
 	return (
 		<header className="Header vintage-newspaper-header">
 			<div className="newspaper-masthead">
-				{/* Left: Date */}
 				<div className="masthead-left">
 					<div className="masthead-date">{getCurrentDate()}</div>
 				</div>
 
-				{/* Center: ChronoZ Logo */}
 				<div className="masthead-center">
 					<div className="newspaper-rivet top-left"></div>
 					<div className="newspaper-rivet top-right"></div>
@@ -200,7 +176,6 @@ function Header(): ReactElement {
 					<div className="newspaper-rivet bottom-right"></div>
 				</div>
 
-				{/* Right: Navigation & User */}
 				<div className={`masthead-right ${mobileNavOpen ? 'mobile-open' : ''}`}>
 					<button
 						type="button"

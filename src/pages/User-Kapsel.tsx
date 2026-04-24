@@ -54,7 +54,6 @@ function History(): ReactElement {
       return;
     }
 
-    // Verify token and get user data
     fetch(apiUrl('/api/auth/me'), {
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -107,23 +106,18 @@ function History(): ReactElement {
 
         const postcards = await response.json();
         
-        // Sortiere nach Datum (älteste zuerst)
         const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
         
         setPostcards(sortedPostcards);
-        console.log(`Postkarten für User ${currentUser.id} geladen:`, sortedPostcards);
         
-        // Prüfe ob eine zuletzt bearbeitete/erstellte Postkarte existiert
         const lastPostcardId = localStorage.getItem('lastViewedPostcardId');
         if (lastPostcardId) {
           const index = sortedPostcards.findIndex((card: Postcard) => card.id === lastPostcardId);
           if (index !== -1) {
             setCurrentCardIndex(index);
-            console.log(`Springe zu zuletzt bearbeiteter Postkarte: Index ${index}`);
           }
-          // Entferne nach Verwendung
           localStorage.removeItem('lastViewedPostcardId');
         }
         
@@ -139,16 +133,12 @@ function History(): ReactElement {
     }
   }, [currentUser]);
 
-  // Postkarten neu laden wenn Seite fokussiert wird (nach Navigation zurück)
-  // Postkarten neu laden wenn Seite fokussiert wird (nach Navigation zurück)
   useEffect(() => {
     const handleFocus = async () => {
       if (!currentUser) return;
       
       const token = localStorage.getItem('token');
       if (!token) return;
-
-      console.log('Seite fokussiert - lade Postkarten neu');
       try {
         const response = await fetch(apiUrl('/api/postcards'), {
           headers: {
@@ -162,7 +152,6 @@ function History(): ReactElement {
 
         const postcards = await response.json();
         
-        // Sortiere nach Datum (älteste zuerst)
         const sortedPostcards = postcards.sort((a: Postcard, b: Postcard) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
@@ -176,24 +165,16 @@ function History(): ReactElement {
     window.addEventListener('focus', handleFocus);
     return () => window.removeEventListener('focus', handleFocus);
   }, [currentUser]);
-  // Postkarten in Datenbank speichern nicht mehr notwendig - wird durch API gemacht
-  // useEffect entfernt
 
-  // Event-Listener für neue Postkarten
   useEffect(() => {
     const handleNewPostcard = (event: CustomEvent) => {
       const newPostcard = event.detail;
-      console.log('Neue Postkarte erhalten:', newPostcard);
-      // Speichere ID für späteren Abruf nach Seiten-Reload
       localStorage.setItem('lastViewedPostcardId', newPostcard.id);
       setPostcards(prev => {
-        // Füge neue Postkarte hinzu und sortiere nach Datum
         const updated = [...prev, newPostcard].sort((a, b) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
-        console.log('Postkarten aktualisiert:', updated);
-        
-        // Finde den Index der neuen Postkarte in der sortierten Liste
+
         const newIndex = updated.findIndex(card => card.id === newPostcard.id);
         setCurrentCardIndex(newIndex);
         
@@ -203,19 +184,14 @@ function History(): ReactElement {
 
     const handlePostcardUpdated = (event: CustomEvent) => {
       const updatedPostcard = event.detail;
-      console.log('Postkarte aktualisiert erhalten:', updatedPostcard);
-      // Speichere ID für späteren Abruf nach Seiten-Reload
       localStorage.setItem('lastViewedPostcardId', updatedPostcard.id);
       setPostcards(prev => {
-        // Aktualisiere Postkarte und sortiere nach Datum
         const updated = prev.map(card => 
           card.id === updatedPostcard.id ? updatedPostcard : card
         ).sort((a, b) => {
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         });
-        console.log('Postkarten nach Update:', updated);
-        
-        // Finde den neuen Index der aktualisierten Postkarte
+
         const newIndex = updated.findIndex(card => card.id === updatedPostcard.id);
         setCurrentCardIndex(newIndex);
         
@@ -223,19 +199,15 @@ function History(): ReactElement {
       });
     };
 
-    // Event-Listener hinzufügen
     window.addEventListener('newPostcard', handleNewPostcard as EventListener);
     window.addEventListener('postcardUpdated', handlePostcardUpdated as EventListener);
-    console.log('Event-Listener für newPostcard und postcardUpdated registriert');
     
     return () => {
       window.removeEventListener('newPostcard', handleNewPostcard as EventListener);
       window.removeEventListener('postcardUpdated', handlePostcardUpdated as EventListener);
-      console.log('Event-Listener entfernt');
     };
   }, []);
 
-  // Dropdown schließen bei Klick außerhalb
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -252,7 +224,6 @@ function History(): ReactElement {
 
   const handleEditPostcard = () => {
     if (currentPostcard) {
-      // Postkarte-Daten an CreatePostcard weitergeben
       localStorage.setItem('editingPostcard', JSON.stringify({
         ...currentPostcard,
         isEditing: true
@@ -285,11 +256,9 @@ function History(): ReactElement {
         throw new Error('Fehler beim Löschen der Postkarte');
       }
 
-      // Entferne Postkarte aus der lokalen Liste
       const updatedPostcards = postcards.filter((_, index) => index !== currentCardIndex);
       setPostcards(updatedPostcards);
       
-      // Index anpassen
       if (currentCardIndex >= updatedPostcards.length && updatedPostcards.length > 0) {
         setCurrentCardIndex(updatedPostcards.length - 1);
       } else if (updatedPostcards.length === 0) {
@@ -408,7 +377,6 @@ function History(): ReactElement {
         });
       }
       
-      // PDF speichern
       const filename = `chronoZ_Zeitkapsel_${currentUser?.username || 'user'}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(filename);
       
@@ -476,11 +444,6 @@ function History(): ReactElement {
 
   const currentPostcard = postcards[currentCardIndex];
 
-  // Debug-Logging
-  console.log('Aktuelle Postkarten:', postcards);
-  console.log('Aktueller Index:', currentCardIndex);
-  console.log('Aktuelle Postkarte:', currentPostcard);
-
 
   if (loading) {
     return (
@@ -534,7 +497,6 @@ function History(): ReactElement {
               </header>
 
               <div className="ArchiveTimeline">
-                {/* Year Timeline - Top */}
                 <div className="TimelineSection YearTimeline">
                   <div className="TimelineDots">
                     {Array.from(new Set(postcards.map(p => new Date(p.date).getFullYear())))
@@ -562,7 +524,6 @@ function History(): ReactElement {
                   <div className="TimelineRack YearRack" />
                 </div>
 
-                {/* Month + Day Timeline - Bottom */}
                 {selectedYear !== null && (
                   <div className="TimelineSection MonthDayTimeline">
                     <div className="TimelineDots">
